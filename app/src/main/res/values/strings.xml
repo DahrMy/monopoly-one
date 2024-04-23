@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Monopoly One (unofficial)</string>
+    <string name="iv_description_monopoly_one">Monopoly One</string>
+    <string name="et_email_hint">Email</string>
+    <string name="et_password_hint">Password</string>
+    <string name="bt_login_text">Login</string>
 </resources>

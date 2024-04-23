@@ -5,17 +5,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import my.dahr.monopolyone.R
+import my.dahr.monopolyone.databinding.FragmentLoginBinding
 
 class LoginFragment : Fragment() {
 
+    private var _binding: FragmentLoginBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+        _binding = FragmentLoginBinding.inflate(inflater, container, false)
 
 
-
-        return inflater.inflate(R.layout.fragment_login, container, false)
+        return binding.root
     }
 
 }
