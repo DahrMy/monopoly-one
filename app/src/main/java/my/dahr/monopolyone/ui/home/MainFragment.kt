@@ -1,4 +1,4 @@
-package my.dahr.monopolyone.home
+package my.dahr.monopolyone.ui.home
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,12 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import my.dahr.monopolyone.R
-import my.dahr.monopolyone.home.chat.ChatFragment
+import my.dahr.monopolyone.ui.home.chat.ChatFragment
 import my.dahr.monopolyone.databinding.FragmentMainBinding
-import my.dahr.monopolyone.home.friends.FriendsFragment
-import my.dahr.monopolyone.home.inventory.InventoryFragment
+import my.dahr.monopolyone.ui.home.friends.FriendsFragment
+import my.dahr.monopolyone.ui.home.inventory.InventoryFragment
 import my.dahr.monopolyone.listeners.NavigationListener
-import my.dahr.monopolyone.home.profile.ProfileFragment
+import my.dahr.monopolyone.ui.home.profile.ProfileFragment
 
 class MainFragment : Fragment(), NavigationListener {
 
@@ -28,6 +28,7 @@ class MainFragment : Fragment(), NavigationListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        navigateToFriendsScreen()
         navigationOnScreen()
     }
 

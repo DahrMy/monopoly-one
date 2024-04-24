@@ -1,21 +1,20 @@
-package my.dahr.monopolyone.home.inventory
+package my.dahr.monopolyone.ui.home.friends
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import my.dahr.monopolyone.R
-import my.dahr.monopolyone.databinding.FragmentInventoryBinding
+import my.dahr.monopolyone.databinding.FragmentFriendsBinding
 
-class InventoryFragment : Fragment() {
-    private var _binding: FragmentInventoryBinding? = null
+class FriendsFragment : Fragment() {
+    private var _binding: FragmentFriendsBinding? = null
     private val binding get () = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentInventoryBinding.inflate(inflater, container, false)
+        _binding = FragmentFriendsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -29,6 +28,6 @@ class InventoryFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(): InventoryFragment = InventoryFragment()
+        fun newInstance(): FriendsFragment = FriendsFragment()
     }
 }

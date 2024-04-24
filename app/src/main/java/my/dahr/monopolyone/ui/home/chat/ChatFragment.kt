@@ -1,4 +1,4 @@
-package my.dahr.monopolyone.home.chat
+package my.dahr.monopolyone.ui.home.chat
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
