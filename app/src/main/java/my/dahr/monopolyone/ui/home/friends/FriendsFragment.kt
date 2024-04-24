@@ -5,9 +5,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import my.dahr.monopolyone.databinding.FragmentFriendsBinding
+import my.dahr.monopolyone.ui.home.MainFragment
 
+
+@AndroidEntryPoint
 class FriendsFragment : Fragment() {
+    private val viewModel: FriendsViewModel by viewModels()
+
     private var _binding: FragmentFriendsBinding? = null
     private val binding get () = _binding!!
     override fun onCreateView(
@@ -15,6 +22,9 @@ class FriendsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFriendsBinding.inflate(inflater, container, false)
+        binding.ibAdd.setOnClickListener {
+            viewModel.getFriendList()
+        }
         return binding.root
     }
 

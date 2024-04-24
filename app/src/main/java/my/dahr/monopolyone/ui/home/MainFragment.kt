@@ -1,22 +1,31 @@
 package my.dahr.monopolyone.ui.home
 
+import android.Manifest.permission.INTERNET
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
+import dagger.hilt.android.AndroidEntryPoint
 import my.dahr.monopolyone.R
 import my.dahr.monopolyone.ui.home.chat.ChatFragment
 import my.dahr.monopolyone.databinding.FragmentMainBinding
 import my.dahr.monopolyone.ui.home.friends.FriendsFragment
 import my.dahr.monopolyone.ui.home.inventory.InventoryFragment
 import my.dahr.monopolyone.listeners.NavigationListener
+import my.dahr.monopolyone.ui.home.friends.user.UserFragment
 import my.dahr.monopolyone.ui.home.profile.ProfileFragment
 
+
+@AndroidEntryPoint
 class MainFragment : Fragment(), NavigationListener {
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
+
+    private val requestPermission =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
 
 
     override fun onCreateView(
@@ -28,6 +37,8 @@ class MainFragment : Fragment(), NavigationListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requestPermission.launch(INTERNET)
+
         navigateToFriendsScreen()
         navigationOnScreen()
     }
@@ -59,6 +70,14 @@ class MainFragment : Fragment(), NavigationListener {
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
+    }
+
+    override fun navigateToUserScreen() {
+        replaceFragment(UserFragment.newInstance())
+    }
+
+    override fun navigateBack() {
+        parentFragmentManager.popBackStack()
     }
 
     override fun navigateToProfileScreen() {

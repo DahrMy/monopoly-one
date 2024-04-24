@@ -21,23 +21,12 @@ object NetworkModule {
     @Singleton
     fun provideRetrofit(): Retrofit {
 
-        val acceptHeader = "application/json"
-        val authorizationHeader = "Bearer [your API access token]"
-
         val logger = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
 
-        val headersInterceptor = Interceptor { chain ->
-            val request = chain.request().newBuilder() // Add your headers here
-                .addHeader("Accept", acceptHeader)
-                .addHeader("Authorization", authorizationHeader)
-                .build()
-            chain.proceed(request)
-        }
 
         val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(headersInterceptor)
             .addInterceptor(logger)
             .build()
 
