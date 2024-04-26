@@ -7,7 +7,7 @@ import retrofit2.http.POST
 
 interface MonopolyApi {
     @POST("auth.signin")
-    suspend fun authSignInRequest(@Body body: Map<String, String>): Call<SessionResponse>
+    fun authSignInRequest(@Body body: Map<String, String>): Call<SessionResponse>
 
 
 }
