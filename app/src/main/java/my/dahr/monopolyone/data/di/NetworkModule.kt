@@ -1,10 +1,10 @@
-package my.dahr.monopolyone.di
+package my.dahr.monopolyone.data.di
 
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import my.dahr.monopolyone.data.network.api.FriendsApi
+import my.dahr.monopolyone.network.api.MonopolyApi
 import my.dahr.monopolyone.utils.BASE_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -24,7 +24,6 @@ object NetworkModule {
             level = HttpLoggingInterceptor.Level.BODY
         }
 
-
         val okHttpClient = OkHttpClient.Builder()
             .addInterceptor(logger)
             .build()
@@ -39,6 +38,6 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideSimpleApi(retrofit: Retrofit): FriendsApi = retrofit.create(FriendsApi::class.java)
+    fun provideSimpleApi(retrofit: Retrofit): MonopolyApi = retrofit.create(MonopolyApi::class.java)
 
 }
