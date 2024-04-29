@@ -6,16 +6,16 @@ import my.dahr.monopolyone.domain.models.friends.requests.Request
 interface FriendsDataSource {
     suspend fun getFriendsList(
         userId: Any,
-         online: Boolean,
+        online: Boolean,
         addUser: Boolean,
         type: String,
         offset: Int,
         count: Int
-    ):List<Friend>
+    ): List<Friend>
 
     suspend fun getFriendsRequestsList(
         type: String,
         offset: Int,
         count: Int,
-    ) : List<Request>
+    ): List<Request>
 }

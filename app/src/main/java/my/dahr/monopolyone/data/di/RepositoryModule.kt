@@ -1,4 +1,4 @@
-package my.dahr.monopolyone.di
+package my.dahr.monopolyone.data.di
 
 import dagger.Binds
 import dagger.Module
@@ -11,5 +11,5 @@ import my.dahr.monopolyone.data.repository.FriendsRepositoryImpl
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
     @Binds
-   abstract fun bindFriendsRepository(impl: FriendsRepositoryImpl): FriendsRepository
+    abstract fun bindFriendsRepository(impl: FriendsRepositoryImpl): FriendsRepository
 }

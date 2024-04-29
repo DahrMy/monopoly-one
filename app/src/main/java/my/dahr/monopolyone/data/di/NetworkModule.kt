@@ -4,7 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import my.dahr.monopolyone.network.api.MonopolyApi
+import my.dahr.monopolyone.data.network.api.MonopolyApi
 import my.dahr.monopolyone.utils.BASE_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

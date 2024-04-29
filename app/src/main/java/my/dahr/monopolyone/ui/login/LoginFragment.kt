@@ -9,7 +9,7 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import my.dahr.monopolyone.R
 import my.dahr.monopolyone.databinding.FragmentLoginBinding
-import my.dahr.monopolyone.ui.MainFragment
+import my.dahr.monopolyone.ui.home.MainFragment
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {

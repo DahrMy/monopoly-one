@@ -2,7 +2,6 @@ package my.dahr.monopolyone.data.network.api
 
 import my.dahr.monopolyone.data.network.dto.friends.list.FriendsResponse
 import my.dahr.monopolyone.data.network.dto.friends.requests.FriendsRequestsResponse
-import my.dahr.monopolyone.domain.models.friends.requests.FriendsRequests
 import retrofit2.http.GET
 import retrofit2.http.Query
 

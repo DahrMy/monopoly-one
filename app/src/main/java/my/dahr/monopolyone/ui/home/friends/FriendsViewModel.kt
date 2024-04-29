@@ -21,7 +21,14 @@ class FriendsViewModel @Inject constructor(
 
     fun getFriendList() {
         viewModelScope.launch(myCoroutineContext) {
-            val response = repository.getFriendsList("dahr_my", false, false, "short", 0, 20)
+            val response = repository.getFriendsList(
+                userId = "dahr_my",
+                online = false,
+                addUser = false,
+                type = "short",
+                offset = 0,
+                count = 20
+            )
             friendsResultLiveData.postValue(response)
 
         }

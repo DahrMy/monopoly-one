@@ -1,4 +1,4 @@
-package my.dahr.monopolyone.di
+package my.dahr.monopolyone.data.di
 
 import dagger.Binds
 import dagger.Module

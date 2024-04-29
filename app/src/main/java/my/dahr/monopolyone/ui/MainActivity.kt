@@ -10,16 +10,14 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.AndroidEntryPoint
 import my.dahr.monopolyone.R
 import my.dahr.monopolyone.data.models.Session
 import my.dahr.monopolyone.databinding.ActivityMainBinding
+import my.dahr.monopolyone.ui.home.MainFragment
 import my.dahr.monopolyone.ui.login.LoginFragment
 import my.dahr.monopolyone.utils.SESSION_KEY
 import my.dahr.monopolyone.utils.SHARED_PREFERENCES
 import my.dahr.monopolyone.utils.currentTimeInSec
-import my.dahr.monopolyone.ui.home.MainFragment
-import my.dahr.monopolyone.ui.home.friends.FriendsFragment
 
 
 @AndroidEntryPoint
