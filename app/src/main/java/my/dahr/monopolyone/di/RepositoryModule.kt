@@ -12,5 +12,4 @@ import my.dahr.monopolyone.data.repository.FriendsRepositoryImpl
 abstract class RepositoryModule {
     @Binds
    abstract fun bindFriendsRepository(impl: FriendsRepositoryImpl): FriendsRepository
-
 }

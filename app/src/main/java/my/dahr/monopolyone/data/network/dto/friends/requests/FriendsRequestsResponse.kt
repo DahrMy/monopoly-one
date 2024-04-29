@@ -1,11 +1,11 @@
-package my.dahr.monopolyone.data.network.dto
+package my.dahr.monopolyone.data.network.dto.friends.requests
 
 
 import com.google.gson.annotations.SerializedName
 
-data class FriendsResponse(
+data class FriendsRequestsResponse(
     @SerializedName("code")
     val code: Int? = null,
     @SerializedName("data")
-    val data: DataJson? = null
+    val data: DataRequestsJson? = null
 )

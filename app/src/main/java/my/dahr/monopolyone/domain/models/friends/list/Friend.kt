@@ -1,4 +1,4 @@
-package my.dahr.monopolyone.domain.models
+package my.dahr.monopolyone.domain.models.friends.list
 
 
 

@@ -28,6 +28,15 @@
         app:layout_constraintBottom_toBottomOf="@id/tvFriendsTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/tvFriendsTitle" />
+    <ImageView
+        android:id="@+id/ibCheckRequests"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/item_requests"
+        app:layout_constraintBottom_toBottomOf="@id/tvFriendsTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvFriendsTitle" />
 
     <SearchView
         android:id="@+id/svSearch"
@@ -39,6 +48,7 @@
         app:layout_constraintTop_toBottomOf="@id/tvFriendsTitle" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvFriends"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"

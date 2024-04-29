@@ -3,7 +3,8 @@ package my.dahr.monopolyone.data.network.datasource
 import my.dahr.monopolyone.data.converters.toUi
 import my.dahr.monopolyone.data.network.api.FriendsApi
 import my.dahr.monopolyone.domain.datasource.FriendsDataSource
-import my.dahr.monopolyone.domain.models.Friend
+import my.dahr.monopolyone.domain.models.friends.list.Friend
+import my.dahr.monopolyone.domain.models.friends.requests.Request
 import javax.inject.Inject
 
 class FriendsDataSourceImpl @Inject constructor(
@@ -22,6 +23,17 @@ class FriendsDataSourceImpl @Inject constructor(
             .toUi()
             .data
             .friends
+    }
+
+    override suspend fun getFriendsRequestsList(
+        type: String,
+        offset: Int,
+        count: Int
+    ): List<Request> {
+        return friendsApi.getFriendsRequestsList(type, offset, count)
+            .toUi()
+            .data
+            .requests
     }
 
 }

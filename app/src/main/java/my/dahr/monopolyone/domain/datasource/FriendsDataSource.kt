@@ -1,7 +1,7 @@
 package my.dahr.monopolyone.domain.datasource
 
-import my.dahr.monopolyone.domain.models.Friend
-import my.dahr.monopolyone.domain.models.Friends
+import my.dahr.monopolyone.domain.models.friends.list.Friend
+import my.dahr.monopolyone.domain.models.friends.requests.Request
 
 interface FriendsDataSource {
     suspend fun getFriendsList(
@@ -12,4 +12,10 @@ interface FriendsDataSource {
         offset: Int,
         count: Int
     ):List<Friend>
+
+    suspend fun getFriendsRequestsList(
+        type: String,
+        offset: Int,
+        count: Int,
+    ) : List<Request>
 }
