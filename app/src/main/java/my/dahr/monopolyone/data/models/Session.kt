@@ -4,5 +4,5 @@ data class Session(
     val userId: Int,
     val accessToken: String,
     val refreshToken: String,
-    val expires: Long
+    val expiresAt: Long
 )

@@ -5,6 +5,4 @@
     android:id="@+id/fragment_container_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:name="my.dahr.monopolyone.ui.MainFragment"
-    tools:context=".ui.MainActivity"
-    tools:layout="@layout/fragment_main" />
+    tools:context=".ui.MainActivity" />

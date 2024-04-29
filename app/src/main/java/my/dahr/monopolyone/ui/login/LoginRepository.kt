@@ -37,7 +37,7 @@ class LoginRepository @Inject constructor(
             .putString(SESSION_KEY, serializedData)
             .apply()
 
-        Log.i("SESSION", "Session saved with data:\n$serializedData")
+        Log.i("SharedPreferences", "Session saved with data:\n$serializedData")
     }
 
 }
