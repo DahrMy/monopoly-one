@@ -4,7 +4,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import my.dahr.monopolyone.data.network.api.MonopolyApi
+import my.dahr.monopolyone.data.network.api.AuthorizationApi
+import my.dahr.monopolyone.data.network.api.FriendsApi
 import my.dahr.monopolyone.utils.BASE_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -38,6 +39,10 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideSimpleApi(retrofit: Retrofit): MonopolyApi = retrofit.create(MonopolyApi::class.java)
+    fun provideAuthorizationApi(retrofit: Retrofit): AuthorizationApi = retrofit.create(AuthorizationApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideFriendsApi(retrofit: Retrofit): FriendsApi = retrofit.create(FriendsApi::class.java)
 
 }

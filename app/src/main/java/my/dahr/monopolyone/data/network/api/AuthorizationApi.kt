@@ -5,7 +5,7 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-interface MonopolyApi {
+interface AuthorizationApi {
     @POST("auth.signin")
     fun authSignInRequest(@Body body: Map<String, String>): Call<SessionResponse>
 

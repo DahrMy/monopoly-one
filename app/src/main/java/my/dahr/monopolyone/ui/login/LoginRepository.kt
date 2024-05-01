@@ -6,7 +6,7 @@ import com.google.gson.Gson
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ViewModelScoped
 import my.dahr.monopolyone.data.models.Session
-import my.dahr.monopolyone.data.network.api.MonopolyApi
+import my.dahr.monopolyone.data.network.api.AuthorizationApi
 import my.dahr.monopolyone.data.network.dto.response.SessionResponse
 import my.dahr.monopolyone.utils.SESSION_KEY
 import my.dahr.monopolyone.utils.SHARED_PREFERENCES
@@ -16,7 +16,7 @@ import javax.inject.Inject
 @ViewModelScoped
 class LoginRepository @Inject constructor(
     @ApplicationContext context: Context,
-    private val api: MonopolyApi
+    private val api: AuthorizationApi
 ) {
 
     private val sharedPreferences =
