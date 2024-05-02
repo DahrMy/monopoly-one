@@ -1,8 +1,11 @@
 package my.dahr.monopolyone.data.network.api
 
+import my.dahr.monopolyone.data.network.dto.friends.add.AddResponseJson
 import my.dahr.monopolyone.data.network.dto.friends.list.FriendsResponse
 import my.dahr.monopolyone.data.network.dto.friends.requests.FriendsRequestsResponse
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface FriendsApi {
@@ -21,7 +24,12 @@ interface FriendsApi {
         @Query("access_token") accessToken: String,
         @Query("type") type: String,
         @Query("offset") offset: Int,
-        @Query("count")count: Int,
-    ) : FriendsRequestsResponse
+        @Query("count") count: Int,
+    ): FriendsRequestsResponse
+
+    @POST("friends.add")
+    suspend fun addFriend(
+        @Body body: AddResponseJson
+    )
 
 }

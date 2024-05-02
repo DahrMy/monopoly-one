@@ -28,17 +28,39 @@
         app:layout_constraintBottom_toBottomOf="@id/tvFriendsTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/tvFriendsTitle" />
-    <ImageView
-        android:id="@+id/ibCheckRequests"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="16dp"
-        android:src="@drawable/item_requests"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@id/tvFriendsTitle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvFriendsTitle" />
+        app:layout_constraintTop_toTopOf="@id/tvFriendsTitle">
 
-    <SearchView
+        <TextView
+            android:id="@+id/notificationTextView"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/circle_background"
+            android:text="@string/_10"
+            android:visibility="invisible"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/ibCheckRequests"
+            app:layout_constraintTop_toTopOf="@id/ibCheckRequests" />
+
+        <ImageView
+            android:id="@+id/ibCheckRequests"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/item_requests"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/layout" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.SearchView
         android:id="@+id/svSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

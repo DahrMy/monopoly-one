@@ -9,4 +9,6 @@ interface NavigationListener {
     fun navigateToFriendsScreen()
     fun navigateToChatScreen()
     fun navigateToInventoryScreen()
+
+    fun navigateToFriendsRequestsScreen()
 }
