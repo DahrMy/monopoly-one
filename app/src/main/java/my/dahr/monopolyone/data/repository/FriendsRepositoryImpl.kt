@@ -1,5 +1,6 @@
 package my.dahr.monopolyone.data.repository
 
+import my.dahr.monopolyone.data.network.dto.friends.add.AddResponseJson
 import my.dahr.monopolyone.domain.datasource.FriendsDataSource
 import my.dahr.monopolyone.domain.models.friends.list.Friend
 import my.dahr.monopolyone.domain.models.friends.requests.Request
@@ -24,5 +25,7 @@ class FriendsRepositoryImpl @Inject constructor(
         offset: Int,
         count: Int
     ): List<Request> = friendsDataSource.getFriendsRequestsList(accessToken, type,offset, count)
+
+    override suspend fun addFriend(response: AddResponseJson) = friendsDataSource.addFriend(response)
 
 }

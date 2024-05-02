@@ -14,6 +14,7 @@ import my.dahr.monopolyone.databinding.FragmentMainBinding
 import my.dahr.monopolyone.ui.home.friends.FriendsFragment
 import my.dahr.monopolyone.ui.home.inventory.InventoryFragment
 import my.dahr.monopolyone.listeners.NavigationListener
+import my.dahr.monopolyone.ui.home.friends.requests.FriendsRequestsFragment
 import my.dahr.monopolyone.ui.home.friends.user.UserFragment
 import my.dahr.monopolyone.ui.home.profile.ProfileFragment
 
@@ -94,6 +95,10 @@ class MainFragment : Fragment(), NavigationListener {
 
     override fun navigateToInventoryScreen() {
         replaceFragment(InventoryFragment.newInstance())
+    }
+
+    override fun navigateToFriendsRequestsScreen() {
+        replaceFragment(FriendsRequestsFragment.newInstance())
     }
 
     private fun replaceFragment(fragment: Fragment){

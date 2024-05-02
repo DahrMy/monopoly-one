@@ -1,4 +1,4 @@
-package my.dahr.monopolyone.ui.home.friends.adapter
+package my.dahr.monopolyone.ui.home.friends.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -19,9 +19,12 @@ class FriendsAdapter : ListAdapter<Friend, FriendsAdapter.FriendsViewHolder>(Dif
             rawItemFriendBinding.apply {
                 tvFriendNick.text = friend.nick
                 Glide.with(root)
-                    .load("https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/android.svg")
+                    .load(friend.avatar)
                     .into(ivFriend)
             }
+        }
+
+        private fun loadSvgGlide(){
         }
     }
 

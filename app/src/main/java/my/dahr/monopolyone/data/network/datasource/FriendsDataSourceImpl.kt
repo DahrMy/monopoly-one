@@ -2,6 +2,7 @@ package my.dahr.monopolyone.data.network.datasource
 
 import my.dahr.monopolyone.data.converters.toUi
 import my.dahr.monopolyone.data.network.api.FriendsApi
+import my.dahr.monopolyone.data.network.dto.friends.add.AddResponseJson
 import my.dahr.monopolyone.domain.datasource.FriendsDataSource
 import my.dahr.monopolyone.domain.models.friends.list.Friend
 import my.dahr.monopolyone.domain.models.friends.requests.Request
@@ -37,4 +38,7 @@ class FriendsDataSourceImpl @Inject constructor(
             .requests
     }
 
+    override suspend fun addFriend(response: AddResponseJson) {
+        friendsApi.addFriend(response)
+    }
 }

@@ -78,7 +78,6 @@ okhttp = { group = "com.squareup.okhttp3", name = "logging-interceptor", version
 # Glide
 glide = { group="com.github.bumptech.glide", name="glide", version.ref="glide" }
 
-
 [plugins]
 
 androidApplication = { id = "com.android.application", version.ref = "agp" }
