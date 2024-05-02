@@ -26,11 +26,12 @@ class FriendsDataSourceImpl @Inject constructor(
     }
 
     override suspend fun getFriendsRequestsList(
+        accessToken: String,
         type: String,
         offset: Int,
         count: Int
     ): List<Request> {
-        return friendsApi.getFriendsRequestsList(type, offset, count)
+        return friendsApi.getFriendsRequestsList(accessToken, type, offset, count)
             .toUi()
             .data
             .requests

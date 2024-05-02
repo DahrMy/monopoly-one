@@ -31,7 +31,9 @@ class FriendsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initObservers()
         viewModel.getFriendList()
-        viewModel.getFriendRequestsList()
+        binding.ibCheckRequests.setOnClickListener {
+            viewModel.getFriendRequestsList()
+        }
     }
     private fun initObservers(){
         viewModel.friendsResultLiveData.observe(viewLifecycleOwner){

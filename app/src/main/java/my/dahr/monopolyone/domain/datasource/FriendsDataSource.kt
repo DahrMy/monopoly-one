@@ -14,6 +14,7 @@ interface FriendsDataSource {
     ): List<Friend>
 
     suspend fun getFriendsRequestsList(
+        accessToken: String,
         type: String,
         offset: Int,
         count: Int,

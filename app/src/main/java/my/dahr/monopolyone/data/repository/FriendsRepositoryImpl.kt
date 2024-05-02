@@ -19,9 +19,10 @@ class FriendsRepositoryImpl @Inject constructor(
     ): List<Friend> = friendsDataSource.getFriendsList(userId, online, addUser, type, offset, count)
 
     override suspend fun getFriendsRequestsList(
+        accessToken: String,
         type: String,
         offset: Int,
         count: Int
-    ): List<Request> = friendsDataSource.getFriendsRequestsList(type,offset, count)
+    ): List<Request> = friendsDataSource.getFriendsRequestsList(accessToken, type,offset, count)
 
 }

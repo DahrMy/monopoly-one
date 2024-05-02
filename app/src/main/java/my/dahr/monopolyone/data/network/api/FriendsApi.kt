@@ -18,6 +18,7 @@ interface FriendsApi {
 
     @GET("friends.getRequests")
     suspend fun getFriendsRequestsList(
+        @Query("access_token") accessToken: String,
         @Query("type") type: String,
         @Query("offset") offset: Int,
         @Query("count")count: Int,
