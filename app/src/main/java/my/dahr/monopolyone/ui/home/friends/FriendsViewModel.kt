@@ -14,6 +14,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import my.dahr.monopolyone.data.models.Session
 import my.dahr.monopolyone.data.network.dto.friends.add.AddResponseJson
+import my.dahr.monopolyone.data.network.dto.friends.delete.DeleteResponseJson
 import my.dahr.monopolyone.domain.models.friends.list.Friend
 import my.dahr.monopolyone.domain.models.friends.requests.Request
 import my.dahr.monopolyone.domain.repository.FriendsRepository
@@ -29,16 +30,19 @@ class FriendsViewModel @Inject constructor(
 
 ) : ViewModel() {
 
-    private val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
-    private val sessionJson = sharedPreferences.getString(SESSION_KEY,"")
+    private val sharedPreferences =
+        context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
+    private val sessionJson = sharedPreferences.getString(SESSION_KEY, "")
+    private var session = Gson().fromJson(sessionJson, Session::class.java)
+
 
     private val myCoroutineContext = SupervisorJob() + Dispatchers.IO
     val friendsResultLiveData = MutableLiveData<List<Friend>>()
 
     val friendsRequestsResultLiveData = MutableLiveData<List<Request>>()
 
+
     fun getFriendList() {
-        val session = Gson().fromJson(sessionJson, Session::class.java)
         viewModelScope.launch(myCoroutineContext) {
             try {
                 val response = repository.getFriendsList(
@@ -50,14 +54,13 @@ class FriendsViewModel @Inject constructor(
                     count = 20
                 )
                 friendsResultLiveData.postValue(response)
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 Log.d("e", e.toString())
             }
         }
     }
 
     fun getFriendRequestsList() {
-        val session = Gson().fromJson(sessionJson, Session::class.java)
         viewModelScope.launch(myCoroutineContext) {
             try {
                 val response = repository.getFriendsRequestsList(
@@ -73,18 +76,17 @@ class FriendsViewModel @Inject constructor(
         }
     }
 
-    fun addFriend(userId: Any){
-        val session = Gson().fromJson(sessionJson, Session::class.java)
-        viewModelScope.launch (myCoroutineContext){
-            try {
-                val response = AddResponseJson(access_token = session.accessToken, userId = userId)
-                repository.addFriend(response)
-            }
-            catch (e: Exception){
-                Log.d("user", 5462730.toString())
-                Log.d("token", session.accessToken)
-                Log.d("error", e.toString())
-            }
+    fun addFriend(userId: Any) {
+        viewModelScope.launch(myCoroutineContext) {
+            val response = AddResponseJson(access_token = session.accessToken, userId = userId)
+            repository.addFriend(response)
+        }
+    }
+
+    fun deleteFriend(userId: Any){
+        viewModelScope.launch (myCoroutineContext) {
+            val response = DeleteResponseJson(access_token = session.accessToken, userId = userId)
+            repository.deleteFriend(response)
         }
     }
 }

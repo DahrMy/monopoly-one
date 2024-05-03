@@ -1,6 +1,7 @@
 package my.dahr.monopolyone.data.network.api
 
 import my.dahr.monopolyone.data.network.dto.friends.add.AddResponseJson
+import my.dahr.monopolyone.data.network.dto.friends.delete.DeleteResponseJson
 import my.dahr.monopolyone.data.network.dto.friends.list.FriendsResponse
 import my.dahr.monopolyone.data.network.dto.friends.requests.FriendsRequestsResponse
 import retrofit2.http.Body
@@ -30,6 +31,11 @@ interface FriendsApi {
     @POST("friends.add")
     suspend fun addFriend(
         @Body body: AddResponseJson
+    )
+
+    @POST("friends.delete")
+    suspend fun deleteFriend(
+        @Body body: DeleteResponseJson
     )
 
 }

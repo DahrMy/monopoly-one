@@ -7,21 +7,27 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import my.dahr.monopolyone.databinding.ItemFriendRequestsBinding
 import my.dahr.monopolyone.domain.models.friends.requests.Request
+import okhttp3.internal.notify
 
-class FriendRequestsAdapter(private val onAcceptFriendRequestClickListener: OnAcceptFriendRequestClickListener) :
+class FriendRequestsAdapter(private val onAcceptFriendRequestClickListener: OnAcceptFriendRequestClickListener,
+    private val onRejectFriendRequestClickListener: OnRejectFriendRequestClickListener) :
     ListAdapter<Request, FriendRequestsAdapter.FriendRequestsViewHolder>(
         DiffUtil()
     ) {
 
     class FriendRequestsViewHolder(
         private var rawItemFriendRequestsBinding: ItemFriendRequestsBinding,
-        private val onAcceptFriendRequestClickListener: OnAcceptFriendRequestClickListener
+        private val onAcceptFriendRequestClickListener: OnAcceptFriendRequestClickListener,
+        private val onRejectFriendRequestClickListener: OnRejectFriendRequestClickListener
     ) :
         RecyclerView.ViewHolder(rawItemFriendRequestsBinding.root) {
         fun bind(request: Request) {
             setContent(request)
             rawItemFriendRequestsBinding.ivAccept.setOnClickListener {
                 onAcceptFriendRequestClickListener.onAcceptFriendRequestClicked(request.userId)
+            }
+            rawItemFriendRequestsBinding.ivReject.setOnClickListener {
+                onRejectFriendRequestClickListener.onRejectFriendRequestClicked(request.userId)
             }
         }
 
@@ -38,7 +44,7 @@ class FriendRequestsAdapter(private val onAcceptFriendRequestClickListener: OnAc
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendRequestsViewHolder {
         val binding =
             ItemFriendRequestsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return FriendRequestsViewHolder(binding,onAcceptFriendRequestClickListener)
+        return FriendRequestsViewHolder(binding,onAcceptFriendRequestClickListener, onRejectFriendRequestClickListener)
     }
 
     override fun onBindViewHolder(holder: FriendRequestsViewHolder, position: Int) {
@@ -58,5 +64,8 @@ class FriendRequestsAdapter(private val onAcceptFriendRequestClickListener: OnAc
 
     interface OnAcceptFriendRequestClickListener {
         fun onAcceptFriendRequestClicked(userId: Any)
+    }
+    interface OnRejectFriendRequestClickListener {
+        fun onRejectFriendRequestClicked(userId: Any)
     }
 }

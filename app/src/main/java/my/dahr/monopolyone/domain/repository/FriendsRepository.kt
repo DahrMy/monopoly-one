@@ -1,6 +1,7 @@
 package my.dahr.monopolyone.domain.repository
 
 import my.dahr.monopolyone.data.network.dto.friends.add.AddResponseJson
+import my.dahr.monopolyone.data.network.dto.friends.delete.DeleteResponseJson
 import my.dahr.monopolyone.domain.models.friends.list.Friend
 import my.dahr.monopolyone.domain.models.friends.requests.Request
 
@@ -23,5 +24,9 @@ interface FriendsRepository {
 
     suspend fun addFriend(
         response: AddResponseJson
+    )
+
+    suspend fun deleteFriend(
+        response: DeleteResponseJson
     )
 }

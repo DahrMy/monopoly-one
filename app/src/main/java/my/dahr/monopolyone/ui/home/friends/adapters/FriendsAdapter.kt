@@ -8,8 +8,10 @@ import com.bumptech.glide.Glide
 import my.dahr.monopolyone.databinding.ItemFriendBinding
 import my.dahr.monopolyone.domain.models.friends.list.Friend
 
-class FriendsAdapter : ListAdapter<Friend, FriendsAdapter.FriendsViewHolder>(DiffUtil()) {
-    class FriendsViewHolder(private var rawItemFriendBinding: ItemFriendBinding) :
+class FriendsAdapter(private val onItemClickListener: OnItemClickListener) : ListAdapter<Friend, FriendsAdapter.FriendsViewHolder>(DiffUtil()) {
+    class FriendsViewHolder(private var rawItemFriendBinding: ItemFriendBinding,
+        private val onItemClickListener: OnItemClickListener
+        ) :
         RecyclerView.ViewHolder(rawItemFriendBinding.root) {
         fun bind(friend: Friend) {
             setContent(friend)
@@ -24,18 +26,19 @@ class FriendsAdapter : ListAdapter<Friend, FriendsAdapter.FriendsViewHolder>(Dif
             }
         }
 
-        private fun loadSvgGlide(){
-        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendsViewHolder {
         val binding = ItemFriendBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return FriendsViewHolder(binding)
+        return FriendsViewHolder(binding, onItemClickListener)
     }
 
     override fun onBindViewHolder(holder: FriendsViewHolder, position: Int) {
         val friend = getItem(position)
         holder.bind(friend)
+        holder.itemView.setOnClickListener{
+            onItemClickListener.onItemClicked(position, friend)
+        }
     }
 
     class DiffUtil : androidx.recyclerview.widget.DiffUtil.ItemCallback<Friend>() {
@@ -46,6 +49,10 @@ class FriendsAdapter : ListAdapter<Friend, FriendsAdapter.FriendsViewHolder>(Dif
         override fun areContentsTheSame(oldItem: Friend, newItem: Friend): Boolean {
             return oldItem == newItem
         }
+    }
+
+    interface OnItemClickListener{
+        fun onItemClicked(position: Int, friend: Friend)
     }
 
 }
