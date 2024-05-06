@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import my.dahr.monopolyone.R
+import my.dahr.monopolyone.data.models.LoginStatus
 import my.dahr.monopolyone.databinding.FragmentLoginBinding
 import my.dahr.monopolyone.ui.home.MainFragment
 
@@ -37,9 +38,14 @@ class LoginFragment : Fragment() {
 
                 viewModel.signIn(email, password)
 
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container_view, MainFragment())
-                    .commit()
+                viewModel.loginStatusLiveData.observe(viewLifecycleOwner) { status ->
+                    if (status == LoginStatus.Success) {
+                        parentFragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container_view, MainFragment())
+                            .commit()
+                    }
+                }
+
             }
         }
     }
