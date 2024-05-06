@@ -42,13 +42,13 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+//        sharedPreferences.edit().remove(SESSION_KEY).apply()
         onSessionCheck()
 
     }
 
     private fun onSessionCheck() {
         val sessionJson = sharedPreferences.getString(SESSION_KEY, "")
-//        val sessionJsonTest = "{\"accessToken\":\"4UC4otPsYyCGnovXy0VNo0ym0zwWA7yE\",\"expiresAt\":1714416142779,\"refreshToken\":\"4ZpBDKV55gNl4cjBWB2KTqvasm0dvMkzHxmmnlqTSGu5lPdckyvh7R3YGMcJQT2YJWr4iOiZ5NN82zYQVezD9hb8bN5jqmIYnQlZ14g\",\"userId\":1363434}"
 
         if (!sessionJson.isNullOrBlank()) {
             val session = Gson().fromJson(sessionJson, Session::class.java)
