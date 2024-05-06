@@ -97,10 +97,13 @@ dependencies {
 
     // Retrofit + OkHTTP
     implementation(libs.retrofit)
-    implementation(libs.converter.gson)
+    implementation(libs.gson.converter)
     implementation(libs.okhttp)
 
     // Glide
     implementation(libs.glide)
+
+    // Loading button
+    implementation(libs.loadingBt)
 
 }
