@@ -1,5 +1,6 @@
 package my.dahr.monopolyone.ui.login
 
+import androidx.annotation.DrawableRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -44,6 +45,8 @@ class LoginViewModel @Inject constructor(
             })
         }
     }
+
+    fun loadBitmap(@DrawableRes id: Int) = repository.getBitmapFromDrawableRes(id)
 
     val loginStatusLiveData: LiveData<LoginStatus> get() = mLoginStatusLiveData
 

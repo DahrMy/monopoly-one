@@ -1,10 +1,15 @@
 package my.dahr.monopolyone.ui.login
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.util.Log
+import androidx.annotation.DrawableRes
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.graphics.drawable.toBitmap
 import com.google.gson.Gson
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ViewModelScoped
+import my.dahr.monopolyone.R
 import my.dahr.monopolyone.data.models.Session
 import my.dahr.monopolyone.data.network.api.AuthorizationApi
 import my.dahr.monopolyone.data.network.dto.response.SessionResponse
@@ -15,7 +20,7 @@ import javax.inject.Inject
 
 @ViewModelScoped
 class LoginRepository @Inject constructor(
-    @ApplicationContext context: Context,
+    @ApplicationContext private val context: Context,
     private val api: AuthorizationApi
 ) {
 
@@ -38,6 +43,19 @@ class LoginRepository @Inject constructor(
             .apply()
 
         Log.i("SharedPreferences", "Session saved with data:\n$serializedData")
+    }
+
+    fun getBitmapFromDrawableRes(@DrawableRes id: Int): Bitmap {
+
+        val drawable = AppCompatResources.getDrawable(context, id)
+        if (drawable != null) {
+            return drawable.toBitmap()
+        } else {
+            val reserveDrawable =
+                AppCompatResources.getDrawable(context, R.drawable.ic_disabled_by_default)
+            return reserveDrawable!!.toBitmap()
+        }
+
     }
 
 }

@@ -36,17 +36,28 @@ class LoginFragment : Fragment() {
                 val email = etEmail.text.toString()
                 val password = etPassword.text.toString()
 
+                btLogin.startAnimation()
                 viewModel.signIn(email, password)
+                btLoginObserver()
+            }
+        }
+    }
 
-                viewModel.loginStatusLiveData.observe(viewLifecycleOwner) { status ->
-                    if (status == LoginStatus.Success) {
-                        parentFragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container_view, MainFragment())
-                            .commit()
-                    }
-                }
+    private fun btLoginObserver() {
+        viewModel.loginStatusLiveData.observe(viewLifecycleOwner) { status ->
+            if (status == LoginStatus.Success) {
+
+                binding.btLogin.doneLoadingAnimation(
+                    binding.btLogin.solidColor,
+                    viewModel.loadBitmap(R.drawable.ic_done)
+                )
+
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container_view, MainFragment())
+                    .commit()
 
             }
         }
     }
+
 }
