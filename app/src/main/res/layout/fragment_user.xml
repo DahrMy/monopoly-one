@@ -116,7 +116,110 @@
         android:padding="4dp"
         app:layout_constraintTop_toBottomOf="@id/layoutSend">
 
-        <include layout="@layout/item_rank" />
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvCardRank"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            app:cardCornerRadius="48dp"
+            app:cardElevation="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/ivRank"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_launcher_background"
+                app:layout_constraintBottom_toBottomOf="@id/cvCard"
+                app:layout_constraintEnd_toEndOf="@id/cvCard"
+                app:layout_constraintStart_toStartOf="@id/cvCard"
+                app:layout_constraintTop_toTopOf="@id/cvCard" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tvRankName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/rank_name"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/cvCardRank"
+            app:layout_constraintTop_toTopOf="@id/cvCardRank" />
+
+        <TextView
+            android:id="@+id/tvRankLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rank_level"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@id/tvRankName"
+            app:layout_constraintTop_toBottomOf="@id/tvRankName" />
+
+        <TextView
+            android:id="@+id/tvRankLevelNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@string/_11"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/tvRankLevel"
+            app:layout_constraintTop_toBottomOf="@id/tvRankName" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="0dp"
+            android:layout_height="12dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="4dp"
+            android:max="100"
+            android:progress="5"
+            android:progressDrawable="@drawable/progress_bar"
+            app:layout_constraintBottom_toBottomOf="@id/cvCardRank"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tvRankLevel" />
+
+        <TextView
+            android:id="@+id/tvToLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:text="@string/xp"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/tvRankLevel"
+            app:layout_constraintEnd_toEndOf="@id/progressBar"
+            app:layout_constraintTop_toTopOf="@id/tvRankLevel" />
+
+<!--        <TextView-->
+<!--            android:id="@+id/tvNextLevel"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/_12"-->
+<!--            android:textSize="16sp"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/tvRankLevel"-->
+<!--            app:layout_constraintEnd_toEndOf="@id/progressBar"-->
+<!--            app:layout_constraintTop_toTopOf="@id/tvRankLevel" />-->
+
+        <TextView
+            android:id="@+id/tvXp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:text="@string/_477"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/tvRankLevel"
+            app:layout_constraintEnd_toStartOf="@+id/tvToLevel"
+            app:layout_constraintTop_toTopOf="@id/tvRankLevel" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -227,12 +330,12 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:textStyle="bold"
-        android:layout_marginTop="24dp"
-        android:textSize="28sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:text="@string/inventory_1"
+        android:textSize="28sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@id/LayoutInfoAllMatches"
         app:layout_constraintTop_toBottomOf="@id/LayoutInfoAllMatches" />
 
