@@ -12,6 +12,7 @@ import my.dahr.monopolyone.R
 import my.dahr.monopolyone.databinding.FragmentFriendsBinding
 import my.dahr.monopolyone.domain.models.friends.list.Friend
 import my.dahr.monopolyone.domain.models.friends.requests.Request
+import my.dahr.monopolyone.listeners.NavigationListener
 import my.dahr.monopolyone.ui.home.friends.adapters.FriendsAdapter
 import my.dahr.monopolyone.ui.home.friends.requests.FriendsRequestsFragment
 import my.dahr.monopolyone.ui.home.friends.user.UserFragment
@@ -40,13 +41,10 @@ class FriendsFragment : Fragment() {
         viewModel.getFriendList()
 
         setListeners()
-
-
     }
 
     private fun setListeners() {
         binding.layout.setOnClickListener {
-
             val fragment = FriendsRequestsFragment()
             parentFragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)

@@ -14,4 +14,17 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="friend_requests">Friend Requests</string>
     <string name="_10">10</string>
+    <string name="nickname">Nickname</string>
+    <string name="rank_name">Rank name</string>
+    <string name="rank_level">rank level</string>
+    <string name="_11">11</string>
+    <string name="to_lvl">XP to lvl.</string>
+    <string name="_12">12</string>
+    <string name="_477">477</string>
+    <string name="message">message</string>
+    <string name="_94">94</string>
+    <string name="matches">matches</string>
+    <string name="_25">25</string>
+    <string name="wins">wins</string>
+    <string name="inventory_1">Inventory</string>
 </resources>
