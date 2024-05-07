@@ -10,7 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import my.dahr.monopolyone.data.models.LoginStatus
+import my.dahr.monopolyone.data.models.RequestStatus
 import my.dahr.monopolyone.data.network.dto.response.SessionResponse
 import my.dahr.monopolyone.utils.toSession
 import retrofit2.Call
@@ -25,11 +25,11 @@ class LoginViewModel @Inject constructor(
 
     private val coroutineContext = Dispatchers.IO + SupervisorJob()
 
-    private val mLoginStatusLiveData = MutableLiveData<LoginStatus>()
+    private val mRequestStatusLiveData = MutableLiveData<RequestStatus>()
 
     fun signIn(email: String, password: String) {
 
-        mLoginStatusLiveData.postValue(LoginStatus.Loading)
+        mRequestStatusLiveData.postValue(RequestStatus.Loading)
 
         viewModelScope.launch(coroutineContext) {
             repository.postSignIn(email, password, object : Callback<SessionResponse> {
@@ -39,18 +39,18 @@ class LoginViewModel @Inject constructor(
                         val session = response.body()?.data?.toSession()
                         if (session != null) {
                             repository.saveSession(session)
-                            mLoginStatusLiveData.postValue(LoginStatus.Success)
+                            mRequestStatusLiveData.postValue(RequestStatus.Success)
                         }
                     } else {
                         Log.d("Retrofit", "Error: ${response.body()?.data}")
-                        mLoginStatusLiveData.postValue(LoginStatus.Failure)
+                        mRequestStatusLiveData.postValue(RequestStatus.Failure)
                     }
 
                 }
 
                 override fun onFailure(call: Call<SessionResponse>, t: Throwable) {
                     Log.d("Retrofit", "Failure: ${t.message}")
-                    mLoginStatusLiveData.postValue(LoginStatus.Failure)
+                    mRequestStatusLiveData.postValue(RequestStatus.Failure)
                 }
 
             })
@@ -60,6 +60,6 @@ class LoginViewModel @Inject constructor(
 
     fun loadBitmap(@DrawableRes id: Int) = repository.getBitmapFromDrawableRes(id)
 
-    val loginStatusLiveData: LiveData<LoginStatus> get() = mLoginStatusLiveData
+    val requestStatusLiveData: LiveData<RequestStatus> get() = mRequestStatusLiveData
 
 }

@@ -14,9 +14,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import my.dahr.monopolyone.R
-import my.dahr.monopolyone.data.models.LoginStatus
+import my.dahr.monopolyone.data.models.RequestStatus
 import my.dahr.monopolyone.databinding.FragmentLoginBinding
 import my.dahr.monopolyone.ui.home.MainFragment
+import my.dahr.monopolyone.utils.validEmail
+import my.dahr.monopolyone.utils.validPassword
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
@@ -31,29 +33,58 @@ class LoginFragment : Fragment() {
     ): View {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
 
+        initObservers()
         setListeners()
 
         return binding.root
     }
 
+    private fun initObservers() {
+        btLoginObserver()
+    }
+
     private fun setListeners() {
         binding.apply {
-            btLogin.setOnClickListener {
-                val email = etEmail.text.toString()
-                val password = etPassword.text.toString()
-
-                viewModel.signIn(email, password)
-                btLoginObserver()
-            }
+            btLogin.setOnClickListener { btLoginOnClickListener() }
         }
+    }
+
+    private fun btLoginOnClickListener() {
+        binding.apply {
+            val email = etEmail.text.toString()
+            val password = etPassword.text.toString()
+
+            if (!validEmail(email)) {
+                inputLayoutEmail.isErrorEnabled = true
+                etEmail.error = resources.getString(R.string.et_email_error)
+            } else {
+                inputLayoutEmail.isErrorEnabled = false
+                etEmail.error = null
+            }
+
+            if (!validPassword(password)) {
+                inputLayoutPassword.isErrorEnabled = true
+                etPassword.error = resources.getString(R.string.et_password_error)
+                inputLayoutPassword.error
+            } else {
+                inputLayoutPassword.isErrorEnabled = false
+                etPassword.error = null
+            }
+
+            if (validEmail(email) && validPassword(password)) {
+                viewModel.signIn(email, password)
+            }
+
+        }
+
     }
 
     private fun btLoginObserver() {
         binding.btLogin.apply {
-            viewModel.loginStatusLiveData.observe(viewLifecycleOwner) { status ->
+            viewModel.requestStatusLiveData.observe(viewLifecycleOwner) { status ->
                 when (status) {
 
-                    LoginStatus.Success -> {
+                    RequestStatus.Success -> {
                         lifecycleScope.launch(Dispatchers.Main) {
                             btLoginEndAnimation(
                                 solidColor, viewModel.loadBitmap(R.drawable.ic_done)
@@ -65,7 +96,7 @@ class LoginFragment : Fragment() {
                         }
                     }
 
-                    LoginStatus.Failure -> {
+                    RequestStatus.Failure -> {
                         lifecycleScope.launch(Dispatchers.Main) {
                             btLoginEndAnimation(
                                 solidColor, viewModel.loadBitmap(R.drawable.ic_error_outline)
@@ -73,7 +104,7 @@ class LoginFragment : Fragment() {
                         }
                     }
 
-                    LoginStatus.Loading -> {
+                    RequestStatus.Loading -> {
                         startAnimation()
                     }
 

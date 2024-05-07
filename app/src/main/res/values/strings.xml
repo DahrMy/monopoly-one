@@ -2,7 +2,9 @@
     <string name="app_name">Monopoly One (unofficial)</string>
     <string name="iv_description_monopoly_one">Monopoly One</string>
     <string name="et_email_hint">Email</string>
+    <string name="et_email_error">Email is invalid</string>
     <string name="et_password_hint">Password</string>
+    <string name="et_password_error">Password is invalid</string>
     <string name="bt_login_text">Login</string>
     <string name="profile">profile</string>
     <string name="friends">friends</string>
@@ -10,8 +12,6 @@
     <string name="inventory">inventory</string>
     <string name="Friends">Friends</string>
     <string name="friend_s_nickname">Friend\'s nickname</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="friend_requests">Friend Requests</string>
     <string name="_10">10</string>
 </resources>
