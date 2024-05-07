@@ -1,12 +1,18 @@
 package my.dahr.monopolyone.ui.login
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ColorInt
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import my.dahr.monopolyone.R
 import my.dahr.monopolyone.data.models.LoginStatus
 import my.dahr.monopolyone.databinding.FragmentLoginBinding
@@ -36,7 +42,6 @@ class LoginFragment : Fragment() {
                 val email = etEmail.text.toString()
                 val password = etPassword.text.toString()
 
-                btLogin.startAnimation()
                 viewModel.signIn(email, password)
                 btLoginObserver()
             }
@@ -44,20 +49,45 @@ class LoginFragment : Fragment() {
     }
 
     private fun btLoginObserver() {
-        viewModel.loginStatusLiveData.observe(viewLifecycleOwner) { status ->
-            if (status == LoginStatus.Success) {
+        binding.btLogin.apply {
+            viewModel.loginStatusLiveData.observe(viewLifecycleOwner) { status ->
+                when (status) {
 
-                binding.btLogin.doneLoadingAnimation(
-                    binding.btLogin.solidColor,
-                    viewModel.loadBitmap(R.drawable.ic_done)
-                )
+                    LoginStatus.Success -> {
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            btLoginEndAnimation(
+                                solidColor, viewModel.loadBitmap(R.drawable.ic_done)
+                            )
 
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container_view, MainFragment())
-                    .commit()
+                            parentFragmentManager.beginTransaction()
+                                .replace(R.id.fragment_container_view, MainFragment())
+                                .commit()
+                        }
+                    }
 
+                    LoginStatus.Failure -> {
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            btLoginEndAnimation(
+                                solidColor, viewModel.loadBitmap(R.drawable.ic_error_outline)
+                            )
+                        }
+                    }
+
+                    LoginStatus.Loading -> {
+                        startAnimation()
+                    }
+
+                    else -> {}
+                }
             }
         }
+
+    }
+
+    private suspend fun btLoginEndAnimation(@ColorInt color: Int, bitmap: Bitmap) {
+        binding.btLogin.doneLoadingAnimation(color, bitmap)
+        delay(1000)
+        binding.btLogin.revertAnimation()
     }
 
 }
