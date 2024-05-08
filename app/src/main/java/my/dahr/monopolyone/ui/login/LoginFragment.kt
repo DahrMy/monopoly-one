@@ -9,6 +9,7 @@ import androidx.annotation.ColorInt
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -57,18 +58,12 @@ class LoginFragment : Fragment() {
             if (!validEmail(email)) {
                 inputLayoutEmail.isErrorEnabled = true
                 etEmail.error = resources.getString(R.string.et_email_error)
-            } else {
-                inputLayoutEmail.isErrorEnabled = false
-                etEmail.error = null
             }
 
             if (!validPassword(password)) {
                 inputLayoutPassword.isErrorEnabled = true
                 etPassword.error = resources.getString(R.string.et_password_error)
                 inputLayoutPassword.error
-            } else {
-                inputLayoutPassword.isErrorEnabled = false
-                etPassword.error = null
             }
 
             if (validEmail(email) && validPassword(password)) {
@@ -102,13 +97,29 @@ class LoginFragment : Fragment() {
                                 solidColor, viewModel.loadBitmap(R.drawable.ic_error_outline)
                             )
                         }
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(resources.getString(R.string.dialog_failure_title))
+                            .setPositiveButton(resources.getString(R.string.dialog_bt_ok)) { _, _ -> }
+                            .setMessage(R.string.dialog_failure_text)
+                            .show()
                     }
 
                     RequestStatus.Loading -> {
                         startAnimation()
                     }
 
-                    else -> {}
+                    else -> {
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            btLoginEndAnimation(
+                                solidColor, viewModel.loadBitmap(R.drawable.ic_error_outline)
+                            )
+                        }
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(resources.getString(R.string.dialog_error_title))
+                            .setPositiveButton(resources.getString(R.string.dialog_bt_ok)) { _, _ -> }
+                            .setMessage(viewModel.loadErrorMessage(status.code))
+                            .show()
+                    }
                 }
             }
         }

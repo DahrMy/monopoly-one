@@ -1,6 +1,6 @@
 package my.dahr.monopolyone.data.models
 
-enum class RequestStatus(code: Int) {
+enum class RequestStatus(val code: Int) {
     Loading(-1),
     Success(0),
     Confirmation(11),

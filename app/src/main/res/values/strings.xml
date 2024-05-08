@@ -14,4 +14,25 @@
     <string name="friend_s_nickname">Friend\'s nickname</string>
     <string name="friend_requests">Friend Requests</string>
     <string name="_10">10</string>
+
+    <!-- Errors list: https://docs.mnpl.one/api/http/intro -->
+    <string name="dialog_error_title">Error message</string>
+    <string name="dialog_error_1_text">Authorisation Error. Login or password aren\'t correct.</string>
+    <string name="dialog_error_2_text">A required parameter was not passed or the passed parameters are invalid.</string>
+    <string name="dialog_error_3_text">Internal Server Error.</string>
+    <string name="dialog_error_4_text">You do not have permission to execute this request.</string>
+    <string name="dialog_error_5_text">An unknown API method was called.</string>
+    <string name="dialog_error_6_text">The number of requested objects has been exceeded. The maximum number of objects that can be passed in one request is 50.</string>
+    <string name="dialog_error_7_text">Request limit exceeded. Request limit exceeded. Time until the limit is lifted: %s</string>
+    <string name="dialog_error_8_text">Captcha required. Most likely, several unsuccessful attempts were made to login into your profile. Try later or from a different IP address.</string>
+    <string name="dialog_error_10_text">The server cannot process the request right now.</string>
+    <string name="dialog_error_11_text">Confirmation required.</string>
+    <string name="dialog_error_12_text">Requires entering the code from the authenticator app.</string>
+    <string name="dialog_error_98_text">The method is undergoing technical work and is temporarily disabled.</string>
+    <string name="dialog_error_99_text">An unknown error has occurred</string>
+
+    <string name="dialog_failure_title">Failure</string>
+    <string name="dialog_failure_text">An error occurred while executing the request. Please try again.</string>
+
+    <string name="dialog_bt_ok">OK</string>
 </resources>

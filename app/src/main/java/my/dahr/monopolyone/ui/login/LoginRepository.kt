@@ -27,13 +27,13 @@ class LoginRepository @Inject constructor(
     private val sharedPreferences =
         context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
 
-    fun postSignIn(email: String, password: String, callback: Callback<SessionResponse>) {
+    fun postSignIn(email: String, password: String, callback: () -> Callback<SessionResponse>) {
         val requestBody = mapOf(
             "email" to email,
             "password" to password
         )
         val call = api.authSignInRequest(requestBody)
-        call.enqueue(callback)
+        call.enqueue(callback.invoke())
     }
 
     fun saveSession(session: Session) {
@@ -56,6 +56,22 @@ class LoginRepository @Inject constructor(
             return reserveDrawable!!.toBitmap()
         }
 
+    }
+
+    fun getErrorMessageStringResource(code: Int) = when (code) {
+        1 -> context.resources.getString(R.string.dialog_error_1_text)
+        2 -> context.resources.getString(R.string.dialog_error_2_text)
+        3 -> context.resources.getString(R.string.dialog_error_3_text)
+        4 -> context.resources.getString(R.string.dialog_error_4_text)
+        5 -> context.resources.getString(R.string.dialog_error_5_text)
+        6 -> context.resources.getString(R.string.dialog_error_6_text)
+        7 -> context.resources.getString(R.string.dialog_error_7_text)
+        8 -> context.resources.getString(R.string.dialog_error_8_text)
+        10 -> context.resources.getString(R.string.dialog_error_10_text)
+        11 -> context.resources.getString(R.string.dialog_error_11_text)
+        12 -> context.resources.getString(R.string.dialog_error_12_text)
+        98 -> context.resources.getString(R.string.dialog_error_98_text)
+        else -> { context.resources.getString(R.string.dialog_error_99_text) }
     }
 
 }
