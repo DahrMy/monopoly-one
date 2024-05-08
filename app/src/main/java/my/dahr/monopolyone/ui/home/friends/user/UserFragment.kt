@@ -15,6 +15,7 @@ import my.dahr.monopolyone.databinding.FragmentUserBinding
 import my.dahr.monopolyone.domain.models.friends.list.Friend
 import my.dahr.monopolyone.ui.home.friends.FriendsFragment
 import my.dahr.monopolyone.ui.home.friends.FriendsViewModel
+import my.dahr.monopolyone.ui.home.friends.user.friends.UserFriendsFragment
 import my.dahr.monopolyone.utils.CORPORAL
 import my.dahr.monopolyone.utils.RECRUIT
 import my.dahr.monopolyone.utils.ROOKIE
@@ -26,6 +27,8 @@ class UserFragment : Fragment() {
 
     private var _binding: FragmentUserBinding? = null
     private val binding get() = _binding!!
+
+    private var friend: Friend? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,15 +42,12 @@ class UserFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val friend = arguments?.getSerializable("friend", Friend::class.java)
+        friend = arguments?.getSerializable("friend", Friend::class.java)
         viewModel.getFriendListForUser(friend!!)
 
         setInfo()
         setListeners()
     }
-
-
-
 
     private fun setListeners() {
         binding.ivBack.setOnClickListener {
@@ -56,23 +56,25 @@ class UserFragment : Fragment() {
                 .replace(R.id.container, fragment)
                 .commit()
         }
+        binding.LayoutCountOfFriends.setOnClickListener {
+            val fragment = UserFriendsFragment.newInstance(friend!!)
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.container, fragment)
+                .commit()
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun setInfo() {
-        val friend = arguments?.getSerializable("friend", Friend::class.java)
         binding.apply {
-            viewModel.friendForUserResultLiveData.observe(viewLifecycleOwner){
-                tvCountOfFriends.text = it.size.toString()
+            viewModel.friendForUserResultLiveData.observe(viewLifecycleOwner) {
+                binding.tvCountOfFriends.text = it.size.toString()
             }
             tvFriendNick.text = friend?.nick
             tvRankLevelNumber.text = friend?.xpLevel.toString()
             tvXp.text = friend?.xp.toString()
             tvCountOfAllMatches.text = friend?.games.toString()
             tvCountOfWinningMatches.text = friend?.gamesWins.toString()
-
-
-
 
             val lvl = friend?.xpLevel
             when (lvl) {
@@ -81,7 +83,7 @@ class UserFragment : Fragment() {
                     setRankPhoto(0)
 
                     if (friend != null) {
-                        setPhoto(friend)
+                        setPhoto(friend!!)
                     }
                 }
 
@@ -90,7 +92,7 @@ class UserFragment : Fragment() {
                     setRankPhoto(1)
 
                     if (friend != null) {
-                        setPhoto(friend)
+                        setPhoto(friend!!)
                     }
                 }
 
@@ -100,7 +102,7 @@ class UserFragment : Fragment() {
                     setRankPhoto(2)
 
                     if (friend != null) {
-                        setPhoto(friend)
+                        setPhoto(friend!!)
                     }
                 }
 
@@ -108,6 +110,7 @@ class UserFragment : Fragment() {
             }
 
         }
+
     }
 
     private fun setRankPhoto(number: Int) {

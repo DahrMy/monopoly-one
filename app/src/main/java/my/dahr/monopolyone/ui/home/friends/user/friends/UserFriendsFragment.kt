@@ -1,62 +1,52 @@
-package my.dahr.monopolyone.ui.home.friends
+package my.dahr.monopolyone.ui.home.friends.user.friends
 
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import my.dahr.monopolyone.R
-import my.dahr.monopolyone.databinding.FragmentFriendsBinding
+import my.dahr.monopolyone.databinding.FragmentUserFriendsBinding
 import my.dahr.monopolyone.domain.models.friends.list.Friend
-import my.dahr.monopolyone.domain.models.friends.requests.Request
+import my.dahr.monopolyone.ui.home.friends.FriendsViewModel
 import my.dahr.monopolyone.ui.home.friends.adapters.FriendsAdapter
-import my.dahr.monopolyone.ui.home.friends.requests.FriendsRequestsFragment
 import my.dahr.monopolyone.ui.home.friends.user.UserFragment
 
-
 @AndroidEntryPoint
-class FriendsFragment : Fragment() {
+class UserFriendsFragment : Fragment() {
     private val viewModel: FriendsViewModel by viewModels()
 
-    private var _binding: FragmentFriendsBinding? = null
+    private var _binding: FragmentUserFriendsBinding? = null
     private val binding get() = _binding!!
+
+    private var friend: Friend? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentFriendsBinding.inflate(inflater, container, false)
+        _binding = FragmentUserFriendsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        friend = arguments?.getSerializable("user_friends", Friend::class.java)
+        setContent()
         initObservers()
-
-        viewModel.getFriendRequestsList()
-        viewModel.getFriendList()
-
-        setListeners()
-    }
-
-    private fun setListeners() {
-        binding.layout.setOnClickListener {
-            val fragment = FriendsRequestsFragment()
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
-                .commit()
-        }
+        viewModel.getFriendListForUser(friend!!)
     }
 
     private fun initObservers() {
-        viewModel.friendsResultLiveData.observe(viewLifecycleOwner) {
+        viewModel.friendForUserResultLiveData.observe(viewLifecycleOwner) {
             showFriendsList(it)
-        }
-        viewModel.friendsRequestsResultLiveData.observe(viewLifecycleOwner) {
-            checkFriendRequests(it)
         }
     }
 
@@ -76,16 +66,18 @@ class FriendsFragment : Fragment() {
         binding.rvFriends.adapter = adapter
     }
 
-    private fun checkFriendRequests(requests: List<Request>) {
-        if (requests.isNotEmpty()) {
-            val countOfRequests = requests.size
-            binding.notificationTextView.apply {
-                text = countOfRequests.toString()
-                visibility = View.VISIBLE
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun setContent() {
+        binding.apply {
+            tvFriendNick.text = friend?.nick
+            viewModel.friendForUserResultLiveData.observe(viewLifecycleOwner) {
+                tvCountOfFriends.text = it.size.toString()
             }
-        } else {
-            binding.notificationTextView.visibility = View.INVISIBLE
+            Glide.with(this@UserFriendsFragment)
+                .load(friend?.avatar)
+                .into(ivFriend)
         }
+
     }
 
     override fun onDestroyView() {
@@ -94,6 +86,12 @@ class FriendsFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(): FriendsFragment = FriendsFragment()
+        fun newInstance(friend: Friend): UserFriendsFragment {
+            val fragment = UserFriendsFragment()
+            val bundle = Bundle()
+            bundle.putSerializable("user_friends", friend)
+            fragment.arguments = bundle
+            return fragment
+        }
     }
 }
