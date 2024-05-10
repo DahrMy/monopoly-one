@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.home.friends.user.UserFragment">
+
     <ImageView
         android:id="@+id/ivBack"
         android:layout_width="36dp"
@@ -19,11 +20,10 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivBack"
-        app:layout_constraintBottom_toBottomOf="parent"
-        >
+        app:layout_constraintTop_toBottomOf="@+id/ivBack">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -64,13 +64,13 @@
                 app:layout_constraintTop_toBottomOf="@id/cvCard" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:padding="8dp"
                 android:id="@+id/layoutSend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:background="@drawable/rounded_border"
                 android:backgroundTint="@color/grey"
+                android:padding="8dp"
                 app:layout_constraintEnd_toStartOf="@id/cvCard"
                 app:layout_constraintStart_toStartOf="@id/cvCard"
                 app:layout_constraintTop_toBottomOf="@id/tvFriendNick">
@@ -92,9 +92,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:padding="8dp"
                 android:background="@drawable/rounded_border"
                 android:backgroundTint="@color/grey"
+                android:padding="8dp"
                 app:layout_constraintEnd_toEndOf="@id/cvCard"
                 app:layout_constraintStart_toEndOf="@id/cvCard"
                 app:layout_constraintTop_toBottomOf="@id/tvFriendNick">
@@ -187,7 +187,6 @@
                     android:layout_height="12dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="4dp"
-                    android:max="100"
                     android:progress="5"
                     android:progressDrawable="@drawable/progress_bar"
                     app:layout_constraintBottom_toBottomOf="@id/cvCardRank"
@@ -202,18 +201,18 @@
                     android:text="@string/xp"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="@id/tvRankLevel"
-                    app:layout_constraintEnd_toEndOf="@id/progressBar"
+                    app:layout_constraintEnd_toStartOf="@id/tvNextLevel"
                     app:layout_constraintTop_toTopOf="@id/tvRankLevel" />
 
-                <!--        <TextView-->
-                <!--            android:id="@+id/tvNextLevel"-->
-                <!--            android:layout_width="wrap_content"-->
-                <!--            android:layout_height="wrap_content"-->
-                <!--            android:text="@string/_12"-->
-                <!--            android:textSize="16sp"-->
-                <!--            app:layout_constraintBottom_toBottomOf="@id/tvRankLevel"-->
-                <!--            app:layout_constraintEnd_toEndOf="@id/progressBar"-->
-                <!--            app:layout_constraintTop_toTopOf="@id/tvRankLevel" />-->
+                <TextView
+                    android:id="@+id/tvNextLevel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_12"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@id/tvRankLevel"
+                    app:layout_constraintEnd_toEndOf="@id/progressBar"
+                    app:layout_constraintTop_toTopOf="@id/tvRankLevel" />
 
                 <TextView
                     android:id="@+id/tvXp"
