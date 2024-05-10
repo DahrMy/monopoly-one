@@ -39,6 +39,8 @@ class FriendsViewModel @Inject constructor(
     private val myCoroutineContext = SupervisorJob() + Dispatchers.IO
     val friendsResultLiveData = MutableLiveData<List<Friend>>()
 
+    val friendForUserResultLiveData = MutableLiveData<List<Friend>>()
+
     val friendsRequestsResultLiveData = MutableLiveData<List<Request>>()
 
 
@@ -60,35 +62,50 @@ class FriendsViewModel @Inject constructor(
         }
     }
 
-    fun getFriendRequestsList() {
+    fun getFriendListForUser(friend: Friend) {
         viewModelScope.launch(myCoroutineContext) {
-            try {
-                val response = repository.getFriendsRequestsList(
-                    session.accessToken,
-                    "short",
-                    0,
-                    20
-                )
-                friendsRequestsResultLiveData.postValue(response)
-            } catch (e: Exception) {
-                Log.d("error", e.toString())
-            }
+            val response = repository.getFriendsList(
+                friend.userId,
+                online = false,
+                addUser = false,
+                type = "short",
+                offset = 0,
+                count = 20
+            )
+            friendForUserResultLiveData.postValue(response)
         }
     }
 
-    fun addFriend(userId: Any) {
-        viewModelScope.launch(myCoroutineContext) {
-            val response = AddResponseJson(access_token = session.accessToken, userId = userId)
-            repository.addFriend(response)
-        }
-    }
 
-    fun deleteFriend(userId: Any){
-        viewModelScope.launch (myCoroutineContext) {
-            val response = DeleteResponseJson(access_token = session.accessToken, userId = userId)
-            repository.deleteFriend(response)
+fun getFriendRequestsList() {
+    viewModelScope.launch(myCoroutineContext) {
+        try {
+            val response = repository.getFriendsRequestsList(
+                session.accessToken,
+                "short",
+                0,
+                20
+            )
+            friendsRequestsResultLiveData.postValue(response)
+        } catch (e: Exception) {
+            Log.d("error", e.toString())
         }
     }
+}
+
+fun addFriend(userId: Any) {
+    viewModelScope.launch(myCoroutineContext) {
+        val response = AddResponseJson(access_token = session.accessToken, userId = userId)
+        repository.addFriend(response)
+    }
+}
+
+fun deleteFriend(userId: Any) {
+    viewModelScope.launch(myCoroutineContext) {
+        val response = DeleteResponseJson(access_token = session.accessToken, userId = userId)
+        repository.deleteFriend(response)
+    }
+}
 }
 
 

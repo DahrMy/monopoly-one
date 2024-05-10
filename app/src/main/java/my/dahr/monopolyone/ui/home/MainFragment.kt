@@ -15,7 +15,6 @@ import my.dahr.monopolyone.ui.home.friends.FriendsFragment
 import my.dahr.monopolyone.ui.home.inventory.InventoryFragment
 import my.dahr.monopolyone.listeners.NavigationListener
 import my.dahr.monopolyone.ui.home.friends.requests.FriendsRequestsFragment
-import my.dahr.monopolyone.ui.home.friends.user.UserFragment
 import my.dahr.monopolyone.ui.home.profile.ProfileFragment
 
 
@@ -71,10 +70,6 @@ class MainFragment : Fragment(), NavigationListener {
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
-    }
-
-    override fun navigateToUserScreen() {
-        replaceFragment(UserFragment.newInstance())
     }
 
     override fun navigateBack() {

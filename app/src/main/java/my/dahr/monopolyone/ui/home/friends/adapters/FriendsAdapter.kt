@@ -10,7 +10,7 @@ import my.dahr.monopolyone.domain.models.friends.list.Friend
 
 class FriendsAdapter(private val onItemClickListener: OnItemClickListener) : ListAdapter<Friend, FriendsAdapter.FriendsViewHolder>(DiffUtil()) {
     class FriendsViewHolder(private var rawItemFriendBinding: ItemFriendBinding,
-        private val onItemClickListener: OnItemClickListener
+
         ) :
         RecyclerView.ViewHolder(rawItemFriendBinding.root) {
         fun bind(friend: Friend) {
@@ -30,7 +30,7 @@ class FriendsAdapter(private val onItemClickListener: OnItemClickListener) : Lis
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendsViewHolder {
         val binding = ItemFriendBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return FriendsViewHolder(binding, onItemClickListener)
+        return FriendsViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: FriendsViewHolder, position: Int) {

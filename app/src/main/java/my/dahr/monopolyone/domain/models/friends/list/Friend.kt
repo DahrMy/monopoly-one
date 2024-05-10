@@ -1,5 +1,6 @@
 package my.dahr.monopolyone.domain.models.friends.list
 
+import java.io.Serializable
 
 
 data class Friend(
@@ -21,4 +22,4 @@ data class Friend(
     val vip: Int,
     val xp: Int,
     val xpLevel: Int
-)
+) : Serializable

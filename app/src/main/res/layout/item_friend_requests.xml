@@ -52,7 +52,6 @@
         app:layout_constraintStart_toStartOf="@id/tvFriendNick"
         app:layout_constraintTop_toBottomOf="@id/cvCard" />
 
-    <!-- TODO: Fix warnings -->
     <ImageView
         android:id="@+id/ivAccept"
         android:layout_width="28dp"
@@ -63,7 +62,6 @@
         app:layout_constraintEnd_toStartOf="@id/ivReject"
         app:layout_constraintTop_toTopOf="@id/tvFriendNick" />
 
-    <!-- TODO: Fix warnings -->
     <ImageView
         android:id="@+id/ivReject"
         android:layout_width="28dp"
