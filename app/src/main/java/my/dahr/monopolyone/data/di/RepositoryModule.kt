@@ -6,10 +6,15 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import my.dahr.monopolyone.domain.repository.FriendsRepository
 import my.dahr.monopolyone.data.repository.FriendsRepositoryImpl
+import my.dahr.monopolyone.data.repository.UsersRepositoryImpl
+import my.dahr.monopolyone.domain.repository.UsersRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
     @Binds
     abstract fun bindFriendsRepository(impl: FriendsRepositoryImpl): FriendsRepository
+
+    @Binds
+    abstract fun bindUsersRepository(impl: UsersRepositoryImpl): UsersRepository
 }
