@@ -18,6 +18,8 @@ class UsersViewModel @Inject constructor(
     private val usersRepository: UsersRepository
 ) : ViewModel() {
 
+    private var user: Data? = null
+
     private val myCoroutineContext = SupervisorJob() + Dispatchers.IO
 
     val usersResultLiveData = MutableLiveData<List<Data>>()
@@ -25,9 +27,18 @@ class UsersViewModel @Inject constructor(
     fun getListOfUsers(userId: Any) {
         viewModelScope.launch(myCoroutineContext) {
             val response = usersRepository.getUsersList(
-                userId, setOf(1), "short"
+                userId, setOf(1), "full"
             )
             usersResultLiveData.postValue(response)
         }
     }
+
+    fun setUser(receivedUser: Data){
+        user = receivedUser
+    }
+
+    fun getUser(): Data? {
+        return user
+    }
+
 }

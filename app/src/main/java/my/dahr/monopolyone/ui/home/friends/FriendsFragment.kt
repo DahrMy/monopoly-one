@@ -70,7 +70,13 @@ class FriendsFragment : Fragment() {
     private fun showFriendsList(friends: List<Friend>) {
         val adapter = FriendsAdapter(object : FriendsAdapter.OnItemClickListener {
             override fun onItemClicked(position: Int, friend: Friend) {
-                val fragment = UserFragment.newInstance(friend)
+                val fragment = UserFragment.newInstance(friend.userId,
+                    friend.avatar,
+                    friend.nick,
+                    friend.xpLevel,
+                    friend.xp,
+                    friend.games,
+                    friend.gamesWins)
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.container, fragment)
                     .commit()

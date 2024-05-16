@@ -25,8 +25,9 @@ class UserFriendsFragment : Fragment() {
     private var _binding: FragmentUserFriendsBinding? = null
     private val binding get() = _binding!!
 
-    private var friend: Friend? = null
-
+    private var userId: Any? = null
+    private var avatar: String? = null
+    private var nick: String? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,10 +39,21 @@ class UserFriendsFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        friend = arguments?.getSerializable("user_friends", Friend::class.java)
+        receiveData()
         setContent()
         initObservers()
-        viewModel.getFriendListForUser(friend!!)
+        viewModel.getFriendListForUser(userId!!)
+    }
+    private fun receiveData() {
+        arguments?.let {
+            userId = when {
+                it.containsKey(USER_ID_X_INT) -> it.getInt(USER_ID_X_INT)
+                it.containsKey(USER_ID_X_STRING) -> it.getString(USER_ID_X_STRING)
+                else -> null
+            }
+            avatar = it.getString(USER_AVATAR_X)
+            nick = it.getString(USER_NICK_X)
+        }
     }
 
     private fun initObservers() {
@@ -53,7 +65,15 @@ class UserFriendsFragment : Fragment() {
     private fun showFriendsList(friends: List<Friend>) {
         val adapter = FriendsAdapter(object : FriendsAdapter.OnItemClickListener {
             override fun onItemClicked(position: Int, friend: Friend) {
-                val fragment = UserFragment.newInstance(friend)
+                val fragment = UserFragment.newInstance(
+                    friend.userId,
+                    friend.avatar,
+                    friend.nick,
+                    friend.xpLevel,
+                    friend.xp,
+                    friend.games,
+                    friend.gamesWins
+                )
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.container, fragment)
                     .commit()
@@ -69,12 +89,12 @@ class UserFriendsFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun setContent() {
         binding.apply {
-            tvFriendNick.text = friend?.nick
+            tvFriendNick.text = nick
             viewModel.friendForUserResultLiveData.observe(viewLifecycleOwner) {
                 tvCountOfFriends.text = it.size.toString()
             }
             Glide.with(this@UserFriendsFragment)
-                .load(friend?.avatar)
+                .load(avatar)
                 .into(ivFriend)
         }
 
@@ -86,12 +106,22 @@ class UserFriendsFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(friend: Friend): UserFriendsFragment {
-            val fragment = UserFriendsFragment()
-            val bundle = Bundle()
-            bundle.putSerializable("user_friends", friend)
-            fragment.arguments = bundle
-            return fragment
+        private const val USER_ID_X_INT = "id_int"
+        private const val USER_ID_X_STRING = "id_string"
+        private const val USER_AVATAR_X = "avatar"
+        private const val USER_NICK_X = "nick"
+        fun newInstance(userId: Any, avatar: String, nick: String): UserFriendsFragment {
+            return UserFriendsFragment().apply {
+                arguments = Bundle().apply {
+                    when (userId) {
+                        is Int -> putInt(USER_ID_X_INT, userId)
+                        is String -> putString(USER_ID_X_STRING, userId)
+                        else -> throw IllegalArgumentException("Unsupported type for id")
+                    }
+                    putString(USER_AVATAR_X, avatar)
+                    putString(USER_NICK_X, nick)
+                }
+            }
         }
     }
 }

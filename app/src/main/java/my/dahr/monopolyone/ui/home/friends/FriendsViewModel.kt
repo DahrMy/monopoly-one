@@ -35,7 +35,6 @@ class FriendsViewModel @Inject constructor(
     private val sessionJson = sharedPreferences.getString(SESSION_KEY, "")
     private var session = Gson().fromJson(sessionJson, Session::class.java)
 
-
     private val myCoroutineContext = SupervisorJob() + Dispatchers.IO
     val friendsResultLiveData = MutableLiveData<List<Friend>>()
 
@@ -43,6 +42,7 @@ class FriendsViewModel @Inject constructor(
 
     val friendsRequestsResultLiveData = MutableLiveData<List<Request>>()
 
+     val isFriend = MutableLiveData<Boolean>()
 
     fun getFriendList() {
         viewModelScope.launch(myCoroutineContext) {
@@ -62,10 +62,35 @@ class FriendsViewModel @Inject constructor(
         }
     }
 
-    fun getFriendListForUser(friend: Friend) {
+    fun checkIfFriend (userId: Any){
+        viewModelScope.launch (myCoroutineContext){
+            val friends = getListForChecking(session.userId)
+            var found = false
+            for (friend in friends) {
+                if (userId == friend.userId) {
+                    found = true
+                    break
+                }
+            }
+            isFriend.postValue(found)
+        }
+    }
+
+    private suspend fun getListForChecking(userId: Any): List<Friend> {
+        return repository.getFriendsList(
+            userId,
+            online = false,
+            addUser = false,
+            type = "short",
+            offset = 0,
+            count = 20
+        )
+    }
+
+    fun getFriendListForUser(userId: Any) {
         viewModelScope.launch(myCoroutineContext) {
             val response = repository.getFriendsList(
-                friend.userId,
+                userId,
                 online = false,
                 addUser = false,
                 type = "short",

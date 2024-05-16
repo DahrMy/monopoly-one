@@ -6,17 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import my.dahr.monopolyone.R
 import my.dahr.monopolyone.databinding.FragmentAddFriendsBinding
-import my.dahr.monopolyone.domain.models.friends.list.Friend
-import my.dahr.monopolyone.domain.models.users.Data
 import my.dahr.monopolyone.ui.home.friends.FriendsFragment
-import my.dahr.monopolyone.ui.home.friends.FriendsViewModel
 import my.dahr.monopolyone.ui.home.friends.UsersViewModel
-import my.dahr.monopolyone.ui.home.friends.adapters.FriendsAdapter
 import my.dahr.monopolyone.ui.home.friends.user.UserFragment
 
 @AndroidEntryPoint
@@ -48,26 +43,45 @@ class AddFriendsFragment : Fragment() {
                 .commit()
         }
         binding.layoutUser.setOnClickListener{
-
+            clickedOnUser()
         }
     }
 
     private fun initObservers() {
         usersViewModel.usersResultLiveData.observe(viewLifecycleOwner) {
-            val avatar = it[0].avatar
-            val nick = it[0].nick
-            binding.apply {
-                layoutUser.visibility = View.VISIBLE
-                tvUserNick.text = nick
-
-            }
-            Glide.with(this)
-                .load(avatar)
-                .into(binding.ivUser)
+            val user = it[0]
+            usersViewModel.setUser(user)
+            setContent()
         }
     }
-    private fun clickedOnUser(user: Data){
 
+    private fun setContent() {
+        val user = usersViewModel.getUser()
+        binding.apply {
+            layoutUser.visibility = View.VISIBLE
+            tvUserNick.text = user?.nick
+        }
+        Glide.with(this)
+            .load(user?.avatar)
+            .into(binding.ivUser)
+    }
+
+    private fun clickedOnUser() {
+        val user = usersViewModel.getUser()
+        if (user != null) {
+            val fragment = UserFragment.newInstance(
+                user.userId,
+                user.avatar,
+                user.nick,
+                user.xpLevel,
+                user.xp,
+                user.games,
+                user.gamesWins
+            )
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.container, fragment)
+                .commit()
+        }
     }
 
     private fun inputFriendNick() {

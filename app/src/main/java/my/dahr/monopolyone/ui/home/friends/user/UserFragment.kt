@@ -12,7 +12,6 @@ import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import my.dahr.monopolyone.R
 import my.dahr.monopolyone.databinding.FragmentUserBinding
-import my.dahr.monopolyone.domain.models.friends.list.Friend
 import my.dahr.monopolyone.ui.home.friends.FriendsFragment
 import my.dahr.monopolyone.ui.home.friends.FriendsViewModel
 import my.dahr.monopolyone.ui.home.friends.user.friends.UserFriendsFragment
@@ -37,6 +36,7 @@ import my.dahr.monopolyone.utils.ROOKIE
 import my.dahr.monopolyone.utils.SERGEANT
 import my.dahr.monopolyone.utils.SERGEANT_MAJOR
 import my.dahr.monopolyone.utils.SOLDIER
+import java.io.Serializable
 
 @AndroidEntryPoint
 class UserFragment : Fragment() {
@@ -45,7 +45,14 @@ class UserFragment : Fragment() {
     private var _binding: FragmentUserBinding? = null
     private val binding get() = _binding!!
 
-    private var friend: Friend? = null
+    private var userId: Any? = null
+    private var avatar: String? = null
+    private var nick: String? = null
+    private var xpLevel: Int? = null
+    private var xp: Int? = null
+    private var games: Int? = null
+    private var wins: Int? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,12 +65,28 @@ class UserFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        friend = arguments?.getSerializable("friend", Friend::class.java)
-        viewModel.getFriendListForUser(friend!!)
+        receiveData()
+        viewModel.checkIfFriend(userId!!)
+        viewModel.getFriendListForUser(userId!!)
 
         setInfo()
         setListeners()
+    }
+
+    private fun receiveData() {
+        arguments?.let {
+            userId = when {
+                it.containsKey(USER_ID_INT) -> it.getInt(USER_ID_INT)
+                it.containsKey(USER_ID_STRING) -> it.getString(USER_ID_STRING)
+                else -> null
+            }
+            avatar = it.getString(USER_AVATAR)
+            nick = it.getString(USER_NICK)
+            xpLevel = it.getInt(USER_XP_LEVEL)
+            xp = it.getInt(USER_XP)
+            games = it.getInt(USER_GAMES)
+            wins = it.getInt(USER_GAME_WINS)
+        }
     }
 
     private fun setListeners() {
@@ -74,7 +97,7 @@ class UserFragment : Fragment() {
                 .commit()
         }
         binding.LayoutCountOfFriends.setOnClickListener {
-            val fragment = UserFriendsFragment.newInstance(friend!!)
+            val fragment = UserFriendsFragment.newInstance(userId!!, avatar!!, nick!!)
             parentFragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
                 .commit()
@@ -83,154 +106,166 @@ class UserFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun setInfo() {
+
+
         binding.apply {
+            viewModel.isFriend.observe(viewLifecycleOwner){
+                if (it == true){
+                    binding.tvFriendNick.text = "krasava"
+                }else{
+                    binding.tvFriendNick.text = "loshara"
+                }
+            }
+
             viewModel.friendForUserResultLiveData.observe(viewLifecycleOwner) {
                 binding.tvCountOfFriends.text = it.size.toString()
             }
-            val nextLevel = friend?.xpLevel?.plus(1)
+            val nextLevel = xpLevel?.plus(1)
             tvNextLevel.text = nextLevel.toString()
 
-            tvFriendNick.text = friend?.nick
-            tvRankLevelNumber.text = friend?.xpLevel.toString()
-            tvXp.text = showXp(friend!!)
-            tvCountOfAllMatches.text = friend?.games.toString()
-            tvCountOfWinningMatches.text = friend?.gamesWins.toString()
+//            tvFriendNick.text = nick
+            tvRankLevelNumber.text = xpLevel.toString()
+            tvXp.text = showXp(xpLevel!!, xp!!)
+            tvCountOfAllMatches.text = games.toString()
+            tvCountOfWinningMatches.text = wins.toString()
 
-            val lvl = friend?.xpLevel
+            val lvl = xpLevel
             when (lvl) {
                 in 1..4 -> {
                     tvRankName.text = ROOKIE
                     setRankPhoto(0)
-                    setPhoto(friend!!)
+                    setPhoto(avatar)
                 }
 
                 in 5..9 -> {
                     tvRankName.text = RECRUIT
                     setRankPhoto(1)
-                    setPhoto(friend!!)
+                    setPhoto(avatar)
                 }
 
                 in 10..14 -> {
                     tvRankName.text = SOLDIER
                     setRankPhoto(2)
-                    setPhoto(friend!!)
+                    setPhoto(avatar)
                 }
 
                 in 15..19 -> {
                     tvRankName.text = LANCE_CORPORAL
                     setRankPhoto(3)
-                    setPhoto(friend!!)
+                    setPhoto(avatar)
                 }
 
                 in 20..24 -> {
                     tvRankName.text = CORPORAL
                     setRankPhoto(4)
-                    setPhoto(friend!!)
+                    setPhoto(avatar)
                 }
 
                 in 25..29 -> {
                     tvRankName.text = MASTER_CORPORAL
                     setRankPhoto(5)
-                    setPhoto(friend!!)
+                    setPhoto(avatar)
                 }
 
                 in 30..34 -> {
                     tvRankName.text = LANCE_SERGEANT
                     setRankPhoto(6)
-                    setPhoto(friend!!)
+                    setPhoto(avatar)
                 }
 
                 in 35..39 -> {
                     tvRankName.text = SERGEANT
                     setRankPhoto(7)
-                    setPhoto(friend!!)
+                    setPhoto(avatar)
                 }
 
                 in 40..44 -> {
                     tvRankName.text = MASTER_SERGEANT
                     setRankPhoto(8)
-                    setPhoto(friend!!)
+                    setPhoto(avatar)
                 }
 
                 in 45..49 -> {
                     tvRankName.text = SERGEANT_MAJOR
                     setRankPhoto(5)
-                    setPhoto(friend!!)
+                    setPhoto(avatar)
                 }
 
                 in 50..54 -> {
                     tvRankName.text = LIEUTENANT
                     setRankPhoto(6)
-                    setPhoto(friend!!)
+                    setPhoto(avatar)
                 }
 
                 in 55..59 -> {
                     tvRankName.text = LIEUTENANT_MAJOR
                     setRankPhoto(7)
-                    setPhoto(friend!!)
+                    setPhoto(avatar)
                 }
 
                 in 60..64 -> {
                     tvRankName.text = CAPTAIN
                     setRankPhoto(8)
-                    setPhoto(friend!!)
+                    setPhoto(avatar)
                 }
 
                 in 65..69 -> {
                     tvRankName.text = MAJOR
                     setRankPhoto(5)
-                    setPhoto(friend!!)
+                    setPhoto(avatar)
                 }
 
                 in 70..74 -> {
                     tvRankName.text = LIEUTENANT_COLONEL
                     setRankPhoto(6)
-                    setPhoto(friend!!)
+                    setPhoto(avatar)
                 }
 
                 in 75..79 -> {
                     tvRankName.text = COLONEL
                     setRankPhoto(7)
-                    setPhoto(friend!!)
+                    setPhoto(avatar)
                 }
 
                 in 80..84 -> {
                     tvRankName.text = BRIGADIER_GENERAL
                     setRankPhoto(8)
-                    setPhoto(friend!!)
+                    setPhoto(avatar)
                 }
+
                 in 85..89 -> {
                     tvRankName.text = GENERAL_MAJOR
                     setRankPhoto(5)
-                    setPhoto(friend!!)
+                    setPhoto(avatar)
                 }
 
                 in 90..94 -> {
                     tvRankName.text = GENERAL
                     setRankPhoto(6)
-                    setPhoto(friend!!)
+                    setPhoto(avatar)
                 }
 
                 in 95..99 -> {
                     tvRankName.text = LIEUTENANT_GENERAL
                     setRankPhoto(7)
-                    setPhoto(friend!!)
+                    setPhoto(avatar)
                 }
 
                 in 100..10000 -> {
                     tvRankName.text = MARSHAL
                     setRankPhoto(8)
-                    setPhoto(friend!!)
+                    setPhoto(avatar)
                 }
 
             }
         }
     }
 
-    private fun showXp(friend: Friend): String {
-        val totalXpForNextLevel = (2 * 250 + (friend.xpLevel - 1) * 25) * friend.xpLevel / 2
-        val totalXpForThisLevel = (2 * 250 + (friend.xpLevel - 2) * 25) * (friend.xpLevel - 1) / 2
-        val remainderOfXpForNextLevel = totalXpForNextLevel - friend.xp
+    private fun showXp(xpLevel: Int, xp: Int): String {
+        val totalXpForNextLevel = (2 * 250 + (xpLevel - 1) * 25) * xpLevel / 2
+        val totalXpForThisLevel =
+            (2 * 250 + (xpLevel - 2) * 25) * (xpLevel - 1) / 2
+        val remainderOfXpForNextLevel = totalXpForNextLevel - xp
 
         val xpBetweenLevels = totalXpForNextLevel - totalXpForThisLevel
         binding.progressBar.max = xpBetweenLevels
@@ -249,9 +284,9 @@ class UserFragment : Fragment() {
             .into(binding.ivRank)
     }
 
-    private fun setPhoto(friend: Friend) {
+    private fun setPhoto(avatar: String?) {
         Glide.with(this)
-            .load(friend.avatar)
+            .load(avatar)
             .into(binding.ivFriend)
     }
 
@@ -261,12 +296,41 @@ class UserFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(friend: Friend): UserFragment {
-            val fragment = UserFragment()
-            val bundle = Bundle()
-            bundle.putSerializable("friend", friend)
-            fragment.arguments = bundle
-            return fragment
+
+        private const val USER_ID_INT = "id_int"
+        private const val USER_ID_STRING = "id_string"
+        private const val USER_AVATAR = "avatar"
+        private const val USER_NICK = "nick"
+        private const val USER_XP_LEVEL = "xpLevel"
+        private const val USER_XP = "xp"
+        private const val USER_GAMES = "games"
+        private const val USER_GAME_WINS = "wins"
+        fun newInstance(
+            id: Any,
+            avatar: String,
+            nick: String,
+            xpLevel: Int,
+            xp: Int,
+            games: Int,
+            wins: Int
+        ): UserFragment {
+            return UserFragment().apply {
+                arguments = Bundle().apply {
+                    when (id) {
+                        is Int -> putInt(USER_ID_INT, id)
+                        is String -> putString(USER_ID_STRING, id)
+                        else -> throw IllegalArgumentException("Unsupported type for id")
+                    }
+                    putString(USER_AVATAR, avatar)
+                    putString(USER_NICK, nick)
+                    putInt(USER_XP_LEVEL, xpLevel)
+                    putInt(USER_XP, xp)
+                    putInt(USER_GAMES, games)
+                    putInt(USER_GAME_WINS, wins)
+                }
+            }
         }
     }
 }
+
+
