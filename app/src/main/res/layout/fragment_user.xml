@@ -22,8 +22,10 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivBack">
+        app:layout_constraintTop_toBottomOf="@+id/ivBack"
+        app:layout_constraintVertical_bias="1.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -64,52 +66,34 @@
                 app:layout_constraintTop_toBottomOf="@id/cvCard" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/layoutSend"
+                android:id="@+id/layoutAddToFriends"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
+                android:layout_marginEnd="8dp"
                 android:background="@drawable/rounded_border"
-                android:backgroundTint="@color/grey"
-                android:padding="8dp"
-                app:layout_constraintEnd_toStartOf="@id/cvCard"
-                app:layout_constraintStart_toStartOf="@id/cvCard"
+                android:backgroundTint="@color/green"
+                android:padding="12dp"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvFriendNick">
 
-                <ImageView
-                    android:id="@+id/ivSendMessage"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:contentDescription="@null"
-                    android:src="@drawable/item_message"
+                <TextView
+                    android:id="@+id/tvAddToFriend"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_to_friends"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/layoutMore"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:background="@drawable/rounded_border"
-                android:backgroundTint="@color/grey"
-                android:padding="8dp"
-                app:layout_constraintEnd_toEndOf="@id/cvCard"
-                app:layout_constraintStart_toEndOf="@id/cvCard"
-                app:layout_constraintTop_toBottomOf="@id/tvFriendNick">
-
-                <ImageView
-                    android:id="@+id/ivMore"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:contentDescription="@null"
-                    android:src="@drawable/item_more"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layoutRank"
@@ -121,7 +105,7 @@
                 android:background="@drawable/rounded_border"
                 android:backgroundTint="@color/grey"
                 android:padding="4dp"
-                app:layout_constraintTop_toBottomOf="@id/layoutSend">
+                app:layout_constraintTop_toBottomOf="@id/layoutAddToFriends">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cvCardRank"
@@ -344,7 +328,66 @@
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@id/LayoutInfoAllMatches"
                 app:layout_constraintTop_toBottomOf="@id/LayoutInfoAllMatches" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutYouAreFriends"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/rounded_border"
+                android:backgroundTint="@color/green"
+                android:padding="12dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@id/layoutMore"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvFriendNick">
+
+                <TextView
+                    android:id="@+id/tvYouAreFriends"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_to_friends"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toStartOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutMore"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/rounded_border"
+                android:backgroundTint="@color/grey"
+                android:padding="12dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/layoutYouAreFriends"
+                app:layout_constraintTop_toBottomOf="@id/tvFriendNick">
+
+                <TextView
+                    android:id="@+id/tvMore"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/other"
+                    android:textAlignment="center"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

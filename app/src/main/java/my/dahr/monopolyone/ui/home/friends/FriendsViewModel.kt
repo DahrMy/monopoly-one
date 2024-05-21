@@ -1,6 +1,5 @@
 package my.dahr.monopolyone.ui.home.friends
 
-
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -64,7 +63,7 @@ class FriendsViewModel @Inject constructor(
 
     fun checkIfFriend (userId: Any){
         viewModelScope.launch (myCoroutineContext){
-            val friends = getListForChecking(session.userId)
+            val friends = getFriendsListForChecking(session.userId)
             var found = false
             for (friend in friends) {
                 if (userId == friend.userId) {
@@ -76,7 +75,7 @@ class FriendsViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getListForChecking(userId: Any): List<Friend> {
+    private suspend fun getFriendsListForChecking(userId: Any): List<Friend> {
         return repository.getFriendsList(
             userId,
             online = false,
@@ -118,6 +117,7 @@ class FriendsViewModel @Inject constructor(
         }
     }
 
+
     fun addFriend(userId: Any) {
         viewModelScope.launch(myCoroutineContext) {
             val response = AddResponseJson(access_token = session.accessToken, userId = userId)
@@ -132,6 +132,3 @@ class FriendsViewModel @Inject constructor(
         }
     }
 }
-
-
-

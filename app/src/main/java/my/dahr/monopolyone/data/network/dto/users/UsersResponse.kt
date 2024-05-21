@@ -7,5 +7,5 @@ data class UsersResponse(
     @SerializedName("code")
     val code: Int? = null,
     @SerializedName("data")
-    val `data`: List<DataJson?>? = null
+    val data: List<DataJson?>? = null
 )

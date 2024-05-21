@@ -7,7 +7,6 @@ const val SESSION_KEY = "session"
 
 
 // lvl names
-
 const val ROOKIE = "Rookie"
 const val RECRUIT = "Recruit"
 const val SOLDIER = "Soldier"

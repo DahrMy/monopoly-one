@@ -53,7 +53,6 @@ class UserFragment : Fragment() {
     private var games: Int? = null
     private var wins: Int? = null
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -107,7 +106,6 @@ class UserFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun setInfo() {
 
-
         binding.apply {
             viewModel.isFriend.observe(viewLifecycleOwner){
                 if (it == true){
@@ -123,7 +121,7 @@ class UserFragment : Fragment() {
             val nextLevel = xpLevel?.plus(1)
             tvNextLevel.text = nextLevel.toString()
 
-//            tvFriendNick.text = nick
+            tvFriendNick.text = nick
             tvRankLevelNumber.text = xpLevel.toString()
             tvXp.text = showXp(xpLevel!!, xp!!)
             tvCountOfAllMatches.text = games.toString()
