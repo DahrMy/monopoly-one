@@ -41,7 +41,8 @@ class FriendsViewModel @Inject constructor(
 
     val friendsRequestsResultLiveData = MutableLiveData<List<Request>>()
 
-     val isFriend = MutableLiveData<Boolean>()
+    val isFriend = MutableLiveData<Boolean>()
+
 
     fun getFriendList() {
         viewModelScope.launch(myCoroutineContext) {
@@ -61,8 +62,8 @@ class FriendsViewModel @Inject constructor(
         }
     }
 
-    fun checkIfFriend (userId: Any){
-        viewModelScope.launch (myCoroutineContext){
+    fun checkIfFriend(userId: Any) {
+        viewModelScope.launch(myCoroutineContext) {
             val friends = getFriendsListForChecking(session.userId)
             var found = false
             for (friend in friends) {
@@ -74,6 +75,15 @@ class FriendsViewModel @Inject constructor(
             isFriend.postValue(found)
         }
     }
+
+    fun checkIfMe(userId: Any): Boolean {
+        var result = false
+        if (userId == session.userId) {
+            result = true
+        }
+        return result
+    }
+
 
     private suspend fun getFriendsListForChecking(userId: Any): List<Friend> {
         return repository.getFriendsList(

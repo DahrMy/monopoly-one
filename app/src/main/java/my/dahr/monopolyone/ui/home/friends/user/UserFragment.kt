@@ -4,8 +4,11 @@ import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
@@ -36,7 +39,6 @@ import my.dahr.monopolyone.utils.ROOKIE
 import my.dahr.monopolyone.utils.SERGEANT
 import my.dahr.monopolyone.utils.SERGEANT_MAJOR
 import my.dahr.monopolyone.utils.SOLDIER
-import java.io.Serializable
 
 @AndroidEntryPoint
 class UserFragment : Fragment() {
@@ -89,6 +91,13 @@ class UserFragment : Fragment() {
     }
 
     private fun setListeners() {
+        binding.layoutAddToFriends.setOnClickListener {
+            viewModel.addFriend(userId!!)
+        }
+        binding.layoutMore.setOnClickListener {
+            showPopupMenu(it)
+        }
+
         binding.ivBack.setOnClickListener {
             val fragment = FriendsFragment()
             parentFragmentManager.beginTransaction()
@@ -103,16 +112,45 @@ class UserFragment : Fragment() {
         }
     }
 
+    private fun showPopupMenu(view: View) {
+        val popup = PopupMenu(requireContext(), view)
+        val inflater: MenuInflater = popup.menuInflater
+        inflater.inflate(R.menu.drop_down_menu_for_friends, popup.menu)
+        popup.setOnMenuItemClickListener { item -> handleMenuItemClick(item) }
+        popup.show()
+    }
+
+    private fun handleMenuItemClick(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.delete -> {
+                viewModel.deleteFriend(userId!!)
+                true
+            }
+
+            else -> false
+        }
+    }
+
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun setInfo() {
-
         binding.apply {
-            viewModel.isFriend.observe(viewLifecycleOwner){
-                if (it == true){
-                    binding.tvFriendNick.text = "krasava"
-                }else{
-                    binding.tvFriendNick.text = "loshara"
+            if (!viewModel.checkIfMe(userId!!)) {
+                viewModel.isFriend.observe(viewLifecycleOwner) {
+                    if (it == true) {
+                        binding.layoutAddToFriends.visibility = View.INVISIBLE
+                        binding.layoutYouAreFriends.visibility = View.VISIBLE
+                        binding.layoutMore.visibility = View.VISIBLE
+                    } else {
+                        binding.layoutAddToFriends.visibility = View.VISIBLE
+                        binding.layoutYouAreFriends.visibility = View.INVISIBLE
+                        binding.layoutMore.visibility = View.INVISIBLE
+                    }
                 }
+            } else {
+                binding.layoutAddToFriends.visibility = View.INVISIBLE
+                binding.layoutYouAreFriends.visibility = View.INVISIBLE
+                binding.layoutMore.visibility = View.INVISIBLE
             }
 
             viewModel.friendForUserResultLiveData.observe(viewLifecycleOwner) {

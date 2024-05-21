@@ -56,4 +56,7 @@
     <string name="find_a_friend">Find a friend</string>
     <string name="add_to_friends">Add to friends</string>
     <string name="other">Other</string>
+    <string name="you_are_friends">You are friends.</string>
+    <string name="Other">Other</string>
+    <string name="delete">Delete</string>
 </resources>
