@@ -1,20 +1,21 @@
-package my.dahr.monopolyone.data.repository
+package my.dahr.monopolyone.utils
 
 import android.content.Context
 import com.google.gson.Gson
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import my.dahr.monopolyone.data.models.Session
 import my.dahr.monopolyone.data.network.api.AuthorizationApi
+import my.dahr.monopolyone.data.network.api.IpApi
 import my.dahr.monopolyone.data.network.dto.response.SessionResponse
-import my.dahr.monopolyone.utils.SESSION_KEY
-import my.dahr.monopolyone.utils.SHARED_PREFERENCES
-import my.dahr.monopolyone.utils.currentTimeInSec
 import retrofit2.Callback
 import javax.inject.Inject
 
-class SessionRepository @Inject constructor(
+class SessionHelper @Inject constructor(
     @ApplicationContext context: Context,
-    private val api: AuthorizationApi
+    private val api: AuthorizationApi,
+    private val ipApi: IpApi
 ) {
 
     private val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
@@ -30,6 +31,10 @@ class SessionRepository @Inject constructor(
                 .putString(SESSION_KEY, serializedData)
                 .apply()
         }
+
+    var savedIp: String?
+        get() = sharedPreferences.getString(IP_KEY, "")
+        private set(value) { sharedPreferences.edit().putString(IP_KEY, value).apply() }
 
     fun isSessionNotExpired(): Boolean {
 
@@ -51,7 +56,16 @@ class SessionRepository @Inject constructor(
         call.enqueue(callback.invoke())
     }
 
+    suspend fun refreshSavedIp() {
+        coroutineScope {
+            val currentIp = async { ipApi.getMyIp().ip }
+            savedIp = currentIp.await()
+        }
+    }
+
+    suspend fun isCurrentIpChanged(): Boolean = coroutineScope {
+        val currentIp = async { ipApi.getMyIp().ip }
+        return@coroutineScope currentIp.await() == savedIp
+    }
+
 }
-
-
-

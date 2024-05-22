@@ -15,7 +15,7 @@ import my.dahr.monopolyone.data.models.RequestStatus
 import my.dahr.monopolyone.data.network.dto.response.ErrorResponse
 import my.dahr.monopolyone.data.network.dto.response.SessionResponse
 import my.dahr.monopolyone.data.repository.ResourceRepository
-import my.dahr.monopolyone.data.repository.SessionRepository
+import my.dahr.monopolyone.utils.SessionHelper
 import my.dahr.monopolyone.utils.toSession
 import retrofit2.Call
 import retrofit2.Callback
@@ -26,7 +26,7 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val loginRepository: LoginRepository,
     private val resourceRepository: ResourceRepository,
-    private val sessionRepository: SessionRepository
+    private val sessionHelper: SessionHelper
 ) : ViewModel() {
 
     private val coroutineContext = Dispatchers.IO + SupervisorJob()
@@ -44,7 +44,7 @@ class LoginViewModel @Inject constructor(
                     if (response.isSuccessful) {
                         val session = response.body()?.data?.toSession()
                         if (session != null) {
-                            sessionRepository.session = session
+                            sessionHelper.session = session
                             _requestStatusLiveData.postValue(RequestStatus.Success)
                         }
                     } else {
