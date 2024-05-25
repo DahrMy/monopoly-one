@@ -1,6 +1,6 @@
 package my.dahr.monopolyone.data.network.api
 
-import my.dahr.monopolyone.data.network.dto.users.UsersResponse
+import my.dahr.monopolyone.data.network.dto.response.users.UsersResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

@@ -13,7 +13,9 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import my.dahr.monopolyone.data.models.RequestStatus
 import my.dahr.monopolyone.data.network.dto.response.ErrorResponse
+import my.dahr.monopolyone.data.network.dto.response.LoginBaseResponse
 import my.dahr.monopolyone.data.network.dto.response.SessionResponse
+import my.dahr.monopolyone.data.network.dto.response.TotpResponse
 import my.dahr.monopolyone.data.repository.ResourceRepository
 import my.dahr.monopolyone.utils.SessionHelper
 import my.dahr.monopolyone.utils.toSession
@@ -32,22 +34,37 @@ class LoginViewModel @Inject constructor(
     private val coroutineContext = Dispatchers.IO + SupervisorJob()
 
     private val _requestStatusLiveData = MutableLiveData<RequestStatus>()
+    lateinit var totpToken: String
 
     fun signIn(email: String, password: String) {
 
         _requestStatusLiveData.postValue(RequestStatus.Loading)
 
         viewModelScope.launch(coroutineContext) {
-            loginRepository.postSignIn(email, password) { object : Callback<SessionResponse> {
+            loginRepository.postSignIn(email, password) { object : Callback<LoginBaseResponse> {
 
-                override fun onResponse(call: Call<SessionResponse>, response: Response<SessionResponse>) {
+                override fun onResponse(call: Call<LoginBaseResponse>, response: Response<LoginBaseResponse>) {
                     if (response.isSuccessful) {
-                        val session = response.body()?.data?.toSession()
-                        if (session != null) {
-                            sessionHelper.session = session
-                            _requestStatusLiveData.postValue(RequestStatus.Success)
+
+                        val responseBody = response.body()
+
+                        if (responseBody != null) {
+                            when (responseBody) {
+                                is SessionResponse -> {
+                                    val sessionResponse = responseBody.data
+                                    sessionHelper.session = sessionResponse.toSession()
+                                    _requestStatusLiveData.postValue(RequestStatus.Success)
+                                }
+
+                                is TotpResponse -> {
+                                    totpToken = responseBody.data.totpSessionToken
+                                    _requestStatusLiveData.postValue(RequestStatus.TwoFaCode)
+                                }
+                            }
                         }
+
                     } else {
+
                         val errorJson = response.errorBody()?.string()
                         val errorResponse = Gson().fromJson(errorJson, ErrorResponse::class.java)
 
@@ -62,11 +79,12 @@ class LoginViewModel @Inject constructor(
                         }
 
                         _requestStatusLiveData.postValue(status)
+
                     }
 
                 }
 
-                override fun onFailure(call: Call<SessionResponse>, t: Throwable) {
+                override fun onFailure(call: Call<LoginBaseResponse>, t: Throwable) {
                     Log.e("Retrofit", "Failure: ${t.message}")
                     _requestStatusLiveData.postValue(RequestStatus.Failure)
                 }

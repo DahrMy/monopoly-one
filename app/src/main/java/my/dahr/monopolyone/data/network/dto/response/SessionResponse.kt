@@ -1,22 +1,39 @@
 package my.dahr.monopolyone.data.network.dto.response
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 
 data class SessionResponse(
-    val code: Int,
-    val data: Data
-) {
+
+    @Expose
+    override val code: Int,
+
+    @Expose
+    override val data: Data
+
+) : LoginBaseResponse(code, data) {
 
     data class Data(
+
+        @Expose
         @SerializedName("access_token")
         val accessToken: String,
+
+        @Expose
         val expires: Long,
+
+        @Expose
         @SerializedName("expires_in")
         val expiresIn: Long,
+
+        @Expose
         @SerializedName("refresh_token")
         val refreshToken: String,
+
+        @Expose
         @SerializedName("user_id")
         val userId: Int
+
     )
 
 }

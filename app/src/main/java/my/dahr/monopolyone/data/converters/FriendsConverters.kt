@@ -1,13 +1,13 @@
 package my.dahr.monopolyone.data.converters
 
-import my.dahr.monopolyone.data.network.dto.friends.list.DataJson
-import my.dahr.monopolyone.data.network.dto.friends.list.FriendJson
-import my.dahr.monopolyone.data.network.dto.friends.list.FriendsResponse
-import my.dahr.monopolyone.data.network.dto.friends.list.RankJson
-import my.dahr.monopolyone.data.network.dto.friends.requests.DataRequestsJson
-import my.dahr.monopolyone.data.network.dto.friends.requests.FriendsRequestsResponse
-import my.dahr.monopolyone.data.network.dto.friends.requests.RankRequestsJson
-import my.dahr.monopolyone.data.network.dto.friends.requests.RequestJson
+import my.dahr.monopolyone.data.network.dto.response.friends.list.DataJson
+import my.dahr.monopolyone.data.network.dto.response.friends.list.FriendJson
+import my.dahr.monopolyone.data.network.dto.response.friends.list.FriendsResponse
+import my.dahr.monopolyone.data.network.dto.response.friends.list.RankJson
+import my.dahr.monopolyone.data.network.dto.response.friends.requests.DataRequestsJson
+import my.dahr.monopolyone.data.network.dto.response.friends.requests.FriendsRequestsResponse
+import my.dahr.monopolyone.data.network.dto.response.friends.requests.RankRequestsJson
+import my.dahr.monopolyone.data.network.dto.response.friends.requests.RequestJson
 import my.dahr.monopolyone.domain.models.friends.list.Data
 import my.dahr.monopolyone.domain.models.friends.list.Friend
 import my.dahr.monopolyone.domain.models.friends.list.Friends

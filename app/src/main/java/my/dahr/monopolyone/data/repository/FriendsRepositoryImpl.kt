@@ -1,7 +1,7 @@
 package my.dahr.monopolyone.data.repository
 
-import my.dahr.monopolyone.data.network.dto.friends.add.AddResponseJson
-import my.dahr.monopolyone.data.network.dto.friends.delete.DeleteResponseJson
+import my.dahr.monopolyone.data.network.dto.response.friends.add.AddResponseJson
+import my.dahr.monopolyone.data.network.dto.response.friends.delete.DeleteResponseJson
 import my.dahr.monopolyone.domain.datasource.FriendsDataSource
 import my.dahr.monopolyone.domain.models.friends.list.Friend
 import my.dahr.monopolyone.domain.models.friends.requests.Request

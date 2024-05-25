@@ -1,4 +1,4 @@
-package my.dahr.monopolyone.data.network.dto.friends.add
+package my.dahr.monopolyone.data.network.dto.response.friends.add
 
 
 import com.google.gson.annotations.SerializedName

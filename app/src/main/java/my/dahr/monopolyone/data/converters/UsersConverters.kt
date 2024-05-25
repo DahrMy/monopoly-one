@@ -1,8 +1,8 @@
 package my.dahr.monopolyone.data.converters
 
-import my.dahr.monopolyone.data.network.dto.users.DataJson
-import my.dahr.monopolyone.data.network.dto.users.RankJson
-import my.dahr.monopolyone.data.network.dto.users.UsersResponse
+import my.dahr.monopolyone.data.network.dto.response.users.DataJson
+import my.dahr.monopolyone.data.network.dto.response.users.RankJson
+import my.dahr.monopolyone.data.network.dto.response.users.UsersResponse
 import my.dahr.monopolyone.domain.models.users.Data
 import my.dahr.monopolyone.domain.models.users.Rank
 import my.dahr.monopolyone.domain.models.users.Users
