@@ -26,10 +26,14 @@ class SessionHelper @Inject constructor(
             return Gson().fromJson(sessionJson, Session::class.java)
         }
         set(value) {
-            val serializedData = Gson().toJson(value)
-            sharedPreferences.edit()
-                .putString(SESSION_KEY, serializedData)
-                .apply()
+            if (value != null) {
+                val serializedData = Gson().toJson(value)
+                sharedPreferences.edit()
+                    .putString(SESSION_KEY, serializedData)
+                    .apply()
+            } else {
+                sharedPreferences.edit().remove(SESSION_KEY).apply()
+            }
         }
 
     var savedIp: String?
@@ -55,6 +59,8 @@ class SessionHelper @Inject constructor(
         val call = api.authRefreshRequest(requestBody)
         call.enqueue(callback.invoke())
     }
+
+    fun removeSession() { session = null }
 
     suspend fun refreshSavedIp() {
         coroutineScope {
