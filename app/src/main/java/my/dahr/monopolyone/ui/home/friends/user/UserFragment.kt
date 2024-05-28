@@ -223,73 +223,73 @@ class UserFragment : Fragment() {
 
                 in 45..49 -> {
                     tvRankName.text = SERGEANT_MAJOR
-                    setRankPhoto(5)
+                    setRankPhoto(9)
                     setPhoto(avatar)
                 }
 
                 in 50..54 -> {
                     tvRankName.text = LIEUTENANT
-                    setRankPhoto(6)
+                    setRankPhoto(10)
                     setPhoto(avatar)
                 }
 
                 in 55..59 -> {
                     tvRankName.text = LIEUTENANT_MAJOR
-                    setRankPhoto(7)
+                    setRankPhoto(11)
                     setPhoto(avatar)
                 }
 
                 in 60..64 -> {
                     tvRankName.text = CAPTAIN
-                    setRankPhoto(8)
+                    setRankPhoto(12)
                     setPhoto(avatar)
                 }
 
                 in 65..69 -> {
                     tvRankName.text = MAJOR
-                    setRankPhoto(5)
+                    setRankPhoto(13)
                     setPhoto(avatar)
                 }
 
                 in 70..74 -> {
                     tvRankName.text = LIEUTENANT_COLONEL
-                    setRankPhoto(6)
+                    setRankPhoto(14)
                     setPhoto(avatar)
                 }
 
                 in 75..79 -> {
                     tvRankName.text = COLONEL
-                    setRankPhoto(7)
+                    setRankPhoto(15)
                     setPhoto(avatar)
                 }
 
                 in 80..84 -> {
                     tvRankName.text = BRIGADIER_GENERAL
-                    setRankPhoto(8)
+                    setRankPhoto(16)
                     setPhoto(avatar)
                 }
 
                 in 85..89 -> {
                     tvRankName.text = GENERAL_MAJOR
-                    setRankPhoto(5)
+                    setRankPhoto(17)
                     setPhoto(avatar)
                 }
 
                 in 90..94 -> {
                     tvRankName.text = GENERAL
-                    setRankPhoto(6)
+                    setRankPhoto(18)
                     setPhoto(avatar)
                 }
 
                 in 95..99 -> {
                     tvRankName.text = LIEUTENANT_GENERAL
-                    setRankPhoto(7)
+                    setRankPhoto(19)
                     setPhoto(avatar)
                 }
 
                 in 100..10000 -> {
                     tvRankName.text = MARSHAL
-                    setRankPhoto(8)
+                    setRankPhoto(20)
                     setPhoto(avatar)
                 }
 

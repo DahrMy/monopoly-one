@@ -1,8 +1,295 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.profile.ProfileFragment">
+    tools:context=".ui.home.friends.user.UserFragment">
 
-</FrameLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvCard"
+                android:layout_marginTop="52dp"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                app:cardCornerRadius="100dp"
+                app:cardElevation="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/ivFriend"
+                    android:layout_width="160dp"
+                    android:layout_height="160dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_monopoly_logo"
+                    app:layout_constraintBottom_toBottomOf="@id/cvCard"
+                    app:layout_constraintEnd_toEndOf="@id/cvCard"
+                    app:layout_constraintStart_toStartOf="@id/cvCard"
+                    app:layout_constraintTop_toBottomOf="@id/cvCard" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tvFriendNick"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nickname"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cvCard" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutRank"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/rounded_border"
+                android:backgroundTint="@color/grey"
+                android:padding="4dp"
+                app:layout_constraintTop_toBottomOf="@id/tvFriendNick">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cvCardRank"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    app:cardCornerRadius="48dp"
+                    app:cardElevation="4dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/ivRank"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_launcher_background"
+                        app:layout_constraintBottom_toBottomOf="@id/cvCard"
+                        app:layout_constraintEnd_toEndOf="@id/cvCard"
+                        app:layout_constraintStart_toStartOf="@id/cvCard"
+                        app:layout_constraintTop_toTopOf="@id/cvCard" />
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/tvRankName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="@string/rank_name"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@id/cvCardRank"
+                    app:layout_constraintTop_toTopOf="@id/cvCardRank" />
+
+                <TextView
+                    android:id="@+id/tvRankLevel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rank_level"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="@id/tvRankName"
+                    app:layout_constraintTop_toBottomOf="@id/tvRankName" />
+
+                <TextView
+                    android:id="@+id/tvRankLevelNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/_11"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@id/tvRankLevel"
+                    app:layout_constraintTop_toBottomOf="@id/tvRankName" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="12dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="4dp"
+                    android:progress="5"
+                    android:progressDrawable="@drawable/progress_bar"
+                    app:layout_constraintBottom_toBottomOf="@id/cvCardRank"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/tvRankLevel" />
+
+                <TextView
+                    android:id="@+id/tvToLevel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:text="@string/xp"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@id/tvRankLevel"
+                    app:layout_constraintEnd_toStartOf="@id/tvNextLevel"
+                    app:layout_constraintTop_toTopOf="@id/tvRankLevel" />
+
+                <TextView
+                    android:id="@+id/tvNextLevel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_12"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@id/tvRankLevel"
+                    app:layout_constraintEnd_toEndOf="@id/progressBar"
+                    app:layout_constraintTop_toTopOf="@id/tvRankLevel" />
+
+                <TextView
+                    android:id="@+id/tvXp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:text="@string/_477"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@id/tvRankLevel"
+                    app:layout_constraintEnd_toStartOf="@+id/tvToLevel"
+                    app:layout_constraintTop_toTopOf="@id/tvRankLevel" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/LayoutInfoAllMatches"
+                android:layout_width="116dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/rounded_border"
+                android:backgroundTint="@color/grey"
+                android:padding="8dp"
+                app:layout_constraintStart_toStartOf="@+id/layoutRank"
+                app:layout_constraintTop_toBottomOf="@id/layoutRank">
+
+                <TextView
+                    android:id="@+id/tvCountOfAllMatches"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_94"
+                    android:textSize="44sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/matches"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvCountOfAllMatches" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/LayoutInfoOfWinningMatches"
+                android:layout_width="116dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/rounded_border"
+                android:backgroundTint="@color/grey"
+                android:padding="8dp"
+                app:layout_constraintEnd_toStartOf="@+id/LayoutCountOfFriends"
+                app:layout_constraintStart_toEndOf="@+id/LayoutInfoAllMatches"
+                app:layout_constraintTop_toBottomOf="@id/layoutRank">
+
+                <TextView
+                    android:id="@+id/tvCountOfWinningMatches"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_25"
+                    android:textSize="44sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/wins"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvCountOfWinningMatches" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/LayoutCountOfFriends"
+                android:layout_width="116dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/rounded_border"
+                android:backgroundTint="@color/grey"
+                android:padding="8dp"
+                app:layout_constraintEnd_toEndOf="@id/layoutRank"
+                app:layout_constraintTop_toBottomOf="@id/layoutRank">
+
+                <ImageView
+                    android:id="@+id/ivShowFriends"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@null"
+                    android:src="@drawable/item_show"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvCountOfFriends"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="44sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="@string/_11" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/friends"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvCountOfFriends" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/inventory_1"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/LayoutInfoAllMatches"
+                app:layout_constraintTop_toBottomOf="@id/LayoutInfoAllMatches" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

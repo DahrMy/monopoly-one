@@ -40,5 +40,4 @@ class UsersViewModel @Inject constructor(
     fun getUser(): Data? {
         return user
     }
-
 }
