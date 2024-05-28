@@ -9,5 +9,7 @@ interface AuthorizationApi {
     @POST("auth.signin")
     fun authSignInRequest(@Body body: Map<String, String>): Call<SessionResponse>
 
+    @POST("auth.refresh")
+    fun authRefreshRequest(@Body body: Pair<String, String>): Call<SessionResponse>
 
 }

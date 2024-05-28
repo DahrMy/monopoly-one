@@ -14,6 +14,8 @@ import kotlinx.coroutines.launch
 import my.dahr.monopolyone.data.models.RequestStatus
 import my.dahr.monopolyone.data.network.dto.response.ErrorResponse
 import my.dahr.monopolyone.data.network.dto.response.SessionResponse
+import my.dahr.monopolyone.data.repository.ResourceRepository
+import my.dahr.monopolyone.utils.SessionHelper
 import my.dahr.monopolyone.utils.toSession
 import retrofit2.Call
 import retrofit2.Callback
@@ -22,26 +24,28 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val repository: LoginRepository
+    private val loginRepository: LoginRepository,
+    private val resourceRepository: ResourceRepository,
+    private val sessionHelper: SessionHelper
 ) : ViewModel() {
 
     private val coroutineContext = Dispatchers.IO + SupervisorJob()
 
-    private val mRequestStatusLiveData = MutableLiveData<RequestStatus>()
+    private val _requestStatusLiveData = MutableLiveData<RequestStatus>()
 
     fun signIn(email: String, password: String) {
 
-        mRequestStatusLiveData.postValue(RequestStatus.Loading)
+        _requestStatusLiveData.postValue(RequestStatus.Loading)
 
         viewModelScope.launch(coroutineContext) {
-            repository.postSignIn(email, password) { object : Callback<SessionResponse> {
+            loginRepository.postSignIn(email, password) { object : Callback<SessionResponse> {
 
                 override fun onResponse(call: Call<SessionResponse>, response: Response<SessionResponse>) {
                     if (response.isSuccessful) {
                         val session = response.body()?.data?.toSession()
                         if (session != null) {
-                            repository.saveSession(session)
-                            mRequestStatusLiveData.postValue(RequestStatus.Success)
+                            sessionHelper.session = session
+                            _requestStatusLiveData.postValue(RequestStatus.Success)
                         }
                     } else {
                         val errorJson = response.errorBody()?.string()
@@ -57,14 +61,14 @@ class LoginViewModel @Inject constructor(
                             RequestStatus.UndefinedError
                         }
 
-                        mRequestStatusLiveData.postValue(status)
+                        _requestStatusLiveData.postValue(status)
                     }
 
                 }
 
                 override fun onFailure(call: Call<SessionResponse>, t: Throwable) {
                     Log.e("Retrofit", "Failure: ${t.message}")
-                    mRequestStatusLiveData.postValue(RequestStatus.Failure)
+                    _requestStatusLiveData.postValue(RequestStatus.Failure)
                 }
 
             } }
@@ -72,9 +76,9 @@ class LoginViewModel @Inject constructor(
 
     }
 
-    fun loadBitmap(@DrawableRes id: Int) = repository.getBitmapFromDrawableRes(id)
-    fun loadErrorMessage(code: Int) = repository.getErrorMessageStringResource(code)
+    fun loadBitmap(@DrawableRes id: Int) = resourceRepository.getBitmapFromDrawableRes(id)
+    fun loadErrorMessage(code: Int) = resourceRepository.getErrorMessageStringResource(code)
 
-    val requestStatusLiveData: LiveData<RequestStatus> get() = mRequestStatusLiveData
+    val requestStatusLiveData: LiveData<RequestStatus> get() = _requestStatusLiveData
 
 }
