@@ -56,4 +56,7 @@
     <string name="find_a_friend">Find a friend</string>
     <string name="add_to_friends">Add to friends</string>
     <string name="other">Other</string>
+    <string name="et_2faCode_hint">Code from an authenticator app</string>
+    <string name="dialog_bt_cancel">Cancel</string>
+    <string name="dialog_bt_verify">Verify</string>
 </resources>

@@ -1,7 +1,6 @@
-package my.dahr.monopolyone.ui.login
+package my.dahr.monopolyone.ui.login.dialog.totp
 
 import android.util.Log
-import androidx.annotation.DrawableRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,14 +8,12 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import my.dahr.monopolyone.data.models.RequestStatus
 import my.dahr.monopolyone.data.network.dto.response.ErrorResponse
-import my.dahr.monopolyone.data.network.dto.response.LoginBaseResponse
 import my.dahr.monopolyone.data.network.dto.response.SessionResponse
-import my.dahr.monopolyone.data.network.dto.response.TotpResponse
-import my.dahr.monopolyone.data.repository.ResourceRepository
+import my.dahr.monopolyone.ui.login.LoginRepository
 import my.dahr.monopolyone.utils.SessionHelper
 import my.dahr.monopolyone.utils.toSession
 import retrofit2.Call
@@ -25,44 +22,32 @@ import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(
-    private val loginRepository: LoginRepository,
-    private val resourceRepository: ResourceRepository,
+class TotpViewModel @Inject constructor(
+    private val repository: LoginRepository,
     private val sessionHelper: SessionHelper
 ) : ViewModel() {
 
-    private val coroutineContext = Dispatchers.IO + SupervisorJob()
+    private val coroutineContext = Dispatchers.IO + Job()
 
     private val _requestStatusLiveData = MutableLiveData<RequestStatus>()
     val requestStatusLiveData: LiveData<RequestStatus> get() = _requestStatusLiveData
 
-    lateinit var totpToken: String
-
-    fun signIn(email: String, password: String) {
+    fun verifyCode(code: Int, totpToken: String) {
 
         _requestStatusLiveData.postValue(RequestStatus.Loading)
 
         viewModelScope.launch(coroutineContext) {
-            loginRepository.postSignIn(email, password) { object : Callback<LoginBaseResponse> {
+            repository.verify2faCode(code, totpToken) { object : Callback<SessionResponse> {
 
-                override fun onResponse(call: Call<LoginBaseResponse>, response: Response<LoginBaseResponse>) {
+                override fun onResponse(call: Call<SessionResponse>, response: Response<SessionResponse>) {
                     if (response.isSuccessful) {
 
                         val responseBody = response.body()
 
                         if (responseBody != null) {
-                            when (responseBody) {
-                                is SessionResponse -> {
-                                    val sessionResponse = responseBody.data
-                                    sessionHelper.session = sessionResponse.toSession()
-                                    _requestStatusLiveData.postValue(RequestStatus.Success)
-                                }
-
-                                is TotpResponse -> {
-                                    totpToken = responseBody.data.totpSessionToken
-                                    _requestStatusLiveData.postValue(RequestStatus.TwoFaCode)
-                                }
-                            }
+                            val sessionResponse = responseBody.data
+                            sessionHelper.session = sessionResponse.toSession()
+                            _requestStatusLiveData.postValue(RequestStatus.Success)
                         }
 
                     } else {
@@ -86,18 +71,15 @@ class LoginViewModel @Inject constructor(
 
                 }
 
-                override fun onFailure(call: Call<LoginBaseResponse>, t: Throwable) {
+                override fun onFailure(call: Call<SessionResponse>, t: Throwable) {
                     Log.e("Retrofit", "Failure: ${t.message}")
                     _requestStatusLiveData.postValue(RequestStatus.Failure)
                 }
 
-            } }
+            }}
+
         }
 
     }
-
-    fun loadBitmap(@DrawableRes id: Int) = resourceRepository.getBitmapFromDrawableRes(id)
-    fun loadErrorMessage(code: Int) = resourceRepository.getErrorMessageStringResource(code)
-
 
 }
