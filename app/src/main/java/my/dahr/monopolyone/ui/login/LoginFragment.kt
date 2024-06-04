@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -39,6 +38,7 @@ class LoginFragment : Fragment() {
 
         initObservers()
         setListeners()
+        showTotpDialog()
 
         return binding.root
     }
@@ -89,14 +89,13 @@ class LoginFragment : Fragment() {
                             )
 
                             parentFragmentManager.beginTransaction()
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN)
                                 .replace(R.id.fragment_container_view, MainFragment())
                                 .commit()
                         }
                     }
 
-                    RequestStatus.TwoFaCode -> {
-                        Toast.makeText(requireContext(), "TOTP not yet implemented", Toast.LENGTH_SHORT).show()
-                    }
+                    RequestStatus.TwoFaCode -> showTotpDialog()
 
                     RequestStatus.Failure -> {
                         lifecycleScope.launch(Dispatchers.Main) {
@@ -139,22 +138,16 @@ class LoginFragment : Fragment() {
         binding.btLogin.revertAnimation()
     }
 
-    fun showTotpDialog() {
+    private fun showTotpDialog() {
         val fragmentManager = parentFragmentManager
         val newFragment = TotpDialogFragment.newInstance(viewModel.totpToken)
+        val isLargeLayout = resources.getBoolean(R.bool.large_layout)
 
         if (isLargeLayout) {
-            // The device is using a large layout, so show the fragment as a
-            // dialog.
             newFragment.show(fragmentManager, "dialog")
         } else {
-            // The device is smaller, so show the fragment fullscreen.
-            val transaction = fragmentManager.beginTransaction()
-            // For a polished look, specify a transition animation.
-            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-            // To make it fullscreen, use the 'content' root view as the container
-            // for the fragment, which is always the root view for the activity.
-            transaction
+            fragmentManager.beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .add(android.R.id.content, newFragment)
                 .addToBackStack(null)
                 .commit()

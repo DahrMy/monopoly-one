@@ -1,6 +1,7 @@
 package my.dahr.monopolyone.ui.login.dialog.totp
 
 import android.util.Log
+import androidx.annotation.DrawableRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,6 +14,7 @@ import kotlinx.coroutines.launch
 import my.dahr.monopolyone.data.models.RequestStatus
 import my.dahr.monopolyone.data.network.dto.response.ErrorResponse
 import my.dahr.monopolyone.data.network.dto.response.SessionResponse
+import my.dahr.monopolyone.data.repository.ResourceRepository
 import my.dahr.monopolyone.ui.login.LoginRepository
 import my.dahr.monopolyone.utils.SessionHelper
 import my.dahr.monopolyone.utils.toSession
@@ -23,7 +25,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TotpViewModel @Inject constructor(
-    private val repository: LoginRepository,
+    private val loginRepository: LoginRepository,
+    private val resourceRepository: ResourceRepository,
     private val sessionHelper: SessionHelper
 ) : ViewModel() {
 
@@ -37,7 +40,7 @@ class TotpViewModel @Inject constructor(
         _requestStatusLiveData.postValue(RequestStatus.Loading)
 
         viewModelScope.launch(coroutineContext) {
-            repository.verify2faCode(code, totpToken) { object : Callback<SessionResponse> {
+            loginRepository.verify2faCode(code, totpToken) { object : Callback<SessionResponse> {
 
                 override fun onResponse(call: Call<SessionResponse>, response: Response<SessionResponse>) {
                     if (response.isSuccessful) {
@@ -81,5 +84,8 @@ class TotpViewModel @Inject constructor(
         }
 
     }
+
+    fun loadBitmap(@DrawableRes id: Int) = resourceRepository.getBitmapFromDrawableRes(id)
+    fun loadErrorMessage(code: Int) = resourceRepository.getErrorMessageStringResource(code)
 
 }
