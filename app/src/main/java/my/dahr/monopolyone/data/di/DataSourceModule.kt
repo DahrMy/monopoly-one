@@ -5,8 +5,10 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import my.dahr.monopolyone.data.network.datasource.FriendsDataSourceImpl
+import my.dahr.monopolyone.data.network.datasource.InventoryDataSourceImpl
 import my.dahr.monopolyone.data.network.datasource.UsersDataSourceImpl
 import my.dahr.monopolyone.domain.datasource.FriendsDataSource
+import my.dahr.monopolyone.domain.datasource.InventoryDataSource
 import my.dahr.monopolyone.domain.datasource.UsersDataSource
 
 @Module
@@ -17,4 +19,7 @@ abstract class DataSourceModule {
 
     @Binds
     abstract fun bindUsersDataSource(impl: UsersDataSourceImpl): UsersDataSource
+
+    @Binds
+    abstract fun bindInventoryDataSource(impl: InventoryDataSourceImpl): InventoryDataSource
 }
