@@ -1,26 +1,23 @@
 package my.dahr.monopolyone.ui.login.dialog.totp
 
-import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import my.dahr.monopolyone.data.models.RequestStatus
-import my.dahr.monopolyone.data.network.dto.response.ErrorResponse
+import my.dahr.monopolyone.data.network.MyRetrofitCallback
+import my.dahr.monopolyone.data.network.dto.response.BaseResponse
 import my.dahr.monopolyone.data.network.dto.response.SessionResponse
 import my.dahr.monopolyone.data.repository.ResourceRepository
 import my.dahr.monopolyone.ui.login.LoginRepository
 import my.dahr.monopolyone.utils.SessionHelper
 import my.dahr.monopolyone.utils.toSession
 import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,52 +37,29 @@ class TotpViewModel @Inject constructor(
         _requestStatusLiveData.postValue(RequestStatus.Loading)
 
         viewModelScope.launch(coroutineContext) {
-            loginRepository.verify2faCode(code, totpToken) { object : Callback<SessionResponse> {
-
-                override fun onResponse(call: Call<SessionResponse>, response: Response<SessionResponse>) {
-                    if (response.isSuccessful) {
-
-                        val responseBody = response.body()
-
-                        if (responseBody != null) {
+            loginRepository.verify2faCode(
+                code,
+                totpToken,
+                object : MyRetrofitCallback<BaseResponse>(_requestStatusLiveData) {
+                    override fun onSuccessfulResponse(
+                        call: Call<BaseResponse>, responseBody: BaseResponse
+                    ) {
+                        if (responseBody is SessionResponse) {
                             val sessionResponse = responseBody.data
                             sessionHelper.session = sessionResponse.toSession()
                             _requestStatusLiveData.postValue(RequestStatus.Success)
-                        }
-
-                    } else {
-
-                        val errorJson = response.errorBody()?.string()
-                        val errorResponse = Gson().fromJson(errorJson, ErrorResponse::class.java)
-
-                        Log.e("Retrofit", "Error:\n$errorJson")
-
-                        val status = if (errorResponse != null) {
-                            RequestStatus.entries.find { status ->
-                                status.code == errorResponse.code
-                            } ?: RequestStatus.UndefinedError
                         } else {
-                            RequestStatus.UndefinedError
+                            handleErrorResponse(responseBody)
                         }
-
-                        _requestStatusLiveData.postValue(status)
-
                     }
 
                 }
-
-                override fun onFailure(call: Call<SessionResponse>, t: Throwable) {
-                    Log.e("Retrofit", "Failure: ${t.message}")
-                    _requestStatusLiveData.postValue(RequestStatus.Failure)
-                }
-
-            }}
-
+            )
         }
-
     }
 
     fun loadBitmap(@DrawableRes id: Int) = resourceRepository.getBitmapFromDrawableRes(id)
     fun loadErrorMessage(code: Int) = resourceRepository.getErrorMessageStringResource(code)
 
 }
+

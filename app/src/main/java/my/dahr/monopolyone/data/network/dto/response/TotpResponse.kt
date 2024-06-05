@@ -8,8 +8,10 @@ data class TotpResponse(
     @Expose
     override val code: Int,
     @Expose
+    override val description: String?,
+    @Expose
     override val data: Data
-) : LoginBaseResponse(code, data) {
+) : BaseResponse(code, description, data) {
     data class Data(
         @Expose
         @SerializedName("totp_session_token")

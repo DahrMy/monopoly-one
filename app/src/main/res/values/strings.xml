@@ -30,6 +30,23 @@
     <string name="dialog_error_12_text">Requires entering the code from the authenticator app.</string>
     <string name="dialog_error_98_text">The method is undergoing technical work and is temporarily disabled.</string>
     <string name="dialog_error_99_text">An unknown error has occurred</string>
+    <string name="dialog_error_101_text">The user does not exist.</string>
+    <string name="dialog_error_104_text">The user is mutated. The mute will be removed in %s.</string>
+    <string name="dialog_error_107_text">The user added you to the block list.</string>
+    <string name="dialog_error_412_text">The account is globally blocked.</string>
+    <string name="dialog_error_413_text">Invalid TOTP session key.</string>
+    <string name="dialog_error_414_text">Too frequent TOTP authorization.</string>
+    <string name="dialog_error_603_text">Any of the transferred items cannot be used in crafting.</string>
+    <string name="dialog_error_605_text">Items must be of the same type and class.</string>
+    <string name="dialog_error_624_text">Such an item cannot be used in this operation.</string>
+    <string name="dialog_error_701_text">The request cannot be completed due to the user\'s privacy settings.</string>
+    <string name="dialog_error_1203_text">The message was not sent due to chat restrictions. Reason: %s</string>
+    
+    <string name="error_1203_reason_disabled">the chat is closed for receiving messages.</string>
+    <string name="error_1203_reason_strict">the chat is in strict mode so the message hasn\'t been filtered.</string>
+    <string name="error_1203_reason_emotes_only">the chat in “emoticons only” mode.</string>
+    <string name="error_1203_reason_bot_limitations">the bot has exceeded any limit.</string>
+
 
     <string name="dialog_failure_title">Failure</string>
     <string name="dialog_failure_text">An error occurred while executing the request. Please try again.</string>

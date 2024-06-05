@@ -2,6 +2,8 @@ package my.dahr.monopolyone.ui.login.dialog.totp
 
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +21,7 @@ import my.dahr.monopolyone.R
 import my.dahr.monopolyone.data.models.RequestStatus
 import my.dahr.monopolyone.databinding.FragmentDialogTotpBinding
 import my.dahr.monopolyone.ui.home.MainFragment
+import java.util.regex.Pattern
 
 private const val TOTP_TOKEN = "totp_token"
 
@@ -43,18 +46,45 @@ class TotpDialogFragment : DialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDialogTotpBinding.inflate(inflater, container, false)
+
+        initObservers()
+        setListeners()
+
         return binding.root
     }
 
-    private fun btVerifyOnClickListener() {
+    private fun initObservers() {
+        btVerifyObserver()
+    }
+
+    private fun setListeners() {
         binding.apply {
-            val code = et2faCode.text.toString().toInt()
-            totpToken?.let {
-                viewModel.verifyCode(code, it)
+
+            btVerify.setOnClickListener {
+                val code = et2faCode.text.toString().toInt()
+                totpToken?.let {
+                    viewModel.verifyCode(code, it)
+                }
             }
 
-        }
+            btCancel.setOnClickListener {
+                parentFragmentManager.popBackStack()
+            }
 
+            et2faCode.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+                override fun afterTextChanged(s: Editable?) {
+                    val text = s.toString()
+                    val length = text.length
+
+                    if (length > 0 && !Pattern.matches("""[0-9]{0,6}""", text)) {
+                        s?.delete(length - 1, length)
+                    }
+                }
+            })
+
+        }
     }
 
     private fun btVerifyObserver() {
@@ -72,6 +102,8 @@ class TotpDialogFragment : DialogFragment() {
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN)
                                 .replace(R.id.fragment_container_view, MainFragment())
                                 .commit()
+
+                            dialog?.dismiss()
                         }
                     }
 
@@ -107,7 +139,6 @@ class TotpDialogFragment : DialogFragment() {
                 }
             }
         }
-
     }
 
     private suspend fun btLoginEndAnimation(@ColorInt color: Int, bitmap: Bitmap) {

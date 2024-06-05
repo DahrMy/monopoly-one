@@ -38,7 +38,6 @@ class LoginFragment : Fragment() {
 
         initObservers()
         setListeners()
-        showTotpDialog()
 
         return binding.root
     }
@@ -95,7 +94,10 @@ class LoginFragment : Fragment() {
                         }
                     }
 
-                    RequestStatus.TwoFaCode -> showTotpDialog()
+                    RequestStatus.TwoFaCode -> {
+                        showTotpDialog()
+                        revertAnimation()
+                    }
 
                     RequestStatus.Failure -> {
                         lifecycleScope.launch(Dispatchers.Main) {
