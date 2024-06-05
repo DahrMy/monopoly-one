@@ -10,8 +10,8 @@ data class TotpResponse(
     @Expose
     override val description: String?,
     @Expose
-    override val data: Data
-) : BaseResponse(code, description, data) {
+    override val `data`: Data
+) : BaseResponse(code, description, `data`) {
     data class Data(
         @Expose
         @SerializedName("totp_session_token")

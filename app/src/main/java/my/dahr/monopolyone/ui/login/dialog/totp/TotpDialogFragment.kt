@@ -61,7 +61,7 @@ class TotpDialogFragment : DialogFragment() {
         binding.apply {
 
             btVerify.setOnClickListener {
-                val code = et2faCode.text.toString().toInt()
+                val code = et2faCode.text.toString()
                 totpToken?.let {
                     viewModel.verifyCode(code, it)
                 }
@@ -103,7 +103,8 @@ class TotpDialogFragment : DialogFragment() {
                                 .replace(R.id.fragment_container_view, MainFragment())
                                 .commit()
 
-                            dialog?.dismiss()
+                            dismissNow()
+
                         }
                     }
 
@@ -133,7 +134,7 @@ class TotpDialogFragment : DialogFragment() {
                         MaterialAlertDialogBuilder(requireContext())
                             .setTitle(resources.getString(R.string.dialog_error_title))
                             .setPositiveButton(resources.getString(R.string.dialog_bt_ok)) { _, _ -> }
-                            .setMessage(viewModel.loadErrorMessage(status.code))
+                            .setMessage(viewModel.loadErrorMessage(status))
                             .show()
                     }
                 }

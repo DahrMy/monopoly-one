@@ -9,7 +9,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-abstract class MyRetrofitCallback<T>(
+abstract class MonopolyCallback<T>(
     private val requestStatusLiveData: MutableLiveData<RequestStatus>
 ) : Callback<T> {
 

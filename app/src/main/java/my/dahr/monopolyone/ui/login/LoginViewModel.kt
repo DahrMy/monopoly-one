@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import my.dahr.monopolyone.data.models.RequestStatus
-import my.dahr.monopolyone.data.network.MyRetrofitCallback
+import my.dahr.monopolyone.data.network.MonopolyCallback
 import my.dahr.monopolyone.data.network.dto.response.BaseResponse
 import my.dahr.monopolyone.data.network.dto.response.SessionResponse
 import my.dahr.monopolyone.data.network.dto.response.TotpResponse
@@ -42,19 +42,19 @@ class LoginViewModel @Inject constructor(
             loginRepository.postSignIn(
                 email,
                 password,
-                object : MyRetrofitCallback<BaseResponse>(_requestStatusLiveData) {
+                object : MonopolyCallback<BaseResponse>(_requestStatusLiveData) {
                     override fun onSuccessfulResponse(
                         call: Call<BaseResponse>, responseBody: BaseResponse
                     ) {
                         when (responseBody) {
                             is SessionResponse -> {
-                                val sessionResponse = responseBody.data
+                                val sessionResponse = responseBody.`data`
                                 sessionHelper.session = sessionResponse.toSession()
                                 _requestStatusLiveData.postValue(RequestStatus.Success)
                             }
 
                             is TotpResponse -> {
-                                totpToken = responseBody.data.totpSessionToken
+                                totpToken = responseBody.`data`.totpSessionToken
                                 _requestStatusLiveData.postValue(RequestStatus.TwoFaCode)
                             }
 
@@ -69,7 +69,8 @@ class LoginViewModel @Inject constructor(
     }
 
     fun loadBitmap(@DrawableRes id: Int) = resourceRepository.getBitmapFromDrawableRes(id)
-    fun loadErrorMessage(code: Int) = resourceRepository.getErrorMessageStringResource(code)
+    fun loadErrorMessage(status: RequestStatus) =
+        resourceRepository.getErrorMessageStringResource(status)
 
 
 }

@@ -9,7 +9,7 @@ import my.dahr.monopolyone.data.network.api.AuthorizationApi
 import my.dahr.monopolyone.data.network.api.FriendsApi
 import my.dahr.monopolyone.data.network.api.IpApi
 import my.dahr.monopolyone.data.network.api.UsersApi
-import my.dahr.monopolyone.data.network.dto.deserializer.LoginDeserializer
+import my.dahr.monopolyone.data.network.dto.deserializer.MonopolyDeserializer
 import my.dahr.monopolyone.data.network.dto.response.BaseResponse
 import my.dahr.monopolyone.utils.BASE_URL
 import my.dahr.monopolyone.utils.MY_IP_BASE_URL
@@ -32,7 +32,7 @@ object NetworkModule {
         .build()
 
     private val gson get() = GsonBuilder() // TODO: Shouldn't do like here
-        .registerTypeAdapter(BaseResponse::class.java, LoginDeserializer())
+        .registerTypeAdapter(BaseResponse::class.java, MonopolyDeserializer())
         .excludeFieldsWithoutExposeAnnotation()
         .create()
 

@@ -20,10 +20,10 @@ class LoginRepository @Inject constructor(
         call.enqueue(callback)
     }
 
-    fun verify2faCode(code: Int, totpToken: String, callback: Callback<BaseResponse>) {
+    fun verify2faCode(code: String, totpToken: String, callback: Callback<BaseResponse>) {
         val requestBody = mapOf(
             "totp_session_token" to totpToken,
-            "code" to code.toString()
+            "code" to code
         )
         val call = api.authTotpVerify(requestBody)
         call.enqueue(callback)

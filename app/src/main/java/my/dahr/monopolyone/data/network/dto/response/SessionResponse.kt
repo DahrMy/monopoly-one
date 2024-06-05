@@ -12,9 +12,9 @@ data class SessionResponse(
     override val description: String?,
 
     @Expose
-    override val data: Data
+    override val `data`: Data
 
-) : BaseResponse(code, description, data) {
+) : BaseResponse(code, description, `data`) {
 
     data class Data(
 

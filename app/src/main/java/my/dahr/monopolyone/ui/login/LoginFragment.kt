@@ -125,7 +125,7 @@ class LoginFragment : Fragment() {
                         MaterialAlertDialogBuilder(requireContext())
                             .setTitle(resources.getString(R.string.dialog_error_title))
                             .setPositiveButton(resources.getString(R.string.dialog_bt_ok)) { _, _ -> }
-                            .setMessage(viewModel.loadErrorMessage(status.code))
+                            .setMessage(viewModel.loadErrorMessage(status))
                             .show()
                     }
                 }
