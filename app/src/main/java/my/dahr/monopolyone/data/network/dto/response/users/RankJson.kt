@@ -1,9 +1,9 @@
-package my.dahr.monopolyone.data.network.dto.friends.requests
+package my.dahr.monopolyone.data.network.dto.response.users
 
 
 import com.google.gson.annotations.SerializedName
 
-data class RankRequestsJson(
+data class RankJson(
     @SerializedName("hidden")
     val hidden: Int? = null
 )

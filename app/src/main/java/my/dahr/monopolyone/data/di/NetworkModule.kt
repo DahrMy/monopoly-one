@@ -1,5 +1,6 @@
 package my.dahr.monopolyone.data.di
 
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -8,6 +9,8 @@ import my.dahr.monopolyone.data.network.api.AuthorizationApi
 import my.dahr.monopolyone.data.network.api.FriendsApi
 import my.dahr.monopolyone.data.network.api.IpApi
 import my.dahr.monopolyone.data.network.api.UsersApi
+import my.dahr.monopolyone.data.network.dto.deserializer.MonopolyDeserializer
+import my.dahr.monopolyone.data.network.dto.response.BaseResponse
 import my.dahr.monopolyone.utils.BASE_URL
 import my.dahr.monopolyone.utils.MY_IP_BASE_URL
 import okhttp3.OkHttpClient
@@ -28,12 +31,17 @@ object NetworkModule {
         .addInterceptor(logger)
         .build()
 
+    private val gson get() = GsonBuilder() // TODO: Shouldn't do like here
+        .registerTypeAdapter(BaseResponse::class.java, MonopolyDeserializer())
+        .excludeFieldsWithoutExposeAnnotation()
+        .create()
+
     @Provides
     @Singleton
     fun provideRetrofit(): Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .client(okHttpClient)
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
 
     @Provides

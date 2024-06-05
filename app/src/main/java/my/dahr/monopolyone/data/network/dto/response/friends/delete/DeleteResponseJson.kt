@@ -1,4 +1,4 @@
-package my.dahr.monopolyone.data.network.dto.friends.delete
+package my.dahr.monopolyone.data.network.dto.response.friends.delete
 
 import com.google.gson.annotations.SerializedName
 

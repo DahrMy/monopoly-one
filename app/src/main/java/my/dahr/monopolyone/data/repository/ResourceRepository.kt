@@ -7,6 +7,8 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.drawable.toBitmap
 import dagger.hilt.android.qualifiers.ApplicationContext
 import my.dahr.monopolyone.R
+import my.dahr.monopolyone.data.models.RequestStatus.*
+import my.dahr.monopolyone.data.models.RequestStatus
 import javax.inject.Inject
 
 class ResourceRepository @Inject constructor(
@@ -26,20 +28,31 @@ class ResourceRepository @Inject constructor(
 
     }
 
-    fun getErrorMessageStringResource(code: Int) = when (code) {
-        1 -> context.resources.getString(R.string.dialog_error_1_text)
-        2 -> context.resources.getString(R.string.dialog_error_2_text)
-        3 -> context.resources.getString(R.string.dialog_error_3_text)
-        4 -> context.resources.getString(R.string.dialog_error_4_text)
-        5 -> context.resources.getString(R.string.dialog_error_5_text)
-        6 -> context.resources.getString(R.string.dialog_error_6_text)
-        7 -> context.resources.getString(R.string.dialog_error_7_text)
-        8 -> context.resources.getString(R.string.dialog_error_8_text)
-        10 -> context.resources.getString(R.string.dialog_error_10_text)
-        11 -> context.resources.getString(R.string.dialog_error_11_text)
-        12 -> context.resources.getString(R.string.dialog_error_12_text)
-        98 -> context.resources.getString(R.string.dialog_error_98_text)
-        else -> { context.resources.getString(R.string.dialog_error_99_text) }
+    fun getErrorMessageStringResource(status: RequestStatus) = when (status) {
+        AuthorizationError -> context.resources.getString(R.string.dialog_error_1_text)
+        ParamInvalidError -> context.resources.getString(R.string.dialog_error_2_text) // TODO: Use list from `data`
+        InternalError -> context.resources.getString(R.string.dialog_error_3_text)
+        AccessDenyError -> context.resources.getString(R.string.dialog_error_4_text)
+        UndefinedRequestError -> context.resources.getString(R.string.dialog_error_5_text)
+        ObjectsLimitError -> context.resources.getString(R.string.dialog_error_6_text)
+        RequestsLimitError -> context.resources.getString(R.string.dialog_error_7_text)
+        CaptchaError -> context.resources.getString(R.string.dialog_error_8_text)
+        ServerIdleError -> context.resources.getString(R.string.dialog_error_10_text)
+        Confirmation -> context.resources.getString(R.string.dialog_error_11_text)
+        TwoFaCode -> context.resources.getString(R.string.dialog_error_12_text)
+        MaintenanceError -> context.resources.getString(R.string.dialog_error_98_text)
+        UserNotExistError -> context.resources.getString(R.string.dialog_error_101_text)
+        MuteError -> context.resources.getString(R.string.dialog_error_104_text)
+        BlockListError -> context.resources.getString(R.string.dialog_error_107_text)
+        AccountBlockedError -> context.resources.getString(R.string.dialog_error_412_text)
+        InvalidTotpCodeError -> context.resources.getString(R.string.dialog_error_413_text)
+        FrequentTotpError -> context.resources.getString(R.string.dialog_error_414_text) // TODO: Use time from `data`
+        UnableCraftError -> context.resources.getString(R.string.dialog_error_603_text)
+        IncompatibleCraftError -> context.resources.getString(R.string.dialog_error_605_text)
+        ItemUsingOperationError -> context.resources.getString(R.string.dialog_error_624_text)
+        UserPrivacySettingsError -> context.resources.getString(R.string.dialog_error_701_text)
+        ChatRestrictionError -> context.resources.getString(R.string.dialog_error_1203_text)
+        else /* UndefinedError */ -> context.resources.getString(R.string.dialog_error_99_text)
     }
 
 }

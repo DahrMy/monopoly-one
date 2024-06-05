@@ -1,12 +1,14 @@
-package my.dahr.monopolyone.ui.login
+package my.dahr.monopolyone.ui.login.dialog.totp
 
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -17,24 +19,33 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import my.dahr.monopolyone.R
 import my.dahr.monopolyone.data.models.RequestStatus
-import my.dahr.monopolyone.databinding.FragmentLoginBinding
+import my.dahr.monopolyone.databinding.FragmentDialogTotpBinding
 import my.dahr.monopolyone.ui.home.MainFragment
-import my.dahr.monopolyone.ui.login.dialog.totp.TotpDialogFragment
-import my.dahr.monopolyone.utils.validEmail
-import my.dahr.monopolyone.utils.validPassword
+import java.util.regex.Pattern
+
+private const val TOTP_TOKEN = "totp_token"
 
 @AndroidEntryPoint
-class LoginFragment : Fragment() {
+class TotpDialogFragment : DialogFragment() {
 
-    private var _binding: FragmentLoginBinding? = null
-    private val binding get() = _binding!!
+    private var _binding: FragmentDialogTotpBinding? = null
+    private val binding: FragmentDialogTotpBinding get() = _binding!!
 
-    private val viewModel by viewModels<LoginViewModel>()
+    private var totpToken: String? = null
+
+    private val viewModel by viewModels<TotpViewModel>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            totpToken = it.getString(TOTP_TOKEN)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentLoginBinding.inflate(inflater, container, false)
+        _binding = FragmentDialogTotpBinding.inflate(inflater, container, false)
 
         initObservers()
         setListeners()
@@ -43,41 +54,41 @@ class LoginFragment : Fragment() {
     }
 
     private fun initObservers() {
-        btLoginObserver()
+        btVerifyObserver()
     }
 
     private fun setListeners() {
         binding.apply {
-            btLogin.setOnClickListener { btLoginOnClickListener() }
+
+            btVerify.setOnClickListener {
+                val code = et2faCode.text.toString()
+                totpToken?.let {
+                    viewModel.verifyCode(code, it)
+                }
+            }
+
+            btCancel.setOnClickListener {
+                parentFragmentManager.popBackStack()
+            }
+
+            et2faCode.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+                override fun afterTextChanged(s: Editable?) {
+                    val text = s.toString()
+                    val length = text.length
+
+                    if (length > 0 && !Pattern.matches("""[0-9]{0,6}""", text)) {
+                        s?.delete(length - 1, length)
+                    }
+                }
+            })
+
         }
     }
 
-    private fun btLoginOnClickListener() {
-        binding.apply {
-            val email = etEmail.text.toString()
-            val password = etPassword.text.toString()
-
-            if (!validEmail(email)) {
-                inputLayoutEmail.isErrorEnabled = true
-                etEmail.error = resources.getString(R.string.et_email_error)
-            }
-
-            if (!validPassword(password)) {
-                inputLayoutPassword.isErrorEnabled = true
-                etPassword.error = resources.getString(R.string.et_password_error)
-                inputLayoutPassword.error
-            }
-
-            if (validEmail(email) && validPassword(password)) {
-                viewModel.signIn(email, password)
-            }
-
-        }
-
-    }
-
-    private fun btLoginObserver() {
-        binding.btLogin.apply {
+    private fun btVerifyObserver() {
+        binding.btVerify.apply {
             viewModel.requestStatusLiveData.observe(viewLifecycleOwner) { status ->
                 when (status) {
 
@@ -91,12 +102,10 @@ class LoginFragment : Fragment() {
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN)
                                 .replace(R.id.fragment_container_view, MainFragment())
                                 .commit()
-                        }
-                    }
 
-                    RequestStatus.TwoFaCode -> {
-                        showTotpDialog()
-                        revertAnimation()
+                            dismissNow()
+
+                        }
                     }
 
                     RequestStatus.Failure -> {
@@ -131,30 +140,22 @@ class LoginFragment : Fragment() {
                 }
             }
         }
-
     }
 
     private suspend fun btLoginEndAnimation(@ColorInt color: Int, bitmap: Bitmap) {
-        binding.btLogin.doneLoadingAnimation(color, bitmap)
+        binding.btVerify.doneLoadingAnimation(color, bitmap)
         delay(1000)
-        binding.btLogin.revertAnimation()
+        binding.btVerify.revertAnimation()
     }
 
-    private fun showTotpDialog() {
-        val fragmentManager = parentFragmentManager
-        val newFragment = TotpDialogFragment.newInstance(viewModel.totpToken)
-        val isLargeLayout = resources.getBoolean(R.bool.large_layout)
-
-        if (isLargeLayout) {
-            newFragment.show(fragmentManager, "dialog")
-        } else {
-            fragmentManager.beginTransaction()
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .add(android.R.id.content, newFragment)
-                .addToBackStack(null)
-                .commit()
-        }
-
+    companion object {
+        @JvmStatic
+        fun newInstance(totpToken: String) =
+            TotpDialogFragment().apply {
+                arguments = Bundle().apply {
+                    putString(TOTP_TOKEN, totpToken)
+                }
+            }
     }
 
 }

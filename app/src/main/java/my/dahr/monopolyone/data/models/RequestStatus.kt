@@ -2,9 +2,8 @@ package my.dahr.monopolyone.data.models
 
 enum class RequestStatus(val code: Int) {
     Loading(-1),
+    Failure(-1),
     Success(0),
-    Confirmation(11),
-    TwoFaCode(12),
     AuthorizationError(1),
     ParamInvalidError(2),
     InternalError(3),
@@ -14,7 +13,19 @@ enum class RequestStatus(val code: Int) {
     RequestsLimitError(7),
     CaptchaError(8),
     ServerIdleError(10),
+    Confirmation(11),
+    TwoFaCode(12),
     MaintenanceError(98),
     UndefinedError(99),
-    Failure(-1),
+    UserNotExistError(101),
+    MuteError(104),
+    BlockListError(107),
+    AccountBlockedError(412),
+    InvalidTotpCodeError(413),
+    FrequentTotpError(414),
+    UnableCraftError(603),
+    IncompatibleCraftError(605),
+    ItemUsingOperationError(624),
+    UserPrivacySettingsError(701),
+    ChatRestrictionError(1203)
 }

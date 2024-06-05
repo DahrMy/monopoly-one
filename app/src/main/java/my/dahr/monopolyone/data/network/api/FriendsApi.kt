@@ -1,9 +1,9 @@
 package my.dahr.monopolyone.data.network.api
 
-import my.dahr.monopolyone.data.network.dto.friends.add.AddResponseJson
-import my.dahr.monopolyone.data.network.dto.friends.delete.DeleteResponseJson
-import my.dahr.monopolyone.data.network.dto.friends.list.FriendsResponse
-import my.dahr.monopolyone.data.network.dto.friends.requests.FriendsRequestsResponse
+import my.dahr.monopolyone.data.network.dto.response.friends.add.AddResponseJson
+import my.dahr.monopolyone.data.network.dto.response.friends.delete.DeleteResponseJson
+import my.dahr.monopolyone.data.network.dto.response.friends.list.FriendsResponse
+import my.dahr.monopolyone.data.network.dto.response.friends.requests.FriendsRequestsResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST

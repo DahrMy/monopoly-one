@@ -36,9 +36,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-//        getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE).edit()
-//            .remove(SESSION_KEY)
-//            .apply()
+//        sessionHelper.session = null
         onSessionCheck()
 
     }
