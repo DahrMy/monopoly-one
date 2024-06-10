@@ -4,14 +4,13 @@ import my.dahr.monopolyone.domain.models.inventory.Item
 
 interface InventoryRepository {
     suspend fun getInventoryList(
+        accessToken: String,
         userId: Any,
         includeStock: Boolean,
         order: String,
         count: Int,
         addUser: Boolean,
-        addUserInfo: Boolean,
         addEquipped: String,
         addLegacy: Boolean,
-        shrink: Boolean
     ):List<Item>
 }

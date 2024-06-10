@@ -10,26 +10,23 @@ class InventoryRepositoryImpl @Inject constructor(
 
 ) : InventoryRepository {
     override suspend fun getInventoryList(
+        accessToken: String,
         userId: Any,
         includeStock: Boolean,
         order: String,
         count: Int,
         addUser: Boolean,
-        addUserInfo: Boolean,
         addEquipped: String,
         addLegacy: Boolean,
-        shrink: Boolean
     ): List<Item> =
         inventoryDataSource.getInventoryList(
+            accessToken,
             userId,
             includeStock,
             order,
             count,
             addUser,
-            addUserInfo,
             addEquipped,
             addLegacy,
-            shrink
         )
-
 }
