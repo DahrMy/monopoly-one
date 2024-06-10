@@ -11,6 +11,7 @@ import my.dahr.monopolyone.data.network.dto.response.TotpResponse
 import my.dahr.monopolyone.data.network.dto.response.error.DefaultErrorResponse
 import my.dahr.monopolyone.data.network.dto.response.error.FrequentTotpErrorResponse
 import my.dahr.monopolyone.data.network.dto.response.error.ParamInvalidErrorResponse
+import my.dahr.monopolyone.data.network.dto.response.friends.list.FriendsResponse
 import java.lang.reflect.Type
 
 class MonopolyDeserializer : JsonDeserializer<BaseResponse> {
@@ -36,9 +37,11 @@ class MonopolyDeserializer : JsonDeserializer<BaseResponse> {
     ): BaseResponse {
         val dataJson = json.asJsonObject.get("data")
         val hasTotpToken = dataJson.asJsonObject.has("totp_session_token")
+        val isFriendsResponse = dataJson.asJsonObject.has("friends")
 
         return when { // TODO: Add more responses
             hasTotpToken -> context.deserialize(json, TotpResponse::class.java)
+            isFriendsResponse -> context.deserialize(json, FriendsResponse::class.java)
             else -> context.deserialize(json, SessionResponse::class.java)
         }
 

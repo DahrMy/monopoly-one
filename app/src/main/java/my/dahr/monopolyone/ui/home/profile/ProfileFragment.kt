@@ -51,8 +51,8 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getListOfUsers()
         initObservers()
+        viewModel.getListOfUsers()
 
     }
     private fun setListeners(){
@@ -66,7 +66,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun initObservers(){
-        viewModel.usersResultLiveData.observe(viewLifecycleOwner){
+        viewModel.usersResultLiveData.observe(viewLifecycleOwner) {
             val user = it[0]
             viewModel.setUser(user)
             setInfo()

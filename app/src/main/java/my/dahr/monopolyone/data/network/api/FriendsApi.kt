@@ -4,6 +4,7 @@ import my.dahr.monopolyone.data.network.dto.response.friends.add.AddResponseJson
 import my.dahr.monopolyone.data.network.dto.response.friends.delete.DeleteResponseJson
 import my.dahr.monopolyone.data.network.dto.response.friends.list.FriendsResponse
 import my.dahr.monopolyone.data.network.dto.response.friends.requests.FriendsRequestsResponse
+import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -18,7 +19,7 @@ interface FriendsApi {
         @Query("type") type: String,
         @Query("offset") offset: Int,
         @Query("count") count: Int,
-    ): FriendsResponse
+    ): Call<FriendsResponse>
 
     @GET("friends.getRequests")
     suspend fun getFriendsRequestsList(

@@ -11,9 +11,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import my.dahr.monopolyone.data.network.dto.friends.add.AddResponseJson
-import my.dahr.monopolyone.data.network.dto.friends.delete.DeleteResponseJson
 import my.dahr.monopolyone.data.network.dto.response.SessionResponse
+import my.dahr.monopolyone.data.network.dto.response.friends.add.AddResponseJson
+import my.dahr.monopolyone.data.network.dto.response.friends.delete.DeleteResponseJson
 import my.dahr.monopolyone.domain.models.friends.list.Friend
 import my.dahr.monopolyone.domain.models.friends.requests.Request
 import my.dahr.monopolyone.domain.repository.FriendsRepository
