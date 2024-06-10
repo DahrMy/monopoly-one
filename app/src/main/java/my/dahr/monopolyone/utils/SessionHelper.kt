@@ -51,7 +51,6 @@ class SessionHelper @Inject constructor(
         } else {
             return false
         }
-
     }
 
     fun refreshSession(refreshToken: String, callback: () -> Callback<SessionResponse>) {
@@ -73,5 +72,4 @@ class SessionHelper @Inject constructor(
         val currentIp = async { ipApi.getMyIp().ip }
         return@coroutineScope currentIp.await() == savedIp
     }
-
 }

@@ -4,9 +4,11 @@ import my.dahr.monopolyone.data.converters.toUi
 import my.dahr.monopolyone.data.network.api.FriendsApi
 import my.dahr.monopolyone.data.network.dto.response.friends.add.AddResponseJson
 import my.dahr.monopolyone.data.network.dto.response.friends.delete.DeleteResponseJson
+import my.dahr.monopolyone.data.network.dto.response.SessionResponse
 import my.dahr.monopolyone.domain.datasource.FriendsDataSource
 import my.dahr.monopolyone.domain.models.friends.list.Friend
 import my.dahr.monopolyone.domain.models.friends.requests.Request
+import retrofit2.Callback
 import javax.inject.Inject
 
 class FriendsDataSourceImpl @Inject constructor(

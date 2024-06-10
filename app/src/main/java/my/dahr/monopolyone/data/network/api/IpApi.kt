@@ -4,8 +4,6 @@ import my.dahr.monopolyone.data.network.dto.response.MyIpResponse
 import retrofit2.http.GET
 
 interface IpApi {
-
-    @GET
+    @GET("/")
     suspend fun getMyIp(): MyIpResponse
-
 }

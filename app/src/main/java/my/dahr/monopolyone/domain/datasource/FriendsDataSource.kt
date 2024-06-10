@@ -2,8 +2,10 @@ package my.dahr.monopolyone.domain.datasource
 
 import my.dahr.monopolyone.data.network.dto.response.friends.add.AddResponseJson
 import my.dahr.monopolyone.data.network.dto.response.friends.delete.DeleteResponseJson
+import my.dahr.monopolyone.data.network.dto.response.SessionResponse
 import my.dahr.monopolyone.domain.models.friends.list.Friend
 import my.dahr.monopolyone.domain.models.friends.requests.Request
+import retrofit2.Callback
 
 interface FriendsDataSource {
     suspend fun getFriendsList(
