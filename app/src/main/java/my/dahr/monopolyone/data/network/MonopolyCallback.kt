@@ -41,7 +41,7 @@ abstract class MonopolyCallback<T>(
 
     protected fun handleErrorResponse(response: BaseResponse?) {
 
-        Log.e("Retrofit", "Error:\n$response")
+        Log.e("Retrofit", "Error:\n${response.toString()}")
 
         val status = if (response != null) {
             RequestStatus.entries.find { status ->
