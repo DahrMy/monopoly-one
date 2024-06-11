@@ -63,9 +63,9 @@ class FriendRequestsAdapter(private val onAcceptFriendRequestClickListener: OnAc
     }
 
     interface OnAcceptFriendRequestClickListener {
-        fun onAcceptFriendRequestClicked(userId: Any)
+        fun onAcceptFriendRequestClicked(userId: Int)
     }
     interface OnRejectFriendRequestClickListener {
-        fun onRejectFriendRequestClicked(userId: Any)
+        fun onRejectFriendRequestClicked(userId: Int)
     }
 }

@@ -47,7 +47,7 @@ class UserFragment : Fragment() {
     private var _binding: FragmentUserBinding? = null
     private val binding get() = _binding!!
 
-    private var userId: Any? = null
+    private var userId: Int? = null
     private var avatar: String? = null
     private var nick: String? = null
     private var xpLevel: Int? = null
@@ -78,7 +78,6 @@ class UserFragment : Fragment() {
         arguments?.let {
             userId = when {
                 it.containsKey(USER_ID_INT) -> it.getInt(USER_ID_INT)
-                it.containsKey(USER_ID_STRING) -> it.getString(USER_ID_STRING)
                 else -> null
             }
             avatar = it.getString(USER_AVATAR)

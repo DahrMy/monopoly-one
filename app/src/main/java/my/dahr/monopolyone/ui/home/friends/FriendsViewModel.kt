@@ -1,7 +1,6 @@
 package my.dahr.monopolyone.ui.home.friends
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,12 +16,12 @@ import my.dahr.monopolyone.data.models.RequestStatus
 import my.dahr.monopolyone.data.network.MonopolyCallback
 import my.dahr.monopolyone.data.network.dto.response.BaseResponse
 import my.dahr.monopolyone.data.network.dto.response.SessionResponse
-import my.dahr.monopolyone.data.network.dto.response.friends.add.AddResponseJson
+import my.dahr.monopolyone.data.network.dto.response.friends.add.AddRequest
+import my.dahr.monopolyone.data.network.dto.response.friends.add.AddResponse
 import my.dahr.monopolyone.data.network.dto.response.friends.delete.DeleteResponseJson
 import my.dahr.monopolyone.data.network.dto.response.friends.list.FriendsResponse
 import my.dahr.monopolyone.data.network.dto.response.friends.requests.FriendsRequestsResponse
 import my.dahr.monopolyone.domain.models.friends.list.Friend
-import my.dahr.monopolyone.domain.models.friends.requests.FriendsRequests
 import my.dahr.monopolyone.domain.models.friends.requests.Request
 import my.dahr.monopolyone.domain.repository.FriendsRepository
 import my.dahr.monopolyone.utils.SessionHelper
@@ -133,6 +132,36 @@ class FriendsViewModel @Inject constructor(
 //        }
 //    }
 
+    private fun getRequests() {
+        val sessionFromHelper = sessionHelper.session
+        if (sessionFromHelper != null) {
+            repository.getFriendsRequestsList(
+                sessionFromHelper.accessToken,
+                "short",
+                0,
+                20,
+                object : MonopolyCallback<BaseResponse>(requestStatusLiveData) {
+                    override fun onSuccessfulResponse(
+                        call: Call<BaseResponse>,
+                        responseBody: BaseResponse
+                    ) {
+                        when (responseBody) {
+                            is FriendsRequestsResponse -> {
+                                val requests = responseBody.toUi().data.requests
+                                Log.d("requests", requests.toString())
+                                friendsRequestsResultLiveData.postValue(requests)
+                            }
+
+                            else -> handleErrorResponse(responseBody)
+                        }
+
+                    }
+
+                }
+            )
+        }
+    }
+
 
     fun getFriendRequestsList() {
         val sessionFromHelper = sessionHelper.session
@@ -140,30 +169,7 @@ class FriendsViewModel @Inject constructor(
             if (sessionHelper.isSessionNotExpired()) {
                 if (sessionHelper.isCurrentIpChanged()) {
                     if (sessionFromHelper != null) {
-                         repository.getFriendsRequestsList(
-                            sessionFromHelper.accessToken,
-                            "short",
-                            0,
-                            20,
-                            object : MonopolyCallback<BaseResponse>(requestStatusLiveData){
-                                override fun onSuccessfulResponse(
-                                    call: Call<BaseResponse>,
-                                    responseBody: BaseResponse
-                                ) {
-                                    when (responseBody) {
-                                        is FriendsRequestsResponse -> {
-                                            val requests = responseBody.toUi().data.requests
-                                            Log.d("requests", requests.toString())
-                                            friendsRequestsResultLiveData.postValue(requests)
-                                        }
-
-                                        else -> handleErrorResponse(responseBody)
-                                    }
-
-                                }
-
-                            }
-                        )
+                        getRequests()
                     } else {
                         sessionHelper.refreshSavedIp()
                     }
@@ -179,6 +185,7 @@ class FriendsViewModel @Inject constructor(
                                     if (session != null) {
                                         sessionHelper.session = session
                                     }
+                                    getRequests()
                                 }
 
                                 override fun onFailure(
@@ -195,19 +202,39 @@ class FriendsViewModel @Inject constructor(
         }
     }
 
+    private fun add(userId: Int) {
+        val sessionFromHelper = sessionHelper.session
+        if (sessionFromHelper != null) {
+            val request = AddRequest(
+                access_token = sessionFromHelper.accessToken,
+                userId = userId
+            )
+            repository.addFriend(
+                request,
+                object : MonopolyCallback<BaseResponse>(requestStatusLiveData) {
+                    override fun onSuccessfulResponse(
+                        call: Call<BaseResponse>,
+                        responseBody: BaseResponse
+                    ) {
+                        when (responseBody) {
+                            is AddResponse -> {
+                                requestStatusLiveData.postValue(RequestStatus.Success)
+                            }
 
-    fun addFriend(userId: Any) {
+                            else -> handleErrorResponse(responseBody)
+                        }
+                    }
+                })
+        }
+    }
+
+    fun addFriend(userId: Int) {
         val sessionFromHelper = sessionHelper.session
         viewModelScope.launch {
             if (sessionHelper.isSessionNotExpired()) {
                 if (sessionHelper.isCurrentIpChanged()) {
                     if (sessionFromHelper != null) {
-                        val response =
-                            AddResponseJson(
-                                access_token = sessionFromHelper.accessToken,
-                                userId = userId
-                            )
-                        repository.addFriend(response)
+                        add(userId)
                     }
                 } else {
                     sessionHelper.refreshSavedIp()
@@ -224,6 +251,7 @@ class FriendsViewModel @Inject constructor(
                                 if (session != null) {
                                     sessionHelper.session = session
                                 }
+                                add(userId)
                             }
 
                             override fun onFailure(

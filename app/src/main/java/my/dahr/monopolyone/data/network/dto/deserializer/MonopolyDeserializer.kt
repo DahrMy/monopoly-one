@@ -11,8 +11,9 @@ import my.dahr.monopolyone.data.network.dto.response.TotpResponse
 import my.dahr.monopolyone.data.network.dto.response.error.DefaultErrorResponse
 import my.dahr.monopolyone.data.network.dto.response.error.FrequentTotpErrorResponse
 import my.dahr.monopolyone.data.network.dto.response.error.ParamInvalidErrorResponse
+import my.dahr.monopolyone.data.network.dto.response.friends.add.AddResponse
 import my.dahr.monopolyone.data.network.dto.response.friends.list.FriendsResponse
-import my.dahr.monopolyone.domain.models.friends.requests.FriendsRequests
+import my.dahr.monopolyone.data.network.dto.response.friends.requests.FriendsRequestsResponse
 import java.lang.reflect.Type
 
 class MonopolyDeserializer : JsonDeserializer<BaseResponse> {
@@ -30,7 +31,6 @@ class MonopolyDeserializer : JsonDeserializer<BaseResponse> {
             ParamInvalidError -> context.deserialize(json, ParamInvalidErrorResponse::class.java)
             else -> context.deserialize(json, DefaultErrorResponse::class.java)
         }
-
     }
 
     private fun identifyByData(
@@ -40,11 +40,13 @@ class MonopolyDeserializer : JsonDeserializer<BaseResponse> {
         val hasTotpToken = dataJson.asJsonObject.has("totp_session_token")
         val isFriendsResponse = dataJson.asJsonObject.has("friends")
         val isFriendsRequestsResponse = dataJson.asJsonObject.has("requests")
+        val isAddResponse = dataJson.asJsonObject.has("add_response")
 
         return when { // TODO: Add more responses
             hasTotpToken -> context.deserialize(json, TotpResponse::class.java)
             isFriendsResponse -> context.deserialize(json, FriendsResponse::class.java)
-            isFriendsRequestsResponse -> context.deserialize(json, FriendsRequests::class.java)
+            isFriendsRequestsResponse -> context.deserialize(json, FriendsRequestsResponse::class.java)
+            isAddResponse -> context.deserialize(json, AddResponse::class.java)
             else -> context.deserialize(json, SessionResponse::class.java)
         }
 

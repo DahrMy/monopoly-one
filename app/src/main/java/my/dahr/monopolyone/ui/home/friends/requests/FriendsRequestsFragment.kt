@@ -24,13 +24,12 @@ class FriendsRequestsFragment : Fragment() {
     private val adapter: FriendRequestsAdapter by lazy {
         FriendRequestsAdapter(object :
             FriendRequestsAdapter.OnAcceptFriendRequestClickListener {
-            override fun onAcceptFriendRequestClicked(userId: Any) {
+            override fun onAcceptFriendRequestClicked(userId: Int) {
                 viewModel.addFriend(userId)
-                viewModel.getFriendRequestsList()
 
             }
         }, object : FriendRequestsAdapter.OnRejectFriendRequestClickListener {
-            override fun onRejectFriendRequestClicked(userId: Any) {
+            override fun onRejectFriendRequestClicked(userId: Int) {
                 viewModel.deleteFriend(userId)
                 viewModel.getFriendRequestsList()
             }
