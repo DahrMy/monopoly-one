@@ -20,7 +20,9 @@ import my.dahr.monopolyone.data.network.dto.response.SessionResponse
 import my.dahr.monopolyone.data.network.dto.response.friends.add.AddResponseJson
 import my.dahr.monopolyone.data.network.dto.response.friends.delete.DeleteResponseJson
 import my.dahr.monopolyone.data.network.dto.response.friends.list.FriendsResponse
+import my.dahr.monopolyone.data.network.dto.response.friends.requests.FriendsRequestsResponse
 import my.dahr.monopolyone.domain.models.friends.list.Friend
+import my.dahr.monopolyone.domain.models.friends.requests.FriendsRequests
 import my.dahr.monopolyone.domain.models.friends.requests.Request
 import my.dahr.monopolyone.domain.repository.FriendsRepository
 import my.dahr.monopolyone.utils.SessionHelper
@@ -48,7 +50,7 @@ class FriendsViewModel @Inject constructor(
     fun getFriendList() {
         val sessionFromHelper = sessionHelper.session
         if (sessionFromHelper != null) {
-            viewModelScope.launch {
+            viewModelScope.launch(myCoroutineContext) {
                 repository.getFriendsList(
                     sessionFromHelper.userId,
                     online = false,
@@ -138,13 +140,30 @@ class FriendsViewModel @Inject constructor(
             if (sessionHelper.isSessionNotExpired()) {
                 if (sessionHelper.isCurrentIpChanged()) {
                     if (sessionFromHelper != null) {
-                        val response = repository.getFriendsRequestsList(
+                         repository.getFriendsRequestsList(
                             sessionFromHelper.accessToken,
                             "short",
                             0,
-                            20
+                            20,
+                            object : MonopolyCallback<BaseResponse>(requestStatusLiveData){
+                                override fun onSuccessfulResponse(
+                                    call: Call<BaseResponse>,
+                                    responseBody: BaseResponse
+                                ) {
+                                    when (responseBody) {
+                                        is FriendsRequestsResponse -> {
+                                            val requests = responseBody.toUi().data.requests
+                                            Log.d("requests", requests.toString())
+                                            friendsRequestsResultLiveData.postValue(requests)
+                                        }
+
+                                        else -> handleErrorResponse(responseBody)
+                                    }
+
+                                }
+
+                            }
                         )
-                        friendsRequestsResultLiveData.postValue(response)
                     } else {
                         sessionHelper.refreshSavedIp()
                     }

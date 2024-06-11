@@ -20,12 +20,13 @@ interface FriendsRepository {
         callback: Callback<BaseResponse>
     )
 
-    suspend fun getFriendsRequestsList(
+    fun getFriendsRequestsList(
         accessToken: String,
         type: String,
         offset: Int,
         count: Int,
-    ) : List<Request>
+        callback: Callback<BaseResponse>
+    )
 
     suspend fun addFriend(
         response: AddResponseJson

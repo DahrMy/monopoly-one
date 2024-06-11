@@ -25,12 +25,13 @@ class FriendsRepositoryImpl @Inject constructor(
         callback: Callback<BaseResponse>
     )= friendsDataSource.getFriendsList(userId, online, addUser, type, offset, count, callback)
 
-    override suspend fun getFriendsRequestsList(
+    override fun getFriendsRequestsList(
         accessToken: String,
         type: String,
         offset: Int,
-        count: Int
-    ): List<Request> = friendsDataSource.getFriendsRequestsList(accessToken, type, offset, count)
+        count: Int,
+        callback: Callback<BaseResponse>
+    )= friendsDataSource.getFriendsRequestsList(accessToken, type, offset, count, callback)
 
     override suspend fun addFriend(response: AddResponseJson) =
         friendsDataSource.addFriend(response)

@@ -20,8 +20,6 @@ import javax.inject.Inject
 class FriendsDataSourceImpl @Inject constructor(
     private val friendsApi: FriendsApi
 ) : FriendsDataSource {
-
-
    override fun getFriendsList(
         userId: Any,
         online: Boolean,
@@ -29,23 +27,19 @@ class FriendsDataSourceImpl @Inject constructor(
         type: String,
         offset: Int,
         count: Int,
-        callback: Callback<BaseResponse> // TODO: Attention
+        callback: Callback<BaseResponse>
     ) {
         friendsApi.getFriendsList(userId, online, addUser, type, offset, count).enqueue(callback)
     }
 
-
-
-    override suspend fun getFriendsRequestsList(
+    override fun getFriendsRequestsList(
         accessToken: String,
         type: String,
         offset: Int,
-        count: Int
-    ): List<Request> {
-        return friendsApi.getFriendsRequestsList(accessToken, type, offset, count)
-            .toUi()
-            .data
-            .requests
+        count: Int,
+        callback: Callback<BaseResponse>
+    ) {
+        friendsApi.getFriendsRequestsList(accessToken, type, offset, count).enqueue(callback)
     }
 
     override suspend fun addFriend(response: AddResponseJson) {

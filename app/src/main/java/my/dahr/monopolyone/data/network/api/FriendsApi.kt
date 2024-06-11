@@ -23,12 +23,12 @@ interface FriendsApi {
     ): Call<BaseResponse>
 
     @GET("friends.getRequests")
-    suspend fun getFriendsRequestsList(
+    fun getFriendsRequestsList(
         @Query("access_token") accessToken: String,
         @Query("type") type: String,
         @Query("offset") offset: Int,
         @Query("count") count: Int,
-    ): FriendsRequestsResponse
+    ): Call<BaseResponse>
 
     @POST("friends.add")
     suspend fun addFriend(
