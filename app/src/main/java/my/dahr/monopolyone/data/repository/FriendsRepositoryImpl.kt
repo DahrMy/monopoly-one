@@ -1,8 +1,10 @@
 package my.dahr.monopolyone.data.repository
 
+import my.dahr.monopolyone.data.network.dto.response.BaseResponse
 import my.dahr.monopolyone.data.network.dto.response.friends.add.AddResponseJson
 import my.dahr.monopolyone.data.network.dto.response.friends.delete.DeleteResponseJson
 import my.dahr.monopolyone.data.network.dto.response.SessionResponse
+import my.dahr.monopolyone.data.network.dto.response.friends.list.FriendsResponse
 import my.dahr.monopolyone.domain.datasource.FriendsDataSource
 import my.dahr.monopolyone.domain.models.friends.list.Friend
 import my.dahr.monopolyone.domain.models.friends.requests.Request
@@ -13,14 +15,15 @@ import javax.inject.Inject
 class FriendsRepositoryImpl @Inject constructor(
     private val friendsDataSource: FriendsDataSource
 ) : FriendsRepository {
-    override suspend fun getFriendsList(
+    override fun getFriendsList(
         userId: Any,
         online: Boolean,
         addUser: Boolean,
         type: String,
         offset: Int,
-        count: Int
-    ): List<Friend> = friendsDataSource.getFriendsList(userId, online, addUser, type, offset, count)
+        count: Int,
+        callback: Callback<BaseResponse>
+    )= friendsDataSource.getFriendsList(userId, online, addUser, type, offset, count, callback)
 
     override suspend fun getFriendsRequestsList(
         accessToken: String,

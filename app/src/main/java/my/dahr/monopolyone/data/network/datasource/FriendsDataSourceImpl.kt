@@ -5,6 +5,7 @@ import my.dahr.monopolyone.data.converters.toUi
 import my.dahr.monopolyone.data.models.RequestStatus
 import my.dahr.monopolyone.data.network.MonopolyCallback
 import my.dahr.monopolyone.data.network.api.FriendsApi
+import my.dahr.monopolyone.data.network.dto.response.BaseResponse
 import my.dahr.monopolyone.data.network.dto.response.friends.add.AddResponseJson
 import my.dahr.monopolyone.data.network.dto.response.friends.delete.DeleteResponseJson
 import my.dahr.monopolyone.data.network.dto.response.SessionResponse
@@ -20,38 +21,20 @@ class FriendsDataSourceImpl @Inject constructor(
     private val friendsApi: FriendsApi
 ) : FriendsDataSource {
 
-    val _requestStatusLiveData = MutableLiveData<RequestStatus>()
 
-    override suspend fun getFriendsList(
+   override fun getFriendsList(
         userId: Any,
         online: Boolean,
         addUser: Boolean,
         type: String,
         offset: Int,
         count: Int,
-        callback: Callback<FriendsResponse> // TODO: Attention
-    ): List<Friend> {
-
-        var list: List<Friend>
-
+        callback: Callback<BaseResponse> // TODO: Attention
+    ) {
         friendsApi.getFriendsList(userId, online, addUser, type, offset, count).enqueue(callback)
-
-        // Callback example
-        object : MonopolyCallback<FriendsResponse>(_requestStatusLiveData) {
-            override fun onSuccessfulResponse(
-                call: Call<FriendsResponse>, responseBody: FriendsResponse
-            ) {
-                when (responseBody) {
-                    is FriendsResponse -> {
-                        responseBody.toUi().data.friends
-                    }
-                    else -> handleErrorResponse(responseBody)
-                }
-            }
-
-        }
-
     }
+
+
 
     override suspend fun getFriendsRequestsList(
         accessToken: String,

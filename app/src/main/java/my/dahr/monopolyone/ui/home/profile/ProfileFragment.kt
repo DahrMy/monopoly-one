@@ -69,160 +69,160 @@ class ProfileFragment : Fragment() {
         viewModel.usersResultLiveData.observe(viewLifecycleOwner) {
             val user = it[0]
             viewModel.setUser(user)
-            setInfo()
+//            setInfo()
             setListeners()
         }
     }
 
-    private fun setInfo(){
-        val user = viewModel.getUser()
-
-        friendsViewModel.getFriendListForUser(user!!.userId)
-
-        binding.apply {
-            friendsViewModel.friendForUserResultLiveData.observe(viewLifecycleOwner) {
-                binding.tvCountOfFriends.text = it.size.toString()
-            }
-            val nextLevel = user.xpLevel.plus(1)
-            tvNextLevel.text = nextLevel.toString()
-
-            tvFriendNick.text = user.nick
-            tvRankLevelNumber.text = user.xpLevel.toString()
-            tvXp.text = showXp(user.xpLevel, user.xp)
-            tvCountOfAllMatches.text = user.games.toString()
-            tvCountOfWinningMatches.text = user.gamesWins.toString()
-
-            val lvl = user.xpLevel
-            when (lvl) {
-                in 1..4 -> {
-                    tvRankName.text = ROOKIE
-                    setRankPhoto(0)
-                    setPhoto(user.avatar)
-                }
-
-                in 5..9 -> {
-                    tvRankName.text = RECRUIT
-                    setRankPhoto(1)
-                    setPhoto(user.avatar)
-                }
-
-                in 10..14 -> {
-                    tvRankName.text = SOLDIER
-                    setRankPhoto(2)
-                    setPhoto(user.avatar)
-                }
-
-                in 15..19 -> {
-                    tvRankName.text = LANCE_CORPORAL
-                    setRankPhoto(3)
-                    setPhoto(user.avatar)
-                }
-
-                in 20..24 -> {
-                    tvRankName.text = CORPORAL
-                    setRankPhoto(4)
-                    setPhoto(user.avatar)
-                }
-
-                in 25..29 -> {
-                    tvRankName.text = MASTER_CORPORAL
-                    setRankPhoto(5)
-                    setPhoto(user.avatar)
-                }
-
-                in 30..34 -> {
-                    tvRankName.text = LANCE_SERGEANT
-                    setRankPhoto(6)
-                    setPhoto(user.avatar)
-                }
-
-                in 35..39 -> {
-                    tvRankName.text = SERGEANT
-                    setRankPhoto(7)
-                    setPhoto(user.avatar)
-                }
-
-                in 40..44 -> {
-                    tvRankName.text = MASTER_SERGEANT
-                    setRankPhoto(8)
-                    setPhoto(user.avatar)
-                }
-
-                in 45..49 -> {
-                    tvRankName.text = SERGEANT_MAJOR
-                    setRankPhoto(9)
-                    setPhoto(user.avatar)
-                }
-
-                in 50..54 -> {
-                    tvRankName.text = LIEUTENANT
-                    setRankPhoto(10)
-                    setPhoto(user.avatar)
-                }
-
-                in 55..59 -> {
-                    tvRankName.text = LIEUTENANT_MAJOR
-                    setRankPhoto(11)
-                    setPhoto(user.avatar)
-                }
-
-                in 60..64 -> {
-                    tvRankName.text = CAPTAIN
-                    setRankPhoto(12)
-                    setPhoto(user.avatar)
-                }
-
-                in 65..69 -> {
-                    tvRankName.text = MAJOR
-                    setRankPhoto(13)
-                    setPhoto(user.avatar)
-                }
-
-                in 70..74 -> {
-                    tvRankName.text = LIEUTENANT_COLONEL
-                    setRankPhoto(14)
-                    setPhoto(user.avatar)
-                }
-
-                in 75..79 -> {
-                    tvRankName.text = COLONEL
-                    setRankPhoto(15)
-                    setPhoto(user.avatar)
-                }
-
-                in 80..84 -> {
-                    tvRankName.text = BRIGADIER_GENERAL
-                    setRankPhoto(16)
-                    setPhoto(user.avatar)
-                }
-
-                in 85..89 -> {
-                    tvRankName.text = GENERAL_MAJOR
-                    setRankPhoto(17)
-                    setPhoto(user.avatar)
-                }
-
-                in 90..94 -> {
-                    tvRankName.text = GENERAL
-                    setRankPhoto(18)
-                    setPhoto(user.avatar)
-                }
-
-                in 95..99 -> {
-                    tvRankName.text = LIEUTENANT_GENERAL
-                    setRankPhoto(19)
-                    setPhoto(user.avatar)
-                }
-
-                in 100..10000 -> {
-                    tvRankName.text = MARSHAL
-                    setRankPhoto(20)
-                    setPhoto(user.avatar)
-                }
-
-            }
-        }
-    }
+//    private fun setInfo(){
+//        val user = viewModel.getUser()
+//
+//        friendsViewModel.getFriendListForUser(user!!.userId)
+//
+//        binding.apply {
+//            friendsViewModel.friendForUserResultLiveData.observe(viewLifecycleOwner) {
+//                binding.tvCountOfFriends.text = it.size.toString()
+//            }
+//            val nextLevel = user.xpLevel.plus(1)
+//            tvNextLevel.text = nextLevel.toString()
+//
+//            tvFriendNick.text = user.nick
+//            tvRankLevelNumber.text = user.xpLevel.toString()
+//            tvXp.text = showXp(user.xpLevel, user.xp)
+//            tvCountOfAllMatches.text = user.games.toString()
+//            tvCountOfWinningMatches.text = user.gamesWins.toString()
+//
+//            val lvl = user.xpLevel
+//            when (lvl) {
+//                in 1..4 -> {
+//                    tvRankName.text = ROOKIE
+//                    setRankPhoto(0)
+//                    setPhoto(user.avatar)
+//                }
+//
+//                in 5..9 -> {
+//                    tvRankName.text = RECRUIT
+//                    setRankPhoto(1)
+//                    setPhoto(user.avatar)
+//                }
+//
+//                in 10..14 -> {
+//                    tvRankName.text = SOLDIER
+//                    setRankPhoto(2)
+//                    setPhoto(user.avatar)
+//                }
+//
+//                in 15..19 -> {
+//                    tvRankName.text = LANCE_CORPORAL
+//                    setRankPhoto(3)
+//                    setPhoto(user.avatar)
+//                }
+//
+//                in 20..24 -> {
+//                    tvRankName.text = CORPORAL
+//                    setRankPhoto(4)
+//                    setPhoto(user.avatar)
+//                }
+//
+//                in 25..29 -> {
+//                    tvRankName.text = MASTER_CORPORAL
+//                    setRankPhoto(5)
+//                    setPhoto(user.avatar)
+//                }
+//
+//                in 30..34 -> {
+//                    tvRankName.text = LANCE_SERGEANT
+//                    setRankPhoto(6)
+//                    setPhoto(user.avatar)
+//                }
+//
+//                in 35..39 -> {
+//                    tvRankName.text = SERGEANT
+//                    setRankPhoto(7)
+//                    setPhoto(user.avatar)
+//                }
+//
+//                in 40..44 -> {
+//                    tvRankName.text = MASTER_SERGEANT
+//                    setRankPhoto(8)
+//                    setPhoto(user.avatar)
+//                }
+//
+//                in 45..49 -> {
+//                    tvRankName.text = SERGEANT_MAJOR
+//                    setRankPhoto(9)
+//                    setPhoto(user.avatar)
+//                }
+//
+//                in 50..54 -> {
+//                    tvRankName.text = LIEUTENANT
+//                    setRankPhoto(10)
+//                    setPhoto(user.avatar)
+//                }
+//
+//                in 55..59 -> {
+//                    tvRankName.text = LIEUTENANT_MAJOR
+//                    setRankPhoto(11)
+//                    setPhoto(user.avatar)
+//                }
+//
+//                in 60..64 -> {
+//                    tvRankName.text = CAPTAIN
+//                    setRankPhoto(12)
+//                    setPhoto(user.avatar)
+//                }
+//
+//                in 65..69 -> {
+//                    tvRankName.text = MAJOR
+//                    setRankPhoto(13)
+//                    setPhoto(user.avatar)
+//                }
+//
+//                in 70..74 -> {
+//                    tvRankName.text = LIEUTENANT_COLONEL
+//                    setRankPhoto(14)
+//                    setPhoto(user.avatar)
+//                }
+//
+//                in 75..79 -> {
+//                    tvRankName.text = COLONEL
+//                    setRankPhoto(15)
+//                    setPhoto(user.avatar)
+//                }
+//
+//                in 80..84 -> {
+//                    tvRankName.text = BRIGADIER_GENERAL
+//                    setRankPhoto(16)
+//                    setPhoto(user.avatar)
+//                }
+//
+//                in 85..89 -> {
+//                    tvRankName.text = GENERAL_MAJOR
+//                    setRankPhoto(17)
+//                    setPhoto(user.avatar)
+//                }
+//
+//                in 90..94 -> {
+//                    tvRankName.text = GENERAL
+//                    setRankPhoto(18)
+//                    setPhoto(user.avatar)
+//                }
+//
+//                in 95..99 -> {
+//                    tvRankName.text = LIEUTENANT_GENERAL
+//                    setRankPhoto(19)
+//                    setPhoto(user.avatar)
+//                }
+//
+//                in 100..10000 -> {
+//                    tvRankName.text = MARSHAL
+//                    setRankPhoto(20)
+//                    setPhoto(user.avatar)
+//                }
+//
+//            }
+//        }
+//    }
 
     private fun showXp(xpLevel: Int, xp: Int): String {
         val totalXpForNextLevel = (2 * 250 + (xpLevel - 1) * 25) * xpLevel / 2
