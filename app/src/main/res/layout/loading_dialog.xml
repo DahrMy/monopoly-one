@@ -17,11 +17,16 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_height="wrap_content"/>
     
-<!--    <TextView-->
-<!--        android:id= "@+id/tvLoading"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        -->
-<!--        />-->
+    <TextView
+        android:id= "@+id/tvLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop = "16dp"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@+id/pbLoading"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/loading"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

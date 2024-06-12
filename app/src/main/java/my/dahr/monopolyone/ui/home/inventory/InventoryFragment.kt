@@ -6,15 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import my.dahr.monopolyone.R
 import my.dahr.monopolyone.data.models.RequestStatus
 import my.dahr.monopolyone.databinding.FragmentInventoryBinding
 import my.dahr.monopolyone.domain.models.inventory.Item
 import my.dahr.monopolyone.ui.home.friends.requests.FriendsRequestsFragment
 import my.dahr.monopolyone.ui.home.inventory.adapters.InventoryAdapter
+import my.dahr.monopolyone.utils.LoadingDialog
 
 @AndroidEntryPoint
 class InventoryFragment : Fragment() {
@@ -22,6 +26,8 @@ class InventoryFragment : Fragment() {
 
     private var _binding: FragmentInventoryBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var loadingDialog: LoadingDialog
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,6 +38,7 @@ class InventoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loadingDialog = LoadingDialog(requireActivity())
         initObservers()
         inventoryViewModel.getItemList()
     }
@@ -40,11 +47,10 @@ class InventoryFragment : Fragment() {
         inventoryViewModel.itemsResultLiveData.observe(viewLifecycleOwner) {
             showRecycler(it)
         }
-
         inventoryViewModel.requestStatusLiveData.observe(viewLifecycleOwner) { status ->
             when (status) {
                 RequestStatus.Success -> {
-
+                        loadingDialog.isDismiss()
                 }
 
                 RequestStatus.Failure -> {
@@ -56,7 +62,8 @@ class InventoryFragment : Fragment() {
                 }
 
                 RequestStatus.Loading -> {
-                    // Do something when loading. For example, show progress indicator
+                        loadingDialog.startLoading()
+
                 }
 
                 else -> {
