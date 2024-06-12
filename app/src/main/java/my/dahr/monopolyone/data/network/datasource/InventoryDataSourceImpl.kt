@@ -1,15 +1,15 @@
 package my.dahr.monopolyone.data.network.datasource
 
-import my.dahr.monopolyone.data.converters.toUi
+import my.dahr.monopolyone.data.network.MonopolyCallback
 import my.dahr.monopolyone.data.network.api.InventoryApi
+import my.dahr.monopolyone.data.network.dto.response.BaseResponse
 import my.dahr.monopolyone.domain.datasource.InventoryDataSource
-import my.dahr.monopolyone.domain.models.inventory.Item
 import javax.inject.Inject
 
 class InventoryDataSourceImpl @Inject constructor(
     private val inventoryApi: InventoryApi
 ) : InventoryDataSource {
-    override suspend fun getInventoryList(
+    override fun getInventoryList(
         accessToken: String,
         userId: Any,
         includeStock: Boolean,
@@ -18,7 +18,8 @@ class InventoryDataSourceImpl @Inject constructor(
         addUser: Boolean,
         addEquipped: String,
         addLegacy: Boolean,
-    ): List<Item> {
+        callback: MonopolyCallback<BaseResponse>
+    ){
         return inventoryApi.getInventoryList(
             accessToken,
             userId,
@@ -28,7 +29,6 @@ class InventoryDataSourceImpl @Inject constructor(
             addUser,
             addEquipped,
             addLegacy,
-        ).toUi().data.items
+        ).enqueue(callback)
     }
-
 }

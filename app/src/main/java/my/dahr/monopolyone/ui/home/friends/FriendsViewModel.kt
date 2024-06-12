@@ -18,7 +18,8 @@ import my.dahr.monopolyone.data.network.dto.response.BaseResponse
 import my.dahr.monopolyone.data.network.dto.response.SessionResponse
 import my.dahr.monopolyone.data.network.dto.response.friends.add.AddRequest
 import my.dahr.monopolyone.data.network.dto.response.friends.add.AddResponse
-import my.dahr.monopolyone.data.network.dto.response.friends.delete.DeleteResponseJson
+import my.dahr.monopolyone.data.network.dto.response.friends.delete.DeleteRequest
+import my.dahr.monopolyone.data.network.dto.response.friends.delete.DeleteResponse
 import my.dahr.monopolyone.data.network.dto.response.friends.list.FriendsResponse
 import my.dahr.monopolyone.data.network.dto.response.friends.requests.FriendsRequestsResponse
 import my.dahr.monopolyone.domain.models.friends.list.Friend
@@ -40,15 +41,19 @@ class FriendsViewModel @Inject constructor(
 
     val friendForUserResultLiveData = MutableLiveData<List<Friend>>()
 
+    val friendResultForChecking = MutableLiveData<List<Friend>>()
+
     val friendsRequestsResultLiveData = MutableLiveData<List<Request>>()
 
     val isFriend = MutableLiveData<Boolean>()
 
     private val requestStatusLiveData = MutableLiveData<RequestStatus>()
 
+
     fun getFriendList() {
         val sessionFromHelper = sessionHelper.session
         if (sessionFromHelper != null) {
+            requestStatusLiveData.postValue(RequestStatus.Loading)
             viewModelScope.launch(myCoroutineContext) {
                 repository.getFriendsList(
                     sessionFromHelper.userId,
@@ -66,6 +71,7 @@ class FriendsViewModel @Inject constructor(
                                 is FriendsResponse -> {
                                     val friends = responseBody.toUi().data.friends
                                     friendsResultLiveData.postValue(friends)
+                                    requestStatusLiveData.postValue(RequestStatus.Success)
                                 }
 
                                 else -> handleErrorResponse(responseBody)
@@ -78,22 +84,23 @@ class FriendsViewModel @Inject constructor(
         }
     }
 
-//    fun checkIfFriend(userId: Any) {
-//        val sessionFromHelper = sessionHelper.session
-//        if (sessionFromHelper != null) {
-//            viewModelScope.launch(myCoroutineContext) {
-//                val friends = getFriendsListForChecking(sessionFromHelper.userId)
-//                var found = false
-//                for (friend in friends) {
-//                    if (userId == friend.userId) {
-//                        found = true
-//                        break
-//                    }
-//                }
-//                isFriend.postValue(found)
-//            }
-//        }
-//    }
+    fun checkIfFriend(userId: Any) {
+        val sessionFromHelper = sessionHelper.session
+        if (sessionFromHelper != null) {
+                getFriendsListForChecking(sessionFromHelper.userId)
+                friendResultForChecking.observeForever {
+                    var found = false
+                    for (friend in it) {
+                        if (userId == friend.userId) {
+                            found = true
+                            break
+                        }
+                    }
+                    isFriend.postValue(found)
+                    friendResultForChecking.removeObserver { }
+                }
+            }
+    }
 
     fun checkIfMe(userId: Any): Boolean {
         val sessionFromHelper = sessionHelper.session
@@ -107,30 +114,68 @@ class FriendsViewModel @Inject constructor(
     }
 
 
-//    private suspend fun getFriendsListForChecking(userId: Any): List<Friend> {
-//        return repository.getFriendsList(
-//            userId,
-//            online = false,
-//            addUser = false,
-//            type = "short",
-//            offset = 0,
-//            count = 20
-//        )
-//    }
+    private fun getFriendsListForChecking(userId: Any) {
+        requestStatusLiveData.postValue(RequestStatus.Loading)
+        viewModelScope.launch {
+            repository.getFriendsList(
+                userId,
+                online = false,
+                addUser = false,
+                type = "short",
+                offset = 0,
+                count = 20,
+                callback = object : MonopolyCallback<BaseResponse>(requestStatusLiveData) {
+                    override fun onSuccessfulResponse(
+                        call: Call<BaseResponse>,
+                        responseBody: BaseResponse
+                    ) {
+                        when (responseBody) {
+                            is FriendsResponse -> {
+                                val friends = responseBody.toUi().data.friends
+                                friendResultForChecking.postValue(friends)
+                                requestStatusLiveData.postValue(RequestStatus.Success)
+                            }
 
-//    fun getFriendListForUser(userId: Any) {
-//        viewModelScope.launch(myCoroutineContext) {
-//            val response = repository.getFriendsList(
-//                userId,
-//                online = false,
-//                addUser = false,
-//                type = "short",
-//                offset = 0,
-//                count = 20
-//            )
-//            friendForUserResultLiveData.postValue(response)
-//        }
-//    }
+                            else -> handleErrorResponse(responseBody)
+                        }
+                    }
+
+                }
+            )
+        }
+    }
+
+    fun getFriendListForUser(userId: Any) {
+        requestStatusLiveData.postValue(RequestStatus.Loading)
+        viewModelScope.launch(myCoroutineContext) {
+            repository.getFriendsList(
+                userId,
+                online = false,
+                addUser = false,
+                type = "short",
+                offset = 0,
+                count = 20,
+                callback = object : MonopolyCallback<BaseResponse>(requestStatusLiveData) {
+                    override fun onSuccessfulResponse(
+                        call: Call<BaseResponse>,
+                        responseBody: BaseResponse
+                    ) {
+                        when (responseBody) {
+                            is FriendsResponse -> {
+                                val friends = responseBody.toUi().data.friends
+                                friendForUserResultLiveData.postValue(friends)
+                                requestStatusLiveData.postValue(RequestStatus.Success)
+                            }
+
+                            else -> handleErrorResponse(responseBody)
+                        }
+
+                    }
+
+                }
+            )
+        }
+    }
 
     private fun getRequests() {
         val sessionFromHelper = sessionHelper.session
@@ -150,6 +195,7 @@ class FriendsViewModel @Inject constructor(
                                 val requests = responseBody.toUi().data.requests
                                 Log.d("requests", requests.toString())
                                 friendsRequestsResultLiveData.postValue(requests)
+                                requestStatusLiveData.postValue(RequestStatus.Success)
                             }
 
                             else -> handleErrorResponse(responseBody)
@@ -165,6 +211,7 @@ class FriendsViewModel @Inject constructor(
 
     fun getFriendRequestsList() {
         val sessionFromHelper = sessionHelper.session
+        requestStatusLiveData.postValue(RequestStatus.Loading)
         viewModelScope.launch {
             if (sessionHelper.isSessionNotExpired()) {
                 if (sessionHelper.isCurrentIpChanged()) {
@@ -202,7 +249,7 @@ class FriendsViewModel @Inject constructor(
         }
     }
 
-    private fun add(userId: Int) {
+    private fun add(userId: Any) {
         val sessionFromHelper = sessionHelper.session
         if (sessionFromHelper != null) {
             val request = AddRequest(
@@ -228,8 +275,35 @@ class FriendsViewModel @Inject constructor(
         }
     }
 
-    fun addFriend(userId: Int) {
+    private fun delete(userId: Any) {
         val sessionFromHelper = sessionHelper.session
+        if (sessionFromHelper != null) {
+            val request = DeleteRequest(
+                access_token = sessionFromHelper.accessToken,
+                userId = userId
+            )
+            repository.deleteFriend(
+                request,
+                object : MonopolyCallback<BaseResponse>(requestStatusLiveData) {
+                    override fun onSuccessfulResponse(
+                        call: Call<BaseResponse>,
+                        responseBody: BaseResponse
+                    ) {
+                        when (responseBody) {
+                            is DeleteResponse -> {
+                                requestStatusLiveData.postValue(RequestStatus.Success)
+                            }
+
+                            else -> handleErrorResponse(responseBody)
+                        }
+                    }
+                })
+        }
+    }
+
+    fun addFriend(userId: Any) {
+        val sessionFromHelper = sessionHelper.session
+        requestStatusLiveData.postValue(RequestStatus.Loading)
         viewModelScope.launch {
             if (sessionHelper.isSessionNotExpired()) {
                 if (sessionHelper.isCurrentIpChanged()) {
@@ -270,16 +344,12 @@ class FriendsViewModel @Inject constructor(
 
     fun deleteFriend(userId: Any) {
         val sessionFromHelper = sessionHelper.session
+        requestStatusLiveData.postValue(RequestStatus.Loading)
         viewModelScope.launch {
             if (sessionHelper.isSessionNotExpired()) {
                 if (sessionHelper.isCurrentIpChanged()) {
                     if (sessionFromHelper != null) {
-                        val response =
-                            DeleteResponseJson(
-                                access_token = sessionFromHelper.accessToken,
-                                userId = userId
-                            )
-                        repository.deleteFriend(response)
+                        delete(userId)
                     }
                 } else {
                     sessionHelper.refreshSavedIp()
@@ -296,6 +366,7 @@ class FriendsViewModel @Inject constructor(
                                 if (session != null) {
                                     sessionHelper.session = session
                                 }
+                                delete(userId)
                             }
 
                             override fun onFailure(

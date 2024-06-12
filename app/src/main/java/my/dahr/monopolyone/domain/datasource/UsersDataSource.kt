@@ -1,11 +1,13 @@
 package my.dahr.monopolyone.domain.datasource
 
-import my.dahr.monopolyone.domain.models.users.Data
+import my.dahr.monopolyone.data.network.MonopolyCallback
+import my.dahr.monopolyone.data.network.dto.response.BaseResponse
 
 interface UsersDataSource {
-    suspend fun getUsersList(
+    fun getUsersList(
         userId: Any,
         userIds: Set<Int>,
-        type: String
-    ): List<Data>
+        type: String,
+        callback: MonopolyCallback<BaseResponse>
+    )
 }

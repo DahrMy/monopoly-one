@@ -1,5 +1,7 @@
 package my.dahr.monopolyone.data.repository
 
+import my.dahr.monopolyone.data.network.MonopolyCallback
+import my.dahr.monopolyone.data.network.dto.response.BaseResponse
 import my.dahr.monopolyone.domain.datasource.InventoryDataSource
 import my.dahr.monopolyone.domain.models.inventory.Item
 import my.dahr.monopolyone.domain.repository.InventoryRepository
@@ -9,7 +11,7 @@ class InventoryRepositoryImpl @Inject constructor(
     private val inventoryDataSource: InventoryDataSource
 
 ) : InventoryRepository {
-    override suspend fun getInventoryList(
+    override fun getInventoryList(
         accessToken: String,
         userId: Any,
         includeStock: Boolean,
@@ -18,7 +20,8 @@ class InventoryRepositoryImpl @Inject constructor(
         addUser: Boolean,
         addEquipped: String,
         addLegacy: Boolean,
-    ): List<Item> =
+        callback: MonopolyCallback<BaseResponse>
+    ) =
         inventoryDataSource.getInventoryList(
             accessToken,
             userId,
@@ -28,5 +31,6 @@ class InventoryRepositoryImpl @Inject constructor(
             addUser,
             addEquipped,
             addLegacy,
+            callback
         )
 }

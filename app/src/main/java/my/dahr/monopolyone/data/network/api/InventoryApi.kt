@@ -1,13 +1,13 @@
 package my.dahr.monopolyone.data.network.api
 
-import my.dahr.monopolyone.data.network.dto.inventory.InventoryResponse
+import my.dahr.monopolyone.data.network.dto.response.BaseResponse
+import retrofit2.Call
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Query
 
 interface InventoryApi {
     @GET("inventory.get")
-    suspend fun getInventoryList(
+    fun getInventoryList(
         @Query("access_token") accessToken: String,
         @Query("user_id") userId: Any,
         @Query("include_stock") includeStock: Boolean,
@@ -16,5 +16,5 @@ interface InventoryApi {
         @Query("add_user") addUser: Boolean,
         @Query("add_equipped") addEquipped: String,
         @Query("add_legacy") addLegacy: Boolean,
-    ): InventoryResponse
+    ): Call<BaseResponse>
 }

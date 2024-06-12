@@ -42,7 +42,7 @@ class UserFriendsFragment : Fragment() {
         receiveData()
         setContent()
         initObservers()
-//        viewModel.getFriendListForUser(userId!!)
+        viewModel.getFriendListForUser(userId!!)
     }
     private fun receiveData() {
         arguments?.let {

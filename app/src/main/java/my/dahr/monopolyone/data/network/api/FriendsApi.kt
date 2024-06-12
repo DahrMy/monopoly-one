@@ -2,7 +2,7 @@ package my.dahr.monopolyone.data.network.api
 
 import my.dahr.monopolyone.data.network.dto.response.BaseResponse
 import my.dahr.monopolyone.data.network.dto.response.friends.add.AddRequest
-import my.dahr.monopolyone.data.network.dto.response.friends.delete.DeleteResponseJson
+import my.dahr.monopolyone.data.network.dto.response.friends.delete.DeleteRequest
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -34,8 +34,8 @@ interface FriendsApi {
     ): Call<BaseResponse>
 
     @POST("friends.delete")
-    suspend fun deleteFriend(
-        @Body body: DeleteResponseJson
-    )
+    fun deleteFriend(
+        @Body body: DeleteRequest
+    ): Call<BaseResponse>
 
 }

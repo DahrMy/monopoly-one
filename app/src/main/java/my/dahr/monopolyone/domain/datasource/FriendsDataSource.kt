@@ -2,7 +2,7 @@ package my.dahr.monopolyone.domain.datasource
 
 import my.dahr.monopolyone.data.network.dto.response.BaseResponse
 import my.dahr.monopolyone.data.network.dto.response.friends.add.AddRequest
-import my.dahr.monopolyone.data.network.dto.response.friends.delete.DeleteResponseJson
+import my.dahr.monopolyone.data.network.dto.response.friends.delete.DeleteRequest
 import retrofit2.Callback
 
 interface FriendsDataSource {
@@ -29,7 +29,8 @@ interface FriendsDataSource {
         callback: Callback<BaseResponse>
     )
 
-    suspend fun deleteFriends(
-        response: DeleteResponseJson
+    fun deleteFriends(
+        deleteRequest: DeleteRequest,
+        callback: Callback<BaseResponse>
     )
 }

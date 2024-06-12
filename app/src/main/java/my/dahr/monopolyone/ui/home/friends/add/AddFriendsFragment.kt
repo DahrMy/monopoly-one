@@ -11,7 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import my.dahr.monopolyone.R
 import my.dahr.monopolyone.databinding.FragmentAddFriendsBinding
 import my.dahr.monopolyone.ui.home.friends.FriendsFragment
-import my.dahr.monopolyone.ui.home.friends.UsersViewModel
+import my.dahr.monopolyone.ui.home.friends.user.UsersViewModel
 import my.dahr.monopolyone.ui.home.friends.user.UserFragment
 
 @AndroidEntryPoint
@@ -86,8 +86,8 @@ class AddFriendsFragment : Fragment() {
 
     private fun inputFriendNick() {
         binding.btnAddFriend.setOnClickListener {
-            val nick = binding.etFriendNick.text.toString()
-            usersViewModel.getListOfUsers(nick)
+            val id = binding.etFriendNick.text.toString()
+            usersViewModel.getListOfUsers(id)
             binding.etFriendNick.text = null
             binding.etFriendNick.text?.clear()
         }

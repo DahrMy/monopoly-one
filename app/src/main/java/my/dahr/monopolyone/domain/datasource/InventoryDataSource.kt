@@ -1,9 +1,10 @@
 package my.dahr.monopolyone.domain.datasource
 
-import my.dahr.monopolyone.domain.models.inventory.Item
+import my.dahr.monopolyone.data.network.MonopolyCallback
+import my.dahr.monopolyone.data.network.dto.response.BaseResponse
 
 interface InventoryDataSource {
-    suspend fun getInventoryList(
+    fun getInventoryList(
         accessToken: String,
         userId: Any,
         includeStock: Boolean,
@@ -12,5 +13,6 @@ interface InventoryDataSource {
         addUser: Boolean,
         addEquipped: String,
         addLegacy: Boolean,
-    ):List<Item>
+        callback: MonopolyCallback<BaseResponse>
+    )
 }

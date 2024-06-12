@@ -67,8 +67,8 @@ class UserFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         receiveData()
-//        viewModel.checkIfFriend(userId!!)
-//        viewModel.getFriendListForUser(userId!!)
+        viewModel.checkIfFriend(userId!!)
+        viewModel.getFriendListForUser(userId!!)
 
         setInfo()
         setListeners()

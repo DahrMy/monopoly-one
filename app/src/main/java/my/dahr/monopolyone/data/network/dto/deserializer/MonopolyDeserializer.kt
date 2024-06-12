@@ -5,6 +5,7 @@ import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import my.dahr.monopolyone.data.models.RequestStatus.*
 import my.dahr.monopolyone.data.models.RequestStatus
+import my.dahr.monopolyone.data.network.dto.inventory.InventoryResponse
 import my.dahr.monopolyone.data.network.dto.response.BaseResponse
 import my.dahr.monopolyone.data.network.dto.response.SessionResponse
 import my.dahr.monopolyone.data.network.dto.response.TotpResponse
@@ -12,8 +13,10 @@ import my.dahr.monopolyone.data.network.dto.response.error.DefaultErrorResponse
 import my.dahr.monopolyone.data.network.dto.response.error.FrequentTotpErrorResponse
 import my.dahr.monopolyone.data.network.dto.response.error.ParamInvalidErrorResponse
 import my.dahr.monopolyone.data.network.dto.response.friends.add.AddResponse
+import my.dahr.monopolyone.data.network.dto.response.friends.delete.DeleteResponse
 import my.dahr.monopolyone.data.network.dto.response.friends.list.FriendsResponse
 import my.dahr.monopolyone.data.network.dto.response.friends.requests.FriendsRequestsResponse
+import my.dahr.monopolyone.data.network.dto.response.users.UsersResponse
 import java.lang.reflect.Type
 
 class MonopolyDeserializer : JsonDeserializer<BaseResponse> {
@@ -37,19 +40,51 @@ class MonopolyDeserializer : JsonDeserializer<BaseResponse> {
         json: JsonElement, context: JsonDeserializationContext
     ): BaseResponse {
         val dataJson = json.asJsonObject.get("data")
-        val hasTotpToken = dataJson.asJsonObject.has("totp_session_token")
-        val isFriendsResponse = dataJson.asJsonObject.has("friends")
-        val isFriendsRequestsResponse = dataJson.asJsonObject.has("requests")
-        val isAddResponse = dataJson.asJsonObject.has("add_response")
+        var hasTotpToken = false
+        //friends
+        var isFriendsResponse = false
+        var isFriendsRequestsResponse = false
+        var isAddResponse = false
+        var isDeleteResponse = false
+        //inventory
+        var isInventoryResponse = false
+        //users
+        var isUsersResponse = false
+
+        if (dataJson.isJsonObject) {
+            hasTotpToken = dataJson.asJsonObject.has("totp_session_token")
+            //friends
+            isFriendsResponse = dataJson.asJsonObject.has("friends")
+            isFriendsRequestsResponse = dataJson.asJsonObject.has("requests")
+            isAddResponse = dataJson.asJsonObject.has("add")
+            isDeleteResponse = dataJson.asJsonObject.has("delete")
+            //inventory
+            isInventoryResponse = dataJson.asJsonObject.has("items")
+        } else {
+            //users
+            isUsersResponse = dataJson.asJsonArray.get(0).asJsonObject.has("rank")
+        }
+
+
+
 
         return when { // TODO: Add more responses
             hasTotpToken -> context.deserialize(json, TotpResponse::class.java)
+            //friends
             isFriendsResponse -> context.deserialize(json, FriendsResponse::class.java)
-            isFriendsRequestsResponse -> context.deserialize(json, FriendsRequestsResponse::class.java)
+            isFriendsRequestsResponse -> context.deserialize(
+                json,
+                FriendsRequestsResponse::class.java
+            )
+
             isAddResponse -> context.deserialize(json, AddResponse::class.java)
+            isDeleteResponse -> context.deserialize(json, DeleteResponse::class.java)
+            //users
+            isUsersResponse -> context.deserialize(json, UsersResponse::class.java)
+            //inventory
+            isInventoryResponse -> context.deserialize(json, InventoryResponse::class.java)
             else -> context.deserialize(json, SessionResponse::class.java)
         }
-
     }
 
     private fun identifyByCode(code: Int) = RequestStatus.entries.find { status ->

@@ -3,7 +3,7 @@ package my.dahr.monopolyone.data.network.datasource
 import my.dahr.monopolyone.data.network.api.FriendsApi
 import my.dahr.monopolyone.data.network.dto.response.BaseResponse
 import my.dahr.monopolyone.data.network.dto.response.friends.add.AddRequest
-import my.dahr.monopolyone.data.network.dto.response.friends.delete.DeleteResponseJson
+import my.dahr.monopolyone.data.network.dto.response.friends.delete.DeleteRequest
 import my.dahr.monopolyone.domain.datasource.FriendsDataSource
 import retrofit2.Callback
 import javax.inject.Inject
@@ -37,7 +37,7 @@ class FriendsDataSourceImpl @Inject constructor(
         friendsApi.addFriend(addRequest).enqueue(callback)
     }
 
-    override suspend fun deleteFriends(response: DeleteResponseJson) {
-        friendsApi.deleteFriend(response)
+    override fun deleteFriends(deleteRequest: DeleteRequest, callback: Callback<BaseResponse>) {
+        friendsApi.deleteFriend(deleteRequest).enqueue(callback)
     }
 }
