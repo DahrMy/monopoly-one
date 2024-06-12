@@ -1,6 +1,6 @@
 [versions]
 # Plugins
-agp = "8.4.1"
+agp = "8.4.2"
 kotlin = "1.9.21"
 ksp = "1.9.23-1.0.20"
 
@@ -11,17 +11,19 @@ junit = "4.13.2"
 coreKtx = "1.13.1"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
-appcompat = "1.6.1"
+appcompat = "1.7.0"
 activity = "1.9.0"
 constraintlayout = "2.1.4"
-fragment = "1.7.1"
-lifecycle = "2.8.0"
+fragment = "1.8.0"
+lifecycle = "2.8.2"
 workRuntimeKtx = "2.9.0"
+hiltWork = "1.2.0"
+hiltCompiler = "1.2.0"
 room = "2.6.1"
 
 # Google
 material = "1.12.0"
-hilt = "2.50"
+hiltGoogle = "2.50"
 gson = "2.10.1"
 
 # KotlinX
@@ -56,18 +58,20 @@ androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifec
 androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
 
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
+androidx-hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltWork" }
+androidx-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltCompiler"}
 
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 
 # Google
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+google-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+google-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hiltGoogle" }
+google-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hiltGoogle" }
 
-gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+google-gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 
 # KotlinX
 kotlinx-coroutines-android = { group="org.jetbrains.kotlinx", name="kotlinx-coroutines-android", version.ref = "coroutines" }
@@ -91,4 +95,4 @@ jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "k
 
 # Google
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltGoogle" }
