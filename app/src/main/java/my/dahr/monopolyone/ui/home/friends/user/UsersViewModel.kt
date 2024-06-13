@@ -14,12 +14,14 @@ import my.dahr.monopolyone.data.models.RequestStatus
 import my.dahr.monopolyone.data.network.MonopolyCallback
 import my.dahr.monopolyone.data.network.dto.response.BaseResponse
 import my.dahr.monopolyone.data.network.dto.response.users.UsersResponse
+import my.dahr.monopolyone.data.repository.ResourceRepository
 import my.dahr.monopolyone.domain.models.users.Data
 import retrofit2.Call
 
 @HiltViewModel
 class UsersViewModel @Inject constructor(
-    private val usersRepository: UsersRepository
+    private val usersRepository: UsersRepository,
+    private val resourceRepository: ResourceRepository
 ) : ViewModel() {
 
     private var user: Data? = null
@@ -28,7 +30,7 @@ class UsersViewModel @Inject constructor(
 
     val usersResultLiveData = MutableLiveData<List<Data>>()
 
-    private val requestStatusLiveData = MutableLiveData<RequestStatus>()
+    val requestStatusLiveData = MutableLiveData<RequestStatus>()
 
 
     fun getListOfUsers(userId: Any) {
@@ -66,4 +68,7 @@ class UsersViewModel @Inject constructor(
     fun getUser(): Data? {
         return user
     }
+
+    fun loadErrorMessage(status: RequestStatus) =
+        resourceRepository.getErrorMessageStringResource(status)
 }

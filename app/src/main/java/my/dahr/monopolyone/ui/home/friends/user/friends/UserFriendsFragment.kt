@@ -10,17 +10,22 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import my.dahr.monopolyone.R
+import my.dahr.monopolyone.data.models.RequestStatus
 import my.dahr.monopolyone.databinding.FragmentUserFriendsBinding
 import my.dahr.monopolyone.domain.models.friends.list.Friend
 import my.dahr.monopolyone.ui.home.friends.FriendsViewModel
 import my.dahr.monopolyone.ui.home.friends.adapters.FriendsAdapter
 import my.dahr.monopolyone.ui.home.friends.user.UserFragment
+import my.dahr.monopolyone.utils.LoadingDialog
 
 @AndroidEntryPoint
 class UserFriendsFragment : Fragment() {
     private val viewModel: FriendsViewModel by viewModels()
+
+    private lateinit var loadingDialog:LoadingDialog
 
     private var _binding: FragmentUserFriendsBinding? = null
     private val binding get() = _binding!!
@@ -39,6 +44,7 @@ class UserFriendsFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loadingDialog = LoadingDialog(requireActivity())
         receiveData()
         setContent()
         initObservers()
@@ -59,6 +65,33 @@ class UserFriendsFragment : Fragment() {
     private fun initObservers() {
         viewModel.friendForUserResultLiveData.observe(viewLifecycleOwner) {
             showFriendsList(it)
+        }
+        viewModel.requestStatusLiveData.observe(viewLifecycleOwner) { status ->
+            when (status) {
+                RequestStatus.Success -> {
+                    loadingDialog.isDismiss()
+                }
+
+                RequestStatus.Failure -> {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(resources.getString(R.string.dialog_failure_title))
+                        .setPositiveButton(resources.getString(R.string.dialog_bt_ok)) { _, _ -> }
+                        .setMessage(R.string.dialog_failure_text)
+                        .show()
+                }
+
+                RequestStatus.Loading -> {
+                    loadingDialog.startLoading()
+                }
+
+                else -> {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(resources.getString(R.string.dialog_error_title))
+                        .setPositiveButton(resources.getString(R.string.dialog_bt_ok)) { _, _ -> }
+                        .setMessage(viewModel.loadErrorMessage(status))
+                        .show()
+                }
+            }
         }
     }
 

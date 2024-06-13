@@ -17,6 +17,7 @@ import my.dahr.monopolyone.data.models.Session
 import my.dahr.monopolyone.data.network.MonopolyCallback
 import my.dahr.monopolyone.data.network.dto.response.BaseResponse
 import my.dahr.monopolyone.data.network.dto.response.users.UsersResponse
+import my.dahr.monopolyone.data.repository.ResourceRepository
 import my.dahr.monopolyone.domain.models.users.Data
 import my.dahr.monopolyone.domain.repository.UsersRepository
 import my.dahr.monopolyone.utils.SESSION_KEY
@@ -27,7 +28,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     @ApplicationContext context: Context,
-    private val usersRepository: UsersRepository
+    private val usersRepository: UsersRepository,
+    private val resourceRepository: ResourceRepository
 ) : ViewModel(){
     private val sharedPreferences =
         context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
@@ -40,9 +42,10 @@ class ProfileViewModel @Inject constructor(
 
     private val myCoroutineContext = SupervisorJob() + Dispatchers.IO
 
-    private val requestStatusLiveData = MutableLiveData<RequestStatus>()
+     val requestStatusLiveData = MutableLiveData<RequestStatus>()
 
     fun getListOfUsers() {
+        requestStatusLiveData.postValue(RequestStatus.Loading)
         viewModelScope.launch(myCoroutineContext) {
             val response = usersRepository.getUsersList(
                 session.userId, setOf(1), "full", callback = object : MonopolyCallback<BaseResponse>(requestStatusLiveData){
@@ -54,8 +57,8 @@ class ProfileViewModel @Inject constructor(
                             is UsersResponse -> {
                                 val users = responseBody.toUi().data
                                 usersResultLiveData.postValue(users)
+                                requestStatusLiveData.postValue(RequestStatus.Success)
                             }
-
                             else -> handleErrorResponse(responseBody)
                         }
                     }
@@ -72,4 +75,7 @@ class ProfileViewModel @Inject constructor(
     fun getUser(): Data? {
         return user
     }
+
+    fun loadErrorMessage(status: RequestStatus) =
+        resourceRepository.getErrorMessageStringResource(status)
 }

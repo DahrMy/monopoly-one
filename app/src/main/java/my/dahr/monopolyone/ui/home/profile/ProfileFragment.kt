@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import my.dahr.monopolyone.R
+import my.dahr.monopolyone.data.models.RequestStatus
 import my.dahr.monopolyone.databinding.FragmentProfileBinding
 import my.dahr.monopolyone.ui.home.friends.FriendsViewModel
 import my.dahr.monopolyone.ui.home.friends.user.friends.UserFriendsFragment
@@ -24,6 +26,7 @@ import my.dahr.monopolyone.utils.LIEUTENANT
 import my.dahr.monopolyone.utils.LIEUTENANT_COLONEL
 import my.dahr.monopolyone.utils.LIEUTENANT_GENERAL
 import my.dahr.monopolyone.utils.LIEUTENANT_MAJOR
+import my.dahr.monopolyone.utils.LoadingDialog
 import my.dahr.monopolyone.utils.MAJOR
 import my.dahr.monopolyone.utils.MARSHAL
 import my.dahr.monopolyone.utils.MASTER_CORPORAL
@@ -39,8 +42,10 @@ class ProfileFragment : Fragment() {
     private val viewModel: ProfileViewModel by viewModels()
     private val friendsViewModel: FriendsViewModel by viewModels()
 
+    private lateinit var loadingDialog: LoadingDialog
+
     private var _binding: FragmentProfileBinding? = null
-    private val binding get () = _binding!!
+    private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -51,13 +56,14 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loadingDialog = LoadingDialog(requireActivity())
         initObservers()
         viewModel.getListOfUsers()
-
     }
-    private fun setListeners(){
+
+    private fun setListeners() {
         val user = viewModel.getUser()
-        binding.LayoutCountOfFriends.setOnClickListener{
+        binding.LayoutCountOfFriends.setOnClickListener {
             val fragment = UserFriendsFragment.newInstance(user!!.userId, user.avatar, user.nick)
             parentFragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
@@ -65,16 +71,44 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun initObservers(){
+    private fun initObservers() {
         viewModel.usersResultLiveData.observe(viewLifecycleOwner) {
             val user = it[0]
             viewModel.setUser(user)
             setInfo()
             setListeners()
         }
+        viewModel.requestStatusLiveData.observe(viewLifecycleOwner) { status ->
+            when (status) {
+                RequestStatus.Success -> {
+                    binding.clProfile.visibility = View.VISIBLE
+                    loadingDialog.isDismiss()
+                }
+
+                RequestStatus.Failure -> {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(resources.getString(R.string.dialog_failure_title))
+                        .setPositiveButton(resources.getString(R.string.dialog_bt_ok)) { _, _ -> }
+                        .setMessage(R.string.dialog_failure_text)
+                        .show()
+                }
+
+                RequestStatus.Loading -> {
+                    loadingDialog.startLoading()
+                }
+
+                else -> {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(resources.getString(R.string.dialog_error_title))
+                        .setPositiveButton(resources.getString(R.string.dialog_bt_ok)) { _, _ -> }
+                        .setMessage(viewModel.loadErrorMessage(status))
+                        .show()
+                }
+            }
+        }
     }
 
-    private fun setInfo(){
+    private fun setInfo() {
         val user = viewModel.getUser()
 
         friendsViewModel.getFriendListForUser(user!!.userId)

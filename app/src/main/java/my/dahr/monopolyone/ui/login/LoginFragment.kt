@@ -73,7 +73,6 @@ class LoginFragment : Fragment() {
             }
 
         }
-
     }
 
     private fun btLoginObserver() {

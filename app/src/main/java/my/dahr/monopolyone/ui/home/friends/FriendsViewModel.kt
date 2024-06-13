@@ -22,6 +22,7 @@ import my.dahr.monopolyone.data.network.dto.response.friends.delete.DeleteReques
 import my.dahr.monopolyone.data.network.dto.response.friends.delete.DeleteResponse
 import my.dahr.monopolyone.data.network.dto.response.friends.list.FriendsResponse
 import my.dahr.monopolyone.data.network.dto.response.friends.requests.FriendsRequestsResponse
+import my.dahr.monopolyone.data.repository.ResourceRepository
 import my.dahr.monopolyone.domain.models.friends.list.Friend
 import my.dahr.monopolyone.domain.models.friends.requests.Request
 import my.dahr.monopolyone.domain.repository.FriendsRepository
@@ -33,7 +34,8 @@ import javax.inject.Inject
 @HiltViewModel
 class FriendsViewModel @Inject constructor(
     private val sessionHelper: SessionHelper,
-    private val repository: FriendsRepository
+    private val repository: FriendsRepository,
+    private val resourceRepository: ResourceRepository
 ) : ViewModel() {
 
     private val myCoroutineContext = SupervisorJob() + Dispatchers.IO
@@ -47,7 +49,7 @@ class FriendsViewModel @Inject constructor(
 
     val isFriend = MutableLiveData<Boolean>()
 
-    private val requestStatusLiveData = MutableLiveData<RequestStatus>()
+    val requestStatusLiveData = MutableLiveData<RequestStatus>()
 
 
     fun getFriendList() {
@@ -87,19 +89,19 @@ class FriendsViewModel @Inject constructor(
     fun checkIfFriend(userId: Any) {
         val sessionFromHelper = sessionHelper.session
         if (sessionFromHelper != null) {
-                getFriendsListForChecking(sessionFromHelper.userId)
-                friendResultForChecking.observeForever {
-                    var found = false
-                    for (friend in it) {
-                        if (userId == friend.userId) {
-                            found = true
-                            break
-                        }
+            getFriendsListForChecking(sessionFromHelper.userId)
+            friendResultForChecking.observeForever {
+                var found = false
+                for (friend in it) {
+                    if (userId == friend.userId) {
+                        found = true
+                        break
                     }
-                    isFriend.postValue(found)
-                    friendResultForChecking.removeObserver { }
                 }
+                isFriend.postValue(found)
+                friendResultForChecking.removeObserver { }
             }
+        }
     }
 
     fun checkIfMe(userId: Any): Boolean {
@@ -381,5 +383,8 @@ class FriendsViewModel @Inject constructor(
             }
         }
     }
+
+    fun loadErrorMessage(status: RequestStatus) =
+        resourceRepository.getErrorMessageStringResource(status)
 }
 
