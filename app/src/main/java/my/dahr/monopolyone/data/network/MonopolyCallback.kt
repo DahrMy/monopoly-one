@@ -13,7 +13,9 @@ abstract class MonopolyCallback<T>(
     private val requestStatusLiveData: MutableLiveData<RequestStatus>
 ) : Callback<T> {
 
-    abstract fun onSuccessfulResponse(call: Call<T>, responseBody: T)
+    open fun onSuccessfulResponse(call: Call<T>, responseBody: T) {
+        requestStatusLiveData.postValue(RequestStatus.Success)
+    }
 
     override fun onResponse(call: Call<T>, response: Response<T>) {
         if (response.isSuccessful) {

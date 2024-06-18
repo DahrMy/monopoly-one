@@ -1,14 +1,18 @@
 package my.dahr.monopolyone.utils
 
 import android.content.Context
+import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import my.dahr.monopolyone.data.models.RequestStatus
 import my.dahr.monopolyone.data.models.Session
+import my.dahr.monopolyone.data.network.MonopolyCallback
 import my.dahr.monopolyone.data.network.api.AuthorizationApi
 import my.dahr.monopolyone.data.network.api.IpApi
 import my.dahr.monopolyone.data.network.dto.response.SessionResponse
+import retrofit2.Call
 import retrofit2.Callback
 import javax.inject.Inject
 
@@ -39,6 +43,37 @@ class SessionHelper @Inject constructor(
     var savedIp: String?
         get() = sharedPreferences.getString(IP_KEY, "")
         private set(value) { sharedPreferences.edit().putString(IP_KEY, value).apply() }
+
+    suspend inline fun safeUse(liveData: MutableLiveData<RequestStatus>, predicate: () -> Unit) {
+
+        val callback: () -> MonopolyCallback<SessionResponse> = {
+            object : MonopolyCallback<SessionResponse>(liveData) {
+                override fun onSuccessfulResponse(
+                    call: Call<SessionResponse>, responseBody: SessionResponse
+                ) {
+                    session = responseBody.data.toSession()
+                    super.onSuccessfulResponse(call, responseBody)
+                }
+            }
+        }
+
+        if (isCurrentIpChanged()) {
+            refreshSavedIp()
+            session?.let { refreshSession(it.refreshToken, callback) }
+        }
+
+        if (isSessionNotExpired()) {
+            predicate.invoke()
+        } else {
+            if (session != null) {
+                refreshSession(session!!.refreshToken, callback)
+                predicate.invoke()
+            } else {
+                liveData.postValue(RequestStatus.AuthorizationError)
+            }
+        }
+
+    }
 
     fun isSessionNotExpired(): Boolean {
 
