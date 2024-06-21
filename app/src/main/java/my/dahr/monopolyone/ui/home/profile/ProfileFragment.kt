@@ -6,41 +6,29 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import my.dahr.monopolyone.R
 import my.dahr.monopolyone.data.models.RequestStatus
 import my.dahr.monopolyone.databinding.FragmentProfileBinding
+import my.dahr.monopolyone.domain.models.inventory.items.Item
 import my.dahr.monopolyone.ui.home.friends.FriendsViewModel
 import my.dahr.monopolyone.ui.home.friends.user.friends.UserFriendsFragment
-import my.dahr.monopolyone.utils.BRIGADIER_GENERAL
-import my.dahr.monopolyone.utils.CAPTAIN
-import my.dahr.monopolyone.utils.COLONEL
-import my.dahr.monopolyone.utils.CORPORAL
-import my.dahr.monopolyone.utils.GENERAL
-import my.dahr.monopolyone.utils.GENERAL_MAJOR
-import my.dahr.monopolyone.utils.LANCE_CORPORAL
-import my.dahr.monopolyone.utils.LANCE_SERGEANT
-import my.dahr.monopolyone.utils.LIEUTENANT
-import my.dahr.monopolyone.utils.LIEUTENANT_COLONEL
-import my.dahr.monopolyone.utils.LIEUTENANT_GENERAL
-import my.dahr.monopolyone.utils.LIEUTENANT_MAJOR
+import my.dahr.monopolyone.ui.home.inventory.InventoryFragment
+import my.dahr.monopolyone.ui.home.inventory.InventoryItemFragment
+import my.dahr.monopolyone.ui.home.inventory.InventoryViewModel
+import my.dahr.monopolyone.ui.home.inventory.adapters.InventoryAdapter
 import my.dahr.monopolyone.utils.LoadingDialog
-import my.dahr.monopolyone.utils.MAJOR
-import my.dahr.monopolyone.utils.MARSHAL
-import my.dahr.monopolyone.utils.MASTER_CORPORAL
-import my.dahr.monopolyone.utils.MASTER_SERGEANT
-import my.dahr.monopolyone.utils.RECRUIT
-import my.dahr.monopolyone.utils.ROOKIE
-import my.dahr.monopolyone.utils.SERGEANT
-import my.dahr.monopolyone.utils.SERGEANT_MAJOR
-import my.dahr.monopolyone.utils.SOLDIER
+import my.dahr.monopolyone.utils.RankConverter
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
     private val viewModel: ProfileViewModel by viewModels()
     private val friendsViewModel: FriendsViewModel by viewModels()
+    private val inventoryViewModel: InventoryViewModel by viewModels()
 
     private lateinit var loadingDialog: LoadingDialog
 
@@ -59,6 +47,7 @@ class ProfileFragment : Fragment() {
         loadingDialog = LoadingDialog(requireActivity())
         initObservers()
         viewModel.getListOfUsers()
+        inventoryViewModel.getItemList()
     }
 
     private fun setListeners() {
@@ -69,16 +58,28 @@ class ProfileFragment : Fragment() {
                 .replace(R.id.container, fragment)
                 .commit()
         }
+        binding.clShowAllItems.setOnClickListener {
+            val fragment = InventoryFragment.newInstance()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.container, fragment)
+                .commit()
+        }
     }
 
     private fun initObservers() {
         viewModel.usersResultLiveData.observe(viewLifecycleOwner) {
             val user = it[0]
             viewModel.setUser(user)
-            setInfo()
+        }
+
+        inventoryViewModel.itemsResultLiveData.observe(viewLifecycleOwner) {
+            val firstThreeElements = it.take(3)
+            showInventory(firstThreeElements)
+            setInfo(it)
             setListeners()
         }
-        viewModel.requestStatusLiveData.observe(viewLifecycleOwner) { status ->
+
+        inventoryViewModel.requestStatusLiveData.observe(viewLifecycleOwner) { status ->
             when (status) {
                 RequestStatus.Success -> {
                     binding.clProfile.visibility = View.VISIBLE
@@ -108,7 +109,29 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun setInfo() {
+    private fun showInventory(items: List<Item>) {
+        val inventoryAdapter = InventoryAdapter(object : InventoryAdapter.OnItemClickListener {
+            override fun onItemClicked(position: Int, item: Item) {
+                val fragment = InventoryItemFragment.newInstance(
+                    item.image,
+                    item.title,
+                    item.type,
+                    item.description,
+                )
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.container, fragment)
+                    .commit()
+            }
+        })
+        inventoryAdapter.submitList(items)
+        val layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.rvInventory.layoutManager = layoutManager
+        binding.rvInventory.setHasFixedSize(true)
+        binding.rvInventory.adapter = inventoryAdapter
+    }
+
+    private fun setInfo(items: List<Item>) {
         val user = viewModel.getUser()
 
         friendsViewModel.getFriendListForUser(user!!.userId)
@@ -120,140 +143,22 @@ class ProfileFragment : Fragment() {
             val nextLevel = user.xpLevel.plus(1)
             tvNextLevel.text = nextLevel.toString()
 
+            tvCountOfItems.text = items.size.toString()
+
             tvFriendNick.text = user.nick
             tvRankLevelNumber.text = user.xpLevel.toString()
             tvXp.text = showXp(user.xpLevel, user.xp)
             tvCountOfAllMatches.text = user.games.toString()
             tvCountOfWinningMatches.text = user.gamesWins.toString()
 
-            val lvl = user.xpLevel
-            when (lvl) {
-                in 1..4 -> {
-                    tvRankName.text = ROOKIE
-                    setRankPhoto(0)
-                    setPhoto(user.avatar)
-                }
+            val rankName = RankConverter.fromNumberToRank(user.xpLevel)
+            tvRankName.text = rankName
+            setPhoto(user.avatar)
 
-                in 5..9 -> {
-                    tvRankName.text = RECRUIT
-                    setRankPhoto(1)
-                    setPhoto(user.avatar)
-                }
+            val rankImage = RankConverter.fromNumberToRankImageId(user.xpLevel)
 
-                in 10..14 -> {
-                    tvRankName.text = SOLDIER
-                    setRankPhoto(2)
-                    setPhoto(user.avatar)
-                }
-
-                in 15..19 -> {
-                    tvRankName.text = LANCE_CORPORAL
-                    setRankPhoto(3)
-                    setPhoto(user.avatar)
-                }
-
-                in 20..24 -> {
-                    tvRankName.text = CORPORAL
-                    setRankPhoto(4)
-                    setPhoto(user.avatar)
-                }
-
-                in 25..29 -> {
-                    tvRankName.text = MASTER_CORPORAL
-                    setRankPhoto(5)
-                    setPhoto(user.avatar)
-                }
-
-                in 30..34 -> {
-                    tvRankName.text = LANCE_SERGEANT
-                    setRankPhoto(6)
-                    setPhoto(user.avatar)
-                }
-
-                in 35..39 -> {
-                    tvRankName.text = SERGEANT
-                    setRankPhoto(7)
-                    setPhoto(user.avatar)
-                }
-
-                in 40..44 -> {
-                    tvRankName.text = MASTER_SERGEANT
-                    setRankPhoto(8)
-                    setPhoto(user.avatar)
-                }
-
-                in 45..49 -> {
-                    tvRankName.text = SERGEANT_MAJOR
-                    setRankPhoto(9)
-                    setPhoto(user.avatar)
-                }
-
-                in 50..54 -> {
-                    tvRankName.text = LIEUTENANT
-                    setRankPhoto(10)
-                    setPhoto(user.avatar)
-                }
-
-                in 55..59 -> {
-                    tvRankName.text = LIEUTENANT_MAJOR
-                    setRankPhoto(11)
-                    setPhoto(user.avatar)
-                }
-
-                in 60..64 -> {
-                    tvRankName.text = CAPTAIN
-                    setRankPhoto(12)
-                    setPhoto(user.avatar)
-                }
-
-                in 65..69 -> {
-                    tvRankName.text = MAJOR
-                    setRankPhoto(13)
-                    setPhoto(user.avatar)
-                }
-
-                in 70..74 -> {
-                    tvRankName.text = LIEUTENANT_COLONEL
-                    setRankPhoto(14)
-                    setPhoto(user.avatar)
-                }
-
-                in 75..79 -> {
-                    tvRankName.text = COLONEL
-                    setRankPhoto(15)
-                    setPhoto(user.avatar)
-                }
-
-                in 80..84 -> {
-                    tvRankName.text = BRIGADIER_GENERAL
-                    setRankPhoto(16)
-                    setPhoto(user.avatar)
-                }
-
-                in 85..89 -> {
-                    tvRankName.text = GENERAL_MAJOR
-                    setRankPhoto(17)
-                    setPhoto(user.avatar)
-                }
-
-                in 90..94 -> {
-                    tvRankName.text = GENERAL
-                    setRankPhoto(18)
-                    setPhoto(user.avatar)
-                }
-
-                in 95..99 -> {
-                    tvRankName.text = LIEUTENANT_GENERAL
-                    setRankPhoto(19)
-                    setPhoto(user.avatar)
-                }
-
-                in 100..10000 -> {
-                    tvRankName.text = MARSHAL
-                    setRankPhoto(20)
-                    setPhoto(user.avatar)
-                }
-
+            if (rankImage != null) {
+                setRankImage(rankImage)
             }
         }
     }
@@ -275,7 +180,7 @@ class ProfileFragment : Fragment() {
         return remainderOfXpForNextLevel.toString()
     }
 
-    private fun setRankPhoto(number: Int) {
+    private fun setRankImage(number: Int) {
         Glide.with(this)
             .load("https://cdn2.kirick.me/libs/monopoly/badges_xp/$number.png")
             .into(binding.ivRank)

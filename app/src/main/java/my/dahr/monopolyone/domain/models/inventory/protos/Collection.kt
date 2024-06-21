@@ -1,5 +1,4 @@
-package my.dahr.monopolyone.domain.models.inventory
-
+package my.dahr.monopolyone.domain.models.inventory.protos
 
 
 data class Collection(

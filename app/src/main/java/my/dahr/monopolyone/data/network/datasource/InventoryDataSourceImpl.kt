@@ -19,8 +19,8 @@ class InventoryDataSourceImpl @Inject constructor(
         addEquipped: String,
         addLegacy: Boolean,
         callback: MonopolyCallback<BaseResponse>
-    ){
-        return inventoryApi.getInventoryList(
+    ) {
+        inventoryApi.getInventoryList(
             accessToken,
             userId,
             includeStock,
@@ -29,6 +29,17 @@ class InventoryDataSourceImpl @Inject constructor(
             addUser,
             addEquipped,
             addLegacy,
+        ).enqueue(callback)
+    }
+
+    override fun getInventoryDataList(
+        itemProtoIds: Set<Int>,
+        addLegacy: Boolean,
+        addMetadata: Boolean,
+        callback: MonopolyCallback<BaseResponse>
+    ) {
+        inventoryApi.getInventoryDataList(
+            itemProtoIds, addLegacy, addMetadata
         ).enqueue(callback)
     }
 }

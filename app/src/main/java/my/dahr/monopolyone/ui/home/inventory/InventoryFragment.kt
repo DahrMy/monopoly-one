@@ -6,17 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import my.dahr.monopolyone.R
 import my.dahr.monopolyone.data.models.RequestStatus
 import my.dahr.monopolyone.databinding.FragmentInventoryBinding
-import my.dahr.monopolyone.domain.models.inventory.Item
-import my.dahr.monopolyone.ui.home.friends.requests.FriendsRequestsFragment
+import my.dahr.monopolyone.domain.models.inventory.items.Item
 import my.dahr.monopolyone.ui.home.inventory.adapters.InventoryAdapter
 import my.dahr.monopolyone.utils.LoadingDialog
 
@@ -80,7 +76,14 @@ class InventoryFragment : Fragment() {
     private fun showRecycler(items: List<Item>) {
         val inventoryAdapter = InventoryAdapter(object : InventoryAdapter.OnItemClickListener {
             override fun onItemClicked(position: Int, item: Item) {
-                val fragment = FriendsRequestsFragment()
+//                val ids = setOf(item.itemProtoId)
+//                inventoryViewModel.getInventoryDataList(ids)
+                val fragment = InventoryItemFragment.newInstance(
+                    item.image,
+                    item.title,
+                    item.type,
+                    item.description,
+                )
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.container, fragment)
                     .commit()

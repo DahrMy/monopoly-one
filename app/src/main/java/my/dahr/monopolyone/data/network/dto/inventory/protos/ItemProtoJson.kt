@@ -1,10 +1,10 @@
-package my.dahr.monopolyone.data.network.dto.inventory
+package my.dahr.monopolyone.data.network.dto.inventory.protos
 
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class ItemJson(
+data class ItemProtoJson(
     @Expose
     @SerializedName("case_item_proto_ids")
     val caseItemProtoIds: List<Int?>? = null,
@@ -21,11 +21,14 @@ data class ItemJson(
     @SerializedName("image")
     val image: String? = null,
     @Expose
-    @SerializedName("item_id")
-    val itemId: Int? = null,
-    @Expose
     @SerializedName("item_proto_id")
     val itemProtoId: Int? = null,
+    @Expose
+    @SerializedName("key_item_proto_id")
+    val keyItemProtoId: Int? = null,
+    @Expose
+    @SerializedName("monopoly_id")
+    val monopolyId: Int? = null,
     @Expose
     @SerializedName("prices")
     val prices: PricesJson? = null,
@@ -35,9 +38,6 @@ data class ItemJson(
     @Expose
     @SerializedName("title")
     val title: String? = null,
-    @Expose
-    @SerializedName("ts_owned")
-    val tsOwned: Int? = null,
     @Expose
     @SerializedName("type")
     val type: Int? = null

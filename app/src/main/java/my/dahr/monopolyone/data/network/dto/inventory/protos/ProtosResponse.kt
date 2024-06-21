@@ -1,11 +1,11 @@
-package my.dahr.monopolyone.data.network.dto.inventory
+package my.dahr.monopolyone.data.network.dto.inventory.protos
 
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import my.dahr.monopolyone.data.network.dto.response.BaseResponse
 
-data class InventoryResponse(
+data class ProtosResponse(
     @Expose
     @SerializedName("code")
     override val code: Int,
@@ -13,5 +13,5 @@ data class InventoryResponse(
     override val description: String? = null,
     @Expose
     @SerializedName("data")
-   override val data: DataJson? = null
-):BaseResponse(code, description, data)
+    override val data: DataJson? = null
+) : BaseResponse(code, description, data)

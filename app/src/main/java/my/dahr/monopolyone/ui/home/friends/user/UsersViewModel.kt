@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import my.dahr.monopolyone.data.converters.inventory.toUi
 import my.dahr.monopolyone.data.converters.toUi
 import my.dahr.monopolyone.data.models.RequestStatus
 import my.dahr.monopolyone.data.network.MonopolyCallback

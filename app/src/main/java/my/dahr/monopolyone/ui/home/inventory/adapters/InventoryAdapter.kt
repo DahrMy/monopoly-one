@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import my.dahr.monopolyone.databinding.ItemInventoryBinding
-import my.dahr.monopolyone.domain.models.inventory.Item
+import my.dahr.monopolyone.domain.models.inventory.items.Item
 
 class InventoryAdapter(private val onItemClickListener: OnItemClickListener) :
     ListAdapter<Item, InventoryAdapter.InventoryViewHolder>(DiffUtil()) {

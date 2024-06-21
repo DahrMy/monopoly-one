@@ -15,4 +15,11 @@ interface InventoryDataSource {
         addLegacy: Boolean,
         callback: MonopolyCallback<BaseResponse>
     )
+
+    fun getInventoryDataList(
+        itemProtoIds: Set<Int>,
+        addLegacy: Boolean,
+        addMetadata: Boolean,
+        callback: MonopolyCallback<BaseResponse>
+    )
 }

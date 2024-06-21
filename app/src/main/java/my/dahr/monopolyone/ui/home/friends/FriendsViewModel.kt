@@ -25,6 +25,7 @@ import my.dahr.monopolyone.data.network.dto.response.friends.requests.FriendsReq
 import my.dahr.monopolyone.data.repository.ResourceRepository
 import my.dahr.monopolyone.domain.models.friends.list.Friend
 import my.dahr.monopolyone.domain.models.friends.requests.Request
+import my.dahr.monopolyone.domain.models.users.Data
 import my.dahr.monopolyone.domain.repository.FriendsRepository
 import my.dahr.monopolyone.utils.SessionHelper
 import my.dahr.monopolyone.utils.toSession
@@ -50,7 +51,6 @@ class FriendsViewModel @Inject constructor(
     val isFriend = MutableLiveData<Boolean>()
 
     val requestStatusLiveData = MutableLiveData<RequestStatus>()
-
 
     fun getFriendList() {
         val sessionFromHelper = sessionHelper.session
@@ -383,6 +383,7 @@ class FriendsViewModel @Inject constructor(
             }
         }
     }
+
 
     fun loadErrorMessage(status: RequestStatus) =
         resourceRepository.getErrorMessageStringResource(status)

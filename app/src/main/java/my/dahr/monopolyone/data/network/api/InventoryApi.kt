@@ -17,4 +17,12 @@ interface InventoryApi {
         @Query("add_equipped") addEquipped: String,
         @Query("add_legacy") addLegacy: Boolean,
     ): Call<BaseResponse>
+
+    @GET("data.getItemProtos")
+    fun getInventoryDataList(
+        @Query("item_proto_ids") itemProtoIds: Set<Int>,
+        @Query("add_legacy") addLegacy: Boolean,
+        @Query("add_metadata") addMetadata: Boolean
+    ): Call<BaseResponse>
+
 }

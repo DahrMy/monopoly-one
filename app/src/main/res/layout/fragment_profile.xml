@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/clProfile"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/clProfile"
     android:visibility="gone"
     tools:context=".ui.home.friends.user.UserFragment">
 
@@ -15,8 +15,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -25,10 +24,10 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvCard"
-                android:layout_marginTop="52dp"
                 android:layout_width="160dp"
                 android:layout_height="160dp"
-                app:cardCornerRadius="100dp"
+                android:layout_marginTop="52dp"
+                app:cardCornerRadius="80dp"
                 app:cardElevation="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -62,9 +61,9 @@
                 android:id="@+id/layoutRank"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="24dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="8dp"
                 android:background="@drawable/rounded_border"
                 android:backgroundTint="@color/grey"
                 android:padding="4dp"
@@ -78,7 +77,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="8dp"
-                    app:cardCornerRadius="48dp"
+                    app:cardCornerRadius="40dp"
                     app:cardElevation="4dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -112,17 +111,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/rank_level"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@id/tvRankName"
                     app:layout_constraintTop_toBottomOf="@id/tvRankName" />
 
                 <TextView
                     android:id="@+id/tvRankLevelNumber"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:text="@string/_11"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@id/tvRankLevel"
                     app:layout_constraintTop_toBottomOf="@id/tvRankName" />
@@ -144,9 +143,8 @@
                     android:id="@+id/tvToLevel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="4dp"
                     android:text="@string/xp"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="@id/tvRankLevel"
                     app:layout_constraintEnd_toStartOf="@id/tvNextLevel"
                     app:layout_constraintTop_toTopOf="@id/tvRankLevel" />
@@ -156,18 +154,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/_12"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="@id/tvRankLevel"
                     app:layout_constraintEnd_toEndOf="@id/progressBar"
                     app:layout_constraintTop_toTopOf="@id/tvRankLevel" />
 
                 <TextView
                     android:id="@+id/tvXp"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="4dp"
                     android:text="@string/_477"
-                    android:textSize="16sp"
+                    android:layout_marginStart="8dp"
+                    android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="@id/tvRankLevel"
                     app:layout_constraintEnd_toStartOf="@+id/tvToLevel"
                     app:layout_constraintTop_toTopOf="@id/tvRankLevel" />
@@ -200,7 +198,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/matches"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -234,7 +232,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/wins"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -275,22 +273,95 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/friends"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvCountOfFriends" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="24dp"
-                android:text="@string/inventory_1"
-                android:textSize="28sp"
-                android:textStyle="bold"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/rounded_border"
+                android:backgroundTint="@color/grey"
+                android:padding="4dp"
                 app:layout_constraintStart_toStartOf="@id/LayoutInfoAllMatches"
-                app:layout_constraintTop_toBottomOf="@id/LayoutInfoAllMatches" />
+                app:layout_constraintTop_toBottomOf="@id/LayoutInfoAllMatches">
+
+                <TextView
+                    android:id="@+id/tvInventory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="@string/inventory_1"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvCountOfItems"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:text="@string/_11"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvInventory"
+                    app:layout_constraintStart_toEndOf="@id/tvInventory"
+                    app:layout_constraintTop_toTopOf="@id/tvInventory" />
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvInventory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvInventory"
+                    tools:itemCount="3"
+                    tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    tools:listitem="@layout/item_inventory"
+                     />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clShowAllItems"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@id/tvInventory"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tvInventory">
+
+                    <TextView
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:id="@+id/tvShowAllItems"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/all"
+                        android:textSize="20sp"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        app:layout_constraintBottom_toBottomOf="@+id/tvShowAllItems"
+                        app:layout_constraintTop_toTopOf="@+id/tvShowAllItems"
+                        app:layout_constraintStart_toEndOf="@+id/tvShowAllItems"
+                        android:id="@+id/ivShowItems"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@null"
+                        android:src="@drawable/item_show"/>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

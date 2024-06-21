@@ -5,7 +5,8 @@ import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import my.dahr.monopolyone.data.models.RequestStatus.*
 import my.dahr.monopolyone.data.models.RequestStatus
-import my.dahr.monopolyone.data.network.dto.inventory.InventoryResponse
+import my.dahr.monopolyone.data.network.dto.inventory.items.InventoryResponse
+import my.dahr.monopolyone.data.network.dto.inventory.protos.ProtosResponse
 import my.dahr.monopolyone.data.network.dto.response.BaseResponse
 import my.dahr.monopolyone.data.network.dto.response.SessionResponse
 import my.dahr.monopolyone.data.network.dto.response.TotpResponse
@@ -50,6 +51,7 @@ class MonopolyDeserializer : JsonDeserializer<BaseResponse> {
         var isInventoryResponse = false
         //users
         var isUsersResponse = false
+        var isInventoryProtosResponse = false
 
         if (dataJson.isJsonObject) {
             hasTotpToken = dataJson.asJsonObject.has("totp_session_token")
@@ -60,6 +62,7 @@ class MonopolyDeserializer : JsonDeserializer<BaseResponse> {
             isDeleteResponse = dataJson.asJsonObject.has("delete")
             //inventory
             isInventoryResponse = dataJson.asJsonObject.has("items")
+            isInventoryProtosResponse = dataJson.asJsonObject.has("item_protos")
         } else {
             //users
             isUsersResponse = dataJson.asJsonArray.get(0).asJsonObject.has("rank")
@@ -83,6 +86,7 @@ class MonopolyDeserializer : JsonDeserializer<BaseResponse> {
             isUsersResponse -> context.deserialize(json, UsersResponse::class.java)
             //inventory
             isInventoryResponse -> context.deserialize(json, InventoryResponse::class.java)
+            isInventoryProtosResponse -> context.deserialize(json, ProtosResponse::class.java)
             else -> context.deserialize(json, SessionResponse::class.java)
         }
     }

@@ -1,21 +1,21 @@
-package my.dahr.monopolyone.data.converters
+package my.dahr.monopolyone.data.converters.inventory
 
-import my.dahr.monopolyone.data.network.dto.inventory.CollectionJson
-import my.dahr.monopolyone.data.network.dto.inventory.DataJson
-import my.dahr.monopolyone.data.network.dto.inventory.DropJson
-import my.dahr.monopolyone.data.network.dto.inventory.InventoryResponse
-import my.dahr.monopolyone.data.network.dto.inventory.ItemJson
-import my.dahr.monopolyone.data.network.dto.inventory.PricesJson
-import my.dahr.monopolyone.data.network.dto.inventory.RankJson
-import my.dahr.monopolyone.data.network.dto.inventory.UserJson
-import my.dahr.monopolyone.domain.models.inventory.Collection
-import my.dahr.monopolyone.domain.models.inventory.Data
-import my.dahr.monopolyone.domain.models.inventory.Drop
-import my.dahr.monopolyone.domain.models.inventory.Inventory
-import my.dahr.monopolyone.domain.models.inventory.Item
-import my.dahr.monopolyone.domain.models.inventory.Prices
-import my.dahr.monopolyone.domain.models.inventory.Rank
-import my.dahr.monopolyone.domain.models.inventory.User
+import my.dahr.monopolyone.data.network.dto.inventory.items.CollectionJson
+import my.dahr.monopolyone.data.network.dto.inventory.items.DataJson
+import my.dahr.monopolyone.data.network.dto.inventory.items.DropJson
+import my.dahr.monopolyone.data.network.dto.inventory.items.InventoryResponse
+import my.dahr.monopolyone.data.network.dto.inventory.items.ItemJson
+import my.dahr.monopolyone.data.network.dto.inventory.items.PricesJson
+import my.dahr.monopolyone.data.network.dto.inventory.items.RankJson
+import my.dahr.monopolyone.data.network.dto.inventory.items.UserJson
+import my.dahr.monopolyone.domain.models.inventory.items.Collection
+import my.dahr.monopolyone.domain.models.inventory.items.Data
+import my.dahr.monopolyone.domain.models.inventory.items.Drop
+import my.dahr.monopolyone.domain.models.inventory.items.Inventory
+import my.dahr.monopolyone.domain.models.inventory.items.Item
+import my.dahr.monopolyone.domain.models.inventory.items.Prices
+import my.dahr.monopolyone.domain.models.inventory.items.Rank
+import my.dahr.monopolyone.domain.models.inventory.items.User
 
 fun CollectionJson.toUi(): Collection {
     return Collection(
@@ -41,7 +41,7 @@ fun DropJson.toUi(): Drop {
 
 fun InventoryResponse.toUi(): Inventory {
     return Inventory(
-        code = code ?: -1,
+        code = code,
         data = (data ?: DataJson()).toUi()
     )
 }
@@ -69,7 +69,7 @@ fun PricesJson.toUi(): Prices {
     )
 }
 
-fun RankJson.toUi(): Rank{
+fun RankJson.toUi(): Rank {
     return Rank(
         hidden = hidden?: -1
     )

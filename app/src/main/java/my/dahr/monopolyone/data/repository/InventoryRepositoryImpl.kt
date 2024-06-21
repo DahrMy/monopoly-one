@@ -3,7 +3,6 @@ package my.dahr.monopolyone.data.repository
 import my.dahr.monopolyone.data.network.MonopolyCallback
 import my.dahr.monopolyone.data.network.dto.response.BaseResponse
 import my.dahr.monopolyone.domain.datasource.InventoryDataSource
-import my.dahr.monopolyone.domain.models.inventory.Item
 import my.dahr.monopolyone.domain.repository.InventoryRepository
 import javax.inject.Inject
 
@@ -33,4 +32,15 @@ class InventoryRepositoryImpl @Inject constructor(
             addLegacy,
             callback
         )
+
+    override fun getInventoryDataList(
+        itemProtoIds: Set<Int>,
+        addLegacy: Boolean,
+        addMetadata: Boolean,
+        callback: MonopolyCallback<BaseResponse>
+    ) {
+        inventoryDataSource.getInventoryDataList(
+            itemProtoIds, addLegacy, addMetadata, callback
+        )
+    }
 }
