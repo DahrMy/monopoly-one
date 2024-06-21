@@ -6,6 +6,7 @@ import com.google.gson.Gson
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.MutableSharedFlow
 import my.dahr.monopolyone.data.models.RequestStatus
 import my.dahr.monopolyone.data.models.Session
 import my.dahr.monopolyone.data.network.MonopolyCallback
@@ -44,35 +45,24 @@ class SessionHelper @Inject constructor(
         get() = sharedPreferences.getString(IP_KEY, "")
         private set(value) { sharedPreferences.edit().putString(IP_KEY, value).apply() }
 
-    suspend inline fun safeUse(liveData: MutableLiveData<RequestStatus>, predicate: () -> Unit) {
+    suspend fun safeUse(liveData: MutableLiveData<RequestStatus>, predicate: () -> Unit) {
+        val callback = createCallback(liveData, flow = null)
+        useSessionCallback(
+            flow = null,
+            liveData = liveData,
+            callback = callback,
+            predicate = predicate
+        )
+    }
 
-        val callback: () -> MonopolyCallback<SessionResponse> = {
-            object : MonopolyCallback<SessionResponse>(liveData) {
-                override fun onSuccessfulResponse(
-                    call: Call<SessionResponse>, responseBody: SessionResponse
-                ) {
-                    session = responseBody.data.toSession()
-                    super.onSuccessfulResponse(call, responseBody)
-                }
-            }
-        }
-
-        if (isCurrentIpChanged()) {
-            refreshSavedIp()
-            session?.let { refreshSession(it.refreshToken, callback) }
-        }
-
-        if (isSessionNotExpired()) {
-            predicate.invoke()
-        } else {
-            if (session != null) {
-                refreshSession(session!!.refreshToken, callback)
-                predicate.invoke()
-            } else {
-                liveData.postValue(RequestStatus.AuthorizationError)
-            }
-        }
-
+    suspend fun safeUse(flow: MutableSharedFlow<RequestStatus>, predicate: () -> Unit) {
+        val callback = createCallback(liveData = null, flow)
+        useSessionCallback(
+            flow = flow,
+            liveData = null,
+            callback = callback,
+            predicate = predicate
+        )
     }
 
     fun isSessionNotExpired(): Boolean {
@@ -107,4 +97,46 @@ class SessionHelper @Inject constructor(
         val currentIp = async { ipApi.getMyIp().ip }
         return@coroutineScope currentIp.await() == savedIp
     }
+
+
+    private fun createCallback(
+        liveData: MutableLiveData<RequestStatus>?,
+        flow: MutableSharedFlow<RequestStatus>?
+    ): () -> MonopolyCallback<SessionResponse> = {
+
+        object : MonopolyCallback<SessionResponse>(liveData, flow) {
+            override fun onSuccessfulResponse(
+                call: Call<SessionResponse>, responseBody: SessionResponse
+            ) {
+                session = responseBody.data.toSession()
+                super.onSuccessfulResponse(call, responseBody)
+            }
+        }
+
+    }
+
+    private suspend fun useSessionCallback(
+        liveData: MutableLiveData<RequestStatus>?,
+        flow: MutableSharedFlow<RequestStatus>?,
+        callback: () -> MonopolyCallback<SessionResponse>,
+        predicate: () -> Unit
+    ) {
+        if (isCurrentIpChanged()) {
+            refreshSavedIp()
+            session?.let { refreshSession(it.refreshToken, callback) }
+        }
+
+        if (isSessionNotExpired()) {
+            predicate.invoke()
+        } else {
+            if (session != null) {
+                refreshSession(session!!.refreshToken, callback)
+                predicate.invoke()
+            } else {
+                liveData?.postValue(RequestStatus.AuthorizationError)
+                flow?.emit(RequestStatus.AuthorizationError)
+            }
+        }
+    }
+
 }

@@ -3,6 +3,10 @@ package my.dahr.monopolyone.data.network
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.launch
 import my.dahr.monopolyone.data.models.RequestStatus
 import my.dahr.monopolyone.data.network.dto.response.BaseResponse
 import retrofit2.Call
@@ -10,12 +14,9 @@ import retrofit2.Callback
 import retrofit2.Response
 
 abstract class MonopolyCallback<T>(
-    private val requestStatusLiveData: MutableLiveData<RequestStatus>
+    private val requestStatusLiveData: MutableLiveData<RequestStatus>?,
+    private val requestStatusFlow: MutableSharedFlow<RequestStatus>?
 ) : Callback<T> {
-
-    open fun onSuccessfulResponse(call: Call<T>, responseBody: T) {
-        requestStatusLiveData.postValue(RequestStatus.Success)
-    }
 
     override fun onResponse(call: Call<T>, response: Response<T>) {
         if (response.isSuccessful) {
@@ -38,7 +39,11 @@ abstract class MonopolyCallback<T>(
     override fun onFailure(call: Call<T>, t: Throwable) {
         Log.e("Retrofit", "Failure: ${t.message}")
         Log.e("Retrofit", "StackTrace: ${t.stackTraceToString()}")
-        requestStatusLiveData.postValue(RequestStatus.Failure)
+        postStatus(RequestStatus.Failure)
+    }
+
+    open fun onSuccessfulResponse(call: Call<T>, responseBody: T) {
+        postStatus(RequestStatus.Success)
     }
 
     protected fun handleErrorResponse(response: BaseResponse?) {
@@ -53,8 +58,18 @@ abstract class MonopolyCallback<T>(
             RequestStatus.UndefinedError
         }
 
-        requestStatusLiveData.postValue(status)
+        postStatus(status)
 
+    }
+
+    private fun postStatus(status: RequestStatus) {
+        when {
+            requestStatusLiveData != null -> requestStatusLiveData.postValue(status)
+            requestStatusFlow != null -> CoroutineScope(Dispatchers.Default).launch {
+                requestStatusFlow.emit(status)
+            }
+            else -> throw Exception("requestStatusLiveData and requestStatusFlow both shouldn't be null")
+        }
     }
 
 }
