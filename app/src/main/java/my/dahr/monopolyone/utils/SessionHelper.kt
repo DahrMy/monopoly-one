@@ -45,9 +45,9 @@ class SessionHelper @Inject constructor(
         get() = sharedPreferences.getString(IP_KEY, "")
         private set(value) { sharedPreferences.edit().putString(IP_KEY, value).apply() }
 
-    suspend fun safeUse(liveData: MutableLiveData<RequestStatus>, predicate: () -> Unit) {
+    suspend fun safeUse(liveData: MutableLiveData<RequestStatus>, predicate: (Session) -> Unit) {
         val callback = createCallback(liveData, flow = null)
-        useSessionCallback(
+        useSession(
             flow = null,
             liveData = liveData,
             callback = callback,
@@ -55,9 +55,9 @@ class SessionHelper @Inject constructor(
         )
     }
 
-    suspend fun safeUse(flow: MutableSharedFlow<RequestStatus>, predicate: () -> Unit) {
+    suspend fun safeUse(flow: MutableSharedFlow<RequestStatus>, predicate: (Session) -> Unit) {
         val callback = createCallback(liveData = null, flow)
-        useSessionCallback(
+        useSession(
             flow = flow,
             liveData = null,
             callback = callback,
@@ -115,27 +115,25 @@ class SessionHelper @Inject constructor(
 
     }
 
-    private suspend fun useSessionCallback(
+    private suspend fun useSession(
         liveData: MutableLiveData<RequestStatus>?,
         flow: MutableSharedFlow<RequestStatus>?,
         callback: () -> MonopolyCallback<SessionResponse>,
-        predicate: () -> Unit
+        predicate: (Session) -> Unit
     ) {
         if (isCurrentIpChanged()) {
             refreshSavedIp()
             session?.let { refreshSession(it.refreshToken, callback) }
         }
 
-        if (isSessionNotExpired()) {
-            predicate.invoke()
+        if (isSessionNotExpired() && session != null) {
+            predicate.invoke(session!!)
+        } else if (session != null) {
+            refreshSession(session!!.refreshToken, callback)
+            predicate.invoke(session!!)
         } else {
-            if (session != null) {
-                refreshSession(session!!.refreshToken, callback)
-                predicate.invoke()
-            } else {
-                liveData?.postValue(RequestStatus.AuthorizationError)
-                flow?.emit(RequestStatus.AuthorizationError)
-            }
+            liveData?.postValue(RequestStatus.AuthorizationError)
+            flow?.emit(RequestStatus.AuthorizationError)
         }
     }
 
