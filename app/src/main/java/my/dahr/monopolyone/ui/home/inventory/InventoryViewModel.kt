@@ -52,7 +52,7 @@ class InventoryViewModel @Inject constructor(
                 addUser = false,
                 addEquipped = "array",
                 addLegacy = false,
-                callback = object : MonopolyCallback<BaseResponse>(requestStatusLiveData) {
+                callback = object : MonopolyCallback<BaseResponse>(requestStatusLiveData, null) {
                     override fun onSuccessfulResponse(
                         call: Call<BaseResponse>,
                         responseBody: BaseResponse
@@ -123,7 +123,7 @@ class InventoryViewModel @Inject constructor(
                     itemProtoIds = ids,
                     addLegacy = true,
                     addMetadata = false,
-                    callback = object : MonopolyCallback<BaseResponse>(requestStatusLiveData) {
+                    callback = object : MonopolyCallback<BaseResponse>(requestStatusLiveData, null) {
                         override fun onSuccessfulResponse(
                             call: Call<BaseResponse>,
                             responseBody: BaseResponse

@@ -48,7 +48,7 @@ class ProfileViewModel @Inject constructor(
         requestStatusLiveData.postValue(RequestStatus.Loading)
         viewModelScope.launch(myCoroutineContext) {
             val response = usersRepository.getUsersList(
-                session.userId, setOf(1), "full", callback = object : MonopolyCallback<BaseResponse>(requestStatusLiveData){
+                session.userId, setOf(1), "full", callback = object : MonopolyCallback<BaseResponse>(requestStatusLiveData, null){
                     override fun onSuccessfulResponse(
                         call: Call<BaseResponse>,
                         responseBody: BaseResponse

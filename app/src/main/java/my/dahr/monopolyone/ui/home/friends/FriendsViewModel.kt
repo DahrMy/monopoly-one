@@ -4,9 +4,6 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -16,8 +13,6 @@ import my.dahr.monopolyone.data.models.RequestStatus
 import my.dahr.monopolyone.data.network.MonopolyCallback
 import my.dahr.monopolyone.data.network.dto.response.BaseResponse
 import my.dahr.monopolyone.data.network.dto.response.SessionResponse
-import my.dahr.monopolyone.data.network.dto.response.friends.add.AddResponseJson
-import my.dahr.monopolyone.data.network.dto.response.friends.delete.DeleteResponseJson
 import my.dahr.monopolyone.data.network.dto.response.friends.add.AddRequest
 import my.dahr.monopolyone.data.network.dto.response.friends.add.AddResponse
 import my.dahr.monopolyone.data.network.dto.response.friends.delete.DeleteRequest
@@ -27,11 +22,12 @@ import my.dahr.monopolyone.data.network.dto.response.friends.requests.FriendsReq
 import my.dahr.monopolyone.data.repository.ResourceRepository
 import my.dahr.monopolyone.domain.models.friends.list.Friend
 import my.dahr.monopolyone.domain.models.friends.requests.Request
-import my.dahr.monopolyone.domain.models.users.Data
 import my.dahr.monopolyone.domain.repository.FriendsRepository
 import my.dahr.monopolyone.utils.SessionHelper
 import my.dahr.monopolyone.utils.toSession
-
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
@@ -66,7 +62,7 @@ class FriendsViewModel @Inject constructor(
                     type = "short",
                     offset = 0,
                     count = 20,
-                    callback = object : MonopolyCallback<BaseResponse>(requestStatusLiveData) {
+                    callback = object : MonopolyCallback<BaseResponse>(requestStatusLiveData, null) {
                         override fun onSuccessfulResponse(
                             call: Call<BaseResponse>,
                             responseBody: BaseResponse
@@ -128,7 +124,7 @@ class FriendsViewModel @Inject constructor(
                 type = "short",
                 offset = 0,
                 count = 20,
-                callback = object : MonopolyCallback<BaseResponse>(requestStatusLiveData) {
+                callback = object : MonopolyCallback<BaseResponse>(requestStatusLiveData, null) {
                     override fun onSuccessfulResponse(
                         call: Call<BaseResponse>,
                         responseBody: BaseResponse
@@ -159,7 +155,7 @@ class FriendsViewModel @Inject constructor(
                 type = "short",
                 offset = 0,
                 count = 20,
-                callback = object : MonopolyCallback<BaseResponse>(requestStatusLiveData) {
+                callback = object : MonopolyCallback<BaseResponse>(requestStatusLiveData, null) {
                     override fun onSuccessfulResponse(
                         call: Call<BaseResponse>,
                         responseBody: BaseResponse
@@ -189,7 +185,7 @@ class FriendsViewModel @Inject constructor(
                 "short",
                 0,
                 20,
-                object : MonopolyCallback<BaseResponse>(requestStatusLiveData) {
+                object : MonopolyCallback<BaseResponse>(requestStatusLiveData, null) {
                     override fun onSuccessfulResponse(
                         call: Call<BaseResponse>,
                         responseBody: BaseResponse
@@ -262,14 +258,15 @@ class FriendsViewModel @Inject constructor(
             )
             repository.addFriend(
                 request,
-                object : MonopolyCallback<BaseResponse>(requestStatusLiveData) {
+                object : MonopolyCallback<BaseResponse>(requestStatusLiveData, null) {
                     override fun onSuccessfulResponse(
                         call: Call<BaseResponse>,
                         responseBody: BaseResponse
                     ) {
+                        requestStatusLiveData.postValue(RequestStatus.Success)
                         when (responseBody) {
                             is AddResponse -> {
-                                requestStatusLiveData.postValue(RequestStatus.Success)
+
                             }
 
                             else -> handleErrorResponse(responseBody)
@@ -288,7 +285,7 @@ class FriendsViewModel @Inject constructor(
             )
             repository.deleteFriend(
                 request,
-                object : MonopolyCallback<BaseResponse>(requestStatusLiveData) {
+                object : MonopolyCallback<BaseResponse>(requestStatusLiveData, null) {
                     override fun onSuccessfulResponse(
                         call: Call<BaseResponse>,
                         responseBody: BaseResponse
