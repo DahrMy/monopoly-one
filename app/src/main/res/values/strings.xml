@@ -51,6 +51,9 @@
     <string name="dialog_failure_title">Failure</string>
     <string name="dialog_failure_text">An error occurred while executing the request. Please try again.</string>
 
+    <string name="dialog_noInternet_title">No internet</string>
+    <string name="dialog_noInternet_text">The request cannot be completed because you are not connected to the Internet.</string>
+
     <string name="dialog_bt_ok">OK</string>
     <string name="nickname">Nickname</string>
     <string name="rank_name">Rank name</string>

@@ -38,28 +38,33 @@ class TotpViewModel @Inject constructor(
 
         _requestStatusLiveData.postValue(RequestStatus.Loading)
 
-        viewModelScope.launch(coroutineContext) {
-            loginRepository.verify2faCode(
-                code,
-                totpToken,
-                object : MonopolyCallback<BaseResponse>(_requestStatusLiveData, null) {
-                    override fun onSuccessfulResponse(
-                        call: Call<BaseResponse>, responseBody: BaseResponse
-                    ) {
-                        if (responseBody is SessionResponse) {
-                            val sessionResponse = responseBody.`data`
-                            sessionHelper.session = sessionResponse.toSession().also {
-                                SessionWorker.enqueue(it.expiresAt, appContext)
+        if (sessionHelper.haveInternetConnection()) {
+            viewModelScope.launch(coroutineContext) {
+                loginRepository.verify2faCode(
+                    code,
+                    totpToken,
+                    object : MonopolyCallback<BaseResponse>(_requestStatusLiveData, null) {
+                        override fun onSuccessfulResponse(
+                            call: Call<BaseResponse>, responseBody: BaseResponse
+                        ) {
+                            if (responseBody is SessionResponse) {
+                                val sessionResponse = responseBody.`data`
+                                sessionHelper.session = sessionResponse.toSession().also {
+                                    SessionWorker.enqueue(it.expiresAt, appContext)
+                                }
+                                _requestStatusLiveData.postValue(RequestStatus.Success)
+                            } else {
+                                handleErrorResponse(responseBody)
                             }
-                            _requestStatusLiveData.postValue(RequestStatus.Success)
-                        } else {
-                            handleErrorResponse(responseBody)
                         }
-                    }
 
-                }
-            )
+                    }
+                )
+            }
+        } else {
+            _requestStatusLiveData.postValue(RequestStatus.NoInternetConnection)
         }
+
     }
 
     fun loadBitmap(@DrawableRes id: Int) = resourceRepository.getBitmapFromDrawableRes(id)

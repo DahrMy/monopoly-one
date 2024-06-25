@@ -121,6 +121,19 @@ class TotpDialogFragment : DialogFragment() {
                             .show()
                     }
 
+                    RequestStatus.NoInternetConnection -> {
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            btLoginEndAnimation(
+                                solidColor, viewModel.loadBitmap(R.drawable.ic_error_outline)
+                            )
+                        }
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(resources.getString(R.string.dialog_noInternet_title))
+                            .setPositiveButton(resources.getString(R.string.dialog_bt_ok)) { _, _ -> }
+                            .setMessage(R.string.dialog_noInternet_text)
+                            .show()
+                    }
+
                     RequestStatus.Loading -> {
                         startAnimation()
                     }

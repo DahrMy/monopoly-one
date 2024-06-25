@@ -76,7 +76,7 @@ class LoginFragment : Fragment() {
 
     }
 
-    private fun btLoginObserver() {
+    private fun btLoginObserver() { // TODO: Make shorter the method
         binding.btLogin.apply {
             viewModel.requestStatusLiveData.observe(viewLifecycleOwner) { status ->
                 when (status) {
@@ -98,6 +98,10 @@ class LoginFragment : Fragment() {
                         revertAnimation()
                     }
 
+                    RequestStatus.Loading -> {
+                        startAnimation()
+                    }
+
                     RequestStatus.Failure -> {
                         lifecycleScope.launch(Dispatchers.Main) {
                             btLoginEndAnimation(
@@ -111,8 +115,17 @@ class LoginFragment : Fragment() {
                             .show()
                     }
 
-                    RequestStatus.Loading -> {
-                        startAnimation()
+                    RequestStatus.NoInternetConnection -> {
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            btLoginEndAnimation(
+                                solidColor, viewModel.loadBitmap(R.drawable.ic_error_outline)
+                            )
+                        }
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(resources.getString(R.string.dialog_noInternet_title))
+                            .setPositiveButton(resources.getString(R.string.dialog_bt_ok)) { _, _ -> }
+                            .setMessage(R.string.dialog_noInternet_text)
+                            .show()
                     }
 
                     else -> {

@@ -3,6 +3,7 @@ package my.dahr.monopolyone.data.models
 enum class RequestStatus(val code: Int) {
     Loading(-1),
     Failure(-1),
+    NoInternetConnection(-1),
     Success(0),
     AuthorizationError(1),
     ParamInvalidError(2),

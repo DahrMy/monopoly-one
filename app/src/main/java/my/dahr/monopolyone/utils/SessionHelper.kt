@@ -1,6 +1,8 @@
 package my.dahr.monopolyone.utils
 
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -50,38 +52,33 @@ class SessionHelper @Inject constructor(
         liveData: MutableLiveData<RequestStatus>,
         predicate: (Session) -> Unit
     ) {
-        val callback = createCallback(liveData, flow = null)
-        useSession(
-            flow = null,
-            liveData = liveData,
-            callback = callback,
-            predicate = predicate
-        )
+        if (haveInternetConnection()) {
+            val callback = createCallback(liveData, flow = null)
+            useSession(
+                flow = null,
+                liveData = liveData,
+                callback = callback,
+                predicate = predicate
+            )
+        } else {
+            liveData.postValue(RequestStatus.NoInternetConnection)
+        }
     }
 
     suspend fun safeUse(
         flow: MutableSharedFlow<RequestStatus>,
         predicate: (Session) -> Unit
     ) {
-        val callback = createCallback(liveData = null, flow)
-        useSession(
-            flow = flow,
-            liveData = null,
-            callback = callback,
-            predicate = predicate
-        )
-    }
-
-    fun isSessionNotExpired(): Boolean {
-
-        if (session != null) {
-            val isNotExpired = (session!!.expiresAt - currentTimeInSec) >= 10 // Ten seconds for reserve
-            if (!isNotExpired) {
-                sharedPreferences.edit().remove(SESSION_KEY).apply()
-            }
-            return isNotExpired
+        if (haveInternetConnection()) {
+            val callback = createCallback(liveData = null, flow)
+            useSession(
+                flow = flow,
+                liveData = null,
+                callback = callback,
+                predicate = predicate
+            )
         } else {
-            return false
+            flow.emit(RequestStatus.NoInternetConnection)
         }
     }
 
@@ -105,11 +102,35 @@ class SessionHelper @Inject constructor(
         }
     }
 
+    fun isSessionNotExpired(): Boolean {
+        if (session != null) {
+            val isNotExpired = (session!!.expiresAt - currentTimeInSec) >= 10 // Ten seconds for reserve
+            if (!isNotExpired) {
+                sharedPreferences.edit().remove(SESSION_KEY).apply()
+            }
+            return isNotExpired
+        } else {
+            return false
+        }
+    }
+
     suspend fun isCurrentIpChanged(): Boolean = coroutineScope {
         val currentIp = async { ipApi.getMyIp().ip }
         return@coroutineScope currentIp.await() == savedIp
     }
 
+    fun haveInternetConnection(): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network = connectivityManager.activeNetwork ?: return false
+        val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+        return when {
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+            else -> false
+        }
+    }
 
     private fun createCallback(
         liveData: MutableLiveData<RequestStatus>?,
