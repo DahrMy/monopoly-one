@@ -1,5 +1,6 @@
 package my.dahr.monopolyone.ui.login
 
+import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -17,6 +18,7 @@ import my.dahr.monopolyone.data.network.dto.response.TotpResponse
 import my.dahr.monopolyone.data.repository.ResourceRepository
 import my.dahr.monopolyone.utils.SessionHelper
 import my.dahr.monopolyone.utils.toSession
+import my.dahr.monopolyone.workers.SessionWorker
 import retrofit2.Call
 import javax.inject.Inject
 
@@ -34,7 +36,7 @@ class LoginViewModel @Inject constructor(
 
     lateinit var totpToken: String
 
-    fun signIn(email: String, password: String) {
+    fun signIn(email: String, password: String, appContext: Context) {
 
         _requestStatusLiveData.postValue(RequestStatus.Loading)
 
@@ -42,14 +44,16 @@ class LoginViewModel @Inject constructor(
             loginRepository.postSignIn(
                 email,
                 password,
-                object : MonopolyCallback<BaseResponse>(_requestStatusLiveData) {
+                object : MonopolyCallback<BaseResponse>(_requestStatusLiveData, null) {
                     override fun onSuccessfulResponse(
                         call: Call<BaseResponse>, responseBody: BaseResponse
                     ) {
                         when (responseBody) {
                             is SessionResponse -> {
                                 val sessionResponse = responseBody.`data`
-                                sessionHelper.session = sessionResponse.toSession()
+                                sessionHelper.session = sessionResponse.toSession().also {
+                                    SessionWorker.enqueue(it.expiresAt, appContext)
+                                }
                                 _requestStatusLiveData.postValue(RequestStatus.Success)
                             }
 

@@ -13,12 +13,13 @@ import my.dahr.monopolyone.data.network.MonopolyCallback
 import my.dahr.monopolyone.data.network.api.AuthorizationApi
 import my.dahr.monopolyone.data.network.api.IpApi
 import my.dahr.monopolyone.data.network.dto.response.SessionResponse
+import my.dahr.monopolyone.workers.SessionWorker
 import retrofit2.Call
 import retrofit2.Callback
 import javax.inject.Inject
 
 class SessionHelper @Inject constructor(
-    @ApplicationContext context: Context,
+    @ApplicationContext private val context: Context,
     private val api: AuthorizationApi,
     private val ipApi: IpApi
 ) {
@@ -45,7 +46,10 @@ class SessionHelper @Inject constructor(
         get() = sharedPreferences.getString(IP_KEY, "")
         private set(value) { sharedPreferences.edit().putString(IP_KEY, value).apply() }
 
-    suspend fun safeUse(liveData: MutableLiveData<RequestStatus>, predicate: (Session) -> Unit) {
+    suspend fun safeUse(
+        liveData: MutableLiveData<RequestStatus>,
+        predicate: (Session) -> Unit
+    ) {
         val callback = createCallback(liveData, flow = null)
         useSession(
             flow = null,
@@ -55,7 +59,10 @@ class SessionHelper @Inject constructor(
         )
     }
 
-    suspend fun safeUse(flow: MutableSharedFlow<RequestStatus>, predicate: (Session) -> Unit) {
+    suspend fun safeUse(
+        flow: MutableSharedFlow<RequestStatus>,
+        predicate: (Session) -> Unit
+    ) {
         val callback = createCallback(liveData = null, flow)
         useSession(
             flow = flow,
@@ -78,10 +85,15 @@ class SessionHelper @Inject constructor(
         }
     }
 
-    fun refreshSession(refreshToken: String, callback: () -> Callback<SessionResponse>) {
+    fun refreshSession(
+        refreshToken: String,
+        callback: () -> Callback<SessionResponse>
+    ) {
         val requestBody = "refresh_token" to refreshToken
         val call = api.authRefreshRequest(requestBody)
         call.enqueue(callback.invoke())
+
+        session?.let { SessionWorker.enqueue(it.expiresAt, context) }
     }
 
     fun removeSession() { session = null }

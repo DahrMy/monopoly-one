@@ -63,7 +63,7 @@ class TotpDialogFragment : DialogFragment() {
             btVerify.setOnClickListener {
                 val code = et2faCode.text.toString()
                 totpToken?.let {
-                    viewModel.verifyCode(code, it)
+                    viewModel.verifyCode(code, it, requireActivity().applicationContext)
                 }
             }
 

@@ -69,7 +69,7 @@ class LoginFragment : Fragment() {
             }
 
             if (validEmail(email) && validPassword(password)) {
-                viewModel.signIn(email, password)
+                viewModel.signIn(email, password, requireActivity().applicationContext)
             }
 
         }
@@ -86,7 +86,6 @@ class LoginFragment : Fragment() {
                             btLoginEndAnimation(
                                 solidColor, viewModel.loadBitmap(R.drawable.ic_done)
                             )
-
                             parentFragmentManager.beginTransaction()
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN)
                                 .replace(R.id.fragment_container_view, MainFragment())

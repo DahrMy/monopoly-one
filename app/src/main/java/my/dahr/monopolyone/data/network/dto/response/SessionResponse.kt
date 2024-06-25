@@ -23,7 +23,8 @@ data class SessionResponse(
         val accessToken: String,
 
         @Expose
-        val expires: Long,
+        @Deprecated("Use expiresIn")
+        val expires: Long?,
 
         @Expose
         @SerializedName("expires_in")

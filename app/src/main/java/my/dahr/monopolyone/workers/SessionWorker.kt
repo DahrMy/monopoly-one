@@ -3,13 +3,15 @@ package my.dahr.monopolyone.workers
 import android.content.Context
 import android.util.Log
 import androidx.hilt.work.HiltWorker
+import androidx.work.Constraints
 import androidx.work.CoroutineWorker
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -25,7 +27,7 @@ import kotlin.coroutines.resume
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toJavaDuration
 
-private const val tag = "SessionWorker"
+private const val tag_logger = "SessionWorker"
 
 @HiltWorker
 class SessionWorker @AssistedInject constructor(
@@ -36,7 +38,7 @@ class SessionWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result {
 
-        Log.d(tag, "SessionWorker is working")
+        Log.d(tag_logger, "SessionWorker is working")
 
         val requestStatusFlow = MutableSharedFlow<RequestStatus>()
 
@@ -54,7 +56,7 @@ class SessionWorker @AssistedInject constructor(
                     continuation.resume(
                         /* return */ when (status) {
                             RequestStatus.Success -> Result.success()
-                            else -> Result.failure()
+                            else -> Result.retry()
                         }
                     )
                 }
@@ -67,22 +69,27 @@ class SessionWorker @AssistedInject constructor(
 
     companion object {
 
-        fun enqueue(expiresAt: Long, @ApplicationContext appContext: Context) {
+        const val tag = "session_worker"
+
+        fun enqueue(expiresAt: Long, appContext: Context) {
             val repeatInterval = ((expiresAt - currentTimeInSec) / 2).seconds.toJavaDuration()
             val flexTimeInterval = ((expiresAt - currentTimeInSec) / 4).seconds.toJavaDuration()
 
-            TODO("Not yet implemented")
-
-            val workRequest = PeriodicWorkRequestBuilder<SessionWorker>(
-                repeatInterval, flexTimeInterval
-            )
+            val constraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.NOT_ROAMING)
+                .setRequiresBatteryNotLow(true)
                 .build()
 
+            val workRequest =
+                PeriodicWorkRequestBuilder<SessionWorker>(repeatInterval, flexTimeInterval)
+                    .setConstraints(constraints)
+                    .build()
 
-            WorkManager.getInstance(appContext)
-//                .updateWork()
-                .enqueue(workRequest)
-
+            WorkManager.getInstance(appContext).enqueueUniquePeriodicWork(
+                /* uniqueWorkName = */ tag,
+                ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
+                workRequest
+            )
         }
 
     }
