@@ -7,5 +7,5 @@ fun SessionResponse.Data.toSession() = Session(
     userId = userId,
     accessToken = accessToken,
     refreshToken = refreshToken,
-    expiresAt = expires + currentTimeInSec
+    expiresAt = expiresIn + currentTimeInSec
 )

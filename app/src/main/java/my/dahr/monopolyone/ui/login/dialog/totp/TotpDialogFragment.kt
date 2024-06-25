@@ -63,7 +63,7 @@ class TotpDialogFragment : DialogFragment() {
             btVerify.setOnClickListener {
                 val code = et2faCode.text.toString()
                 totpToken?.let {
-                    viewModel.verifyCode(code, it)
+                    viewModel.verifyCode(code, it, requireActivity().applicationContext)
                 }
             }
 
@@ -118,6 +118,19 @@ class TotpDialogFragment : DialogFragment() {
                             .setTitle(resources.getString(R.string.dialog_failure_title))
                             .setPositiveButton(resources.getString(R.string.dialog_bt_ok)) { _, _ -> }
                             .setMessage(R.string.dialog_failure_text)
+                            .show()
+                    }
+
+                    RequestStatus.NoInternetConnection -> {
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            btLoginEndAnimation(
+                                solidColor, viewModel.loadBitmap(R.drawable.ic_error_outline)
+                            )
+                        }
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(resources.getString(R.string.dialog_noInternet_title))
+                            .setPositiveButton(resources.getString(R.string.dialog_bt_ok)) { _, _ -> }
+                            .setMessage(R.string.dialog_noInternet_text)
                             .show()
                     }
 

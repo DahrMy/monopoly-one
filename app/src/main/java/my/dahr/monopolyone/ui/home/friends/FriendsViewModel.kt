@@ -16,6 +16,8 @@ import my.dahr.monopolyone.data.models.RequestStatus
 import my.dahr.monopolyone.data.network.MonopolyCallback
 import my.dahr.monopolyone.data.network.dto.response.BaseResponse
 import my.dahr.monopolyone.data.network.dto.response.SessionResponse
+import my.dahr.monopolyone.data.network.dto.response.friends.add.AddResponseJson
+import my.dahr.monopolyone.data.network.dto.response.friends.delete.DeleteResponseJson
 import my.dahr.monopolyone.data.network.dto.response.friends.add.AddRequest
 import my.dahr.monopolyone.data.network.dto.response.friends.add.AddResponse
 import my.dahr.monopolyone.data.network.dto.response.friends.delete.DeleteRequest

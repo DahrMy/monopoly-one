@@ -31,6 +31,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -66,6 +67,8 @@ dependencies {
 
     // Work Manager
     implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.hilt.work)
+    ksp(libs.androidx.hilt.compiler)
 
     // Room
     ksp(libs.androidx.room.compiler)
@@ -76,16 +79,16 @@ dependencies {
     // *** Google ***
 
     // Material
-    implementation(libs.material)
+    implementation(libs.google.material)
 
     // Firebase
 
     // Hilt
-    ksp(libs.hilt.compiler)
-    implementation(libs.hilt)
+    ksp(libs.google.hilt.compiler)
+    implementation(libs.google.hilt)
 
     // GSON
-    implementation(libs.gson)
+    implementation(libs.google.gson)
 
     // *** KotlinX ***
 
