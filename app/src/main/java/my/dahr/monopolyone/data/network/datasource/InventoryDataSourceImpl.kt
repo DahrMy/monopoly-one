@@ -9,6 +9,7 @@ import javax.inject.Inject
 class InventoryDataSourceImpl @Inject constructor(
     private val inventoryApi: InventoryApi
 ) : InventoryDataSource {
+
     override fun getInventoryList(
         accessToken: String,
         userId: Any,

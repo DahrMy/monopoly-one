@@ -4,6 +4,7 @@ import my.dahr.monopolyone.data.network.MonopolyCallback
 import my.dahr.monopolyone.data.network.dto.response.BaseResponse
 
 interface InventoryRepository {
+
     fun getInventoryList(
         accessToken: String,
         userId: Any,

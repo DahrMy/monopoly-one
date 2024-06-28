@@ -10,6 +10,7 @@ class InventoryRepositoryImpl @Inject constructor(
     private val inventoryDataSource: InventoryDataSource
 
 ) : InventoryRepository {
+
     override fun getInventoryList(
         accessToken: String,
         userId: Any,

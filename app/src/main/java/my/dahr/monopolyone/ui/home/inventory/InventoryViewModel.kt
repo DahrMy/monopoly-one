@@ -45,7 +45,7 @@ class InventoryViewModel @Inject constructor(
         if (sessionFromHelper != null) {
             inventoryRepository.getInventoryList(
                 sessionFromHelper.accessToken,
-                "dahr_my",
+                sessionFromHelper.userId,
                 includeStock = true,
                 order = "time",
                 count = Int.MAX_VALUE,
@@ -60,7 +60,6 @@ class InventoryViewModel @Inject constructor(
                         when (responseBody) {
                             is InventoryResponse -> {
                                 val items = responseBody.toUi().data.items
-                                Log.d("items", items[0].toString())
                                 itemsResultLiveData.postValue(items)
                                 requestStatusLiveData.postValue(RequestStatus.Success)
                             }
@@ -114,7 +113,44 @@ class InventoryViewModel @Inject constructor(
         }
     }
 
-    fun getInventoryDataList(ids: Set<Int>){
+    fun getItemListForUser(userId: Any) {
+        val sessionFromHelper = sessionHelper.session
+        if (sessionFromHelper != null) {
+            requestStatusLiveData.postValue(RequestStatus.Loading)
+            viewModelScope.launch(myCoroutineContext) {
+                inventoryRepository.getInventoryList(
+                    accessToken = sessionFromHelper.accessToken,
+                    userId = userId,
+                    includeStock = true,
+                    order = "time",
+                    count = Int.MAX_VALUE,
+                    addUser = false,
+                    addEquipped = "array",
+                    addLegacy = false,
+                    callback = object :
+                        MonopolyCallback<BaseResponse>(requestStatusLiveData, null) {
+                        override fun onSuccessfulResponse(
+                            call: Call<BaseResponse>,
+                            responseBody: BaseResponse
+                        ) {
+                            when (responseBody) {
+                                is InventoryResponse -> {
+                                    val items = responseBody.toUi().data.items
+                                    itemsResultLiveData.postValue(items)
+                                    requestStatusLiveData.postValue(RequestStatus.Success)
+                                }
+
+                                else -> handleErrorResponse(responseBody)
+                            }
+                        }
+
+                    }
+                )
+            }
+        }
+    }
+
+    fun getInventoryDataList(ids: Set<Int>) {
         val sessionFromHelper = sessionHelper.session
         if (sessionFromHelper != null) {
             requestStatusLiveData.postValue(RequestStatus.Loading)
@@ -123,7 +159,8 @@ class InventoryViewModel @Inject constructor(
                     itemProtoIds = ids,
                     addLegacy = true,
                     addMetadata = false,
-                    callback = object : MonopolyCallback<BaseResponse>(requestStatusLiveData, null) {
+                    callback = object :
+                        MonopolyCallback<BaseResponse>(requestStatusLiveData, null) {
                         override fun onSuccessfulResponse(
                             call: Call<BaseResponse>,
                             responseBody: BaseResponse
@@ -135,6 +172,7 @@ class InventoryViewModel @Inject constructor(
                                     protosResultLiveData.postValue(protos)
                                     requestStatusLiveData.postValue(RequestStatus.Success)
                                 }
+
                                 else -> handleErrorResponse(responseBody)
                             }
                         }

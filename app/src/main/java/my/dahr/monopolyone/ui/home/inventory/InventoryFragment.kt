@@ -59,7 +59,6 @@ class InventoryFragment : Fragment() {
 
                 RequestStatus.Loading -> {
                         loadingDialog.startLoading()
-
                 }
 
                 else -> {
@@ -76,8 +75,6 @@ class InventoryFragment : Fragment() {
     private fun showRecycler(items: List<Item>) {
         val inventoryAdapter = InventoryAdapter(object : InventoryAdapter.OnItemClickListener {
             override fun onItemClicked(position: Int, item: Item) {
-//                val ids = setOf(item.itemProtoId)
-//                inventoryViewModel.getInventoryDataList(ids)
                 val fragment = InventoryItemFragment.newInstance(
                     item.image,
                     item.title,

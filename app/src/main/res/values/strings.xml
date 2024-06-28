@@ -88,4 +88,5 @@
     <string name="type">type</string>
     <string name="craft">Send to craft</string>
     <string name="all">all</string>
+    <string name="inventory2">Inventory</string>
 </resources>

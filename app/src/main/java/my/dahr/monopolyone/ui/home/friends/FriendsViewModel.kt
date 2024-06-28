@@ -304,7 +304,6 @@ class FriendsViewModel @Inject constructor(
 
     fun addFriend(userId: Any) {
         val sessionFromHelper = sessionHelper.session
-        requestStatusLiveData.postValue(RequestStatus.Loading)
         viewModelScope.launch {
             if (sessionHelper.isSessionNotExpired()) {
                 if (sessionHelper.isCurrentIpChanged()) {
@@ -345,7 +344,6 @@ class FriendsViewModel @Inject constructor(
 
     fun deleteFriend(userId: Any) {
         val sessionFromHelper = sessionHelper.session
-        requestStatusLiveData.postValue(RequestStatus.Loading)
         viewModelScope.launch {
             if (sessionHelper.isSessionNotExpired()) {
                 if (sessionHelper.isCurrentIpChanged()) {
