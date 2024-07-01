@@ -1,4 +1,4 @@
-package my.dahr.monopolyone.ui.home.inventory
+package my.dahr.monopolyone.ui.home.inventory.items
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import my.dahr.monopolyone.R
 import my.dahr.monopolyone.databinding.FragmentInventoryItemBinding
+import my.dahr.monopolyone.ui.home.inventory.InventoryFragment
+import my.dahr.monopolyone.ui.home.inventory.craft.InventoryCraftFragment
 import my.dahr.monopolyone.utils.ItemTypeConverter
 
 class InventoryItemFragment : Fragment() {
@@ -50,6 +52,12 @@ class InventoryItemFragment : Fragment() {
     private fun setListeners() {
         binding.ivBack.setOnClickListener {
             val fragment = InventoryFragment()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.container, fragment)
+                .commit()
+        }
+        binding.btnCraft.setOnClickListener {
+            val fragment = InventoryCraftFragment()
             parentFragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
                 .commit()

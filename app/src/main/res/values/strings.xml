@@ -86,7 +86,8 @@
     <string name="loading">Loading…</string>
     <string name="title">title</string>
     <string name="type">type</string>
-    <string name="craft">Send to craft</string>
+    <string name="sent_to_craft">Send to craft</string>
     <string name="all">all</string>
     <string name="inventory2">Inventory</string>
+    <string name="craft">Craft</string>
 </resources>

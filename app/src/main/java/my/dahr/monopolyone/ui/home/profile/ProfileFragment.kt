@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -18,7 +17,7 @@ import my.dahr.monopolyone.domain.models.inventory.items.Item
 import my.dahr.monopolyone.ui.home.friends.FriendsViewModel
 import my.dahr.monopolyone.ui.home.friends.user.friends.UserFriendsFragment
 import my.dahr.monopolyone.ui.home.inventory.InventoryFragment
-import my.dahr.monopolyone.ui.home.inventory.InventoryItemFragment
+import my.dahr.monopolyone.ui.home.inventory.items.InventoryItemFragment
 import my.dahr.monopolyone.ui.home.inventory.InventoryViewModel
 import my.dahr.monopolyone.ui.home.inventory.adapters.InventoryAdapter
 import my.dahr.monopolyone.utils.LoadingDialog

@@ -20,9 +20,9 @@ import my.dahr.monopolyone.domain.models.inventory.items.Item
 import my.dahr.monopolyone.ui.home.friends.FriendsFragment
 import my.dahr.monopolyone.ui.home.friends.FriendsViewModel
 import my.dahr.monopolyone.ui.home.friends.user.friends.UserFriendsFragment
-import my.dahr.monopolyone.ui.home.inventory.InventoryItemFragment
+import my.dahr.monopolyone.ui.home.inventory.items.InventoryItemFragment
 import my.dahr.monopolyone.ui.home.inventory.InventoryViewModel
-import my.dahr.monopolyone.ui.home.inventory.UserInventoryFragment
+import my.dahr.monopolyone.ui.home.inventory.ofuser.UserInventoryFragment
 import my.dahr.monopolyone.ui.home.inventory.adapters.InventoryAdapter
 import my.dahr.monopolyone.utils.LoadingDialog
 import my.dahr.monopolyone.utils.RankConverter

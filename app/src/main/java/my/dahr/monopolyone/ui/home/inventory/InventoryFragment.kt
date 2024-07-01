@@ -14,6 +14,7 @@ import my.dahr.monopolyone.data.models.RequestStatus
 import my.dahr.monopolyone.databinding.FragmentInventoryBinding
 import my.dahr.monopolyone.domain.models.inventory.items.Item
 import my.dahr.monopolyone.ui.home.inventory.adapters.InventoryAdapter
+import my.dahr.monopolyone.ui.home.inventory.items.InventoryItemFragment
 import my.dahr.monopolyone.utils.LoadingDialog
 
 @AndroidEntryPoint

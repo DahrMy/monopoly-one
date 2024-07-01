@@ -1,4 +1,4 @@
-package my.dahr.monopolyone.ui.home.inventory
+package my.dahr.monopolyone.ui.home.inventory.ofuser
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,7 +12,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import my.dahr.monopolyone.R
 import my.dahr.monopolyone.databinding.FragmentUserInventoryBinding
 import my.dahr.monopolyone.domain.models.inventory.items.Item
+import my.dahr.monopolyone.ui.home.inventory.InventoryViewModel
 import my.dahr.monopolyone.ui.home.inventory.adapters.InventoryAdapter
+import my.dahr.monopolyone.ui.home.inventory.items.InventoryItemFragment
 
 @AndroidEntryPoint
 class UserInventoryFragment : Fragment() {
