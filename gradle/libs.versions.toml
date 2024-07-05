@@ -38,6 +38,7 @@ glide = "4.16.0"
 
 # Other
 loadingBt = "2.3.0"
+jetbrainsKotlinJvm = "1.9.21"
 
 
 [libraries]
@@ -96,3 +97,4 @@ jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "k
 # Google
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltGoogle" }
+jetbrainsKotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
