@@ -1,5 +1,6 @@
 package my.dahr.monopolyone.ui.home.inventory.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,8 +12,9 @@ import my.dahr.monopolyone.R
 import my.dahr.monopolyone.databinding.ItemInventoryBinding
 import my.dahr.monopolyone.domain.models.inventory.items.Item
 import my.dahr.monopolyone.domain.models.inventory.listitems.ListItem
+import my.dahr.monopolyone.listeners.MoveListener
 
-class InventoryCraftAdapter(private val onItemClickListener: OnItemClickListener) :
+class InventoryCraftAdapter(private val moveListener: MoveListener) :
     ListAdapter<ListItem, RecyclerView.ViewHolder>(DiffUtil()) {
 
     companion object {
@@ -52,7 +54,15 @@ class InventoryCraftAdapter(private val onItemClickListener: OnItemClickListener
                 val item = (getItem(position) as ListItem.InventoryItem).item
                 holder.bind(item)
                 holder.itemView.setOnClickListener {
-                    onItemClickListener.onItemClicked(position, item)
+                    val originalNumber = holder.adapterPosition+1
+                    moveListener.onItemMoved(2, 1, item, originalNumber)
+                    val currentList = currentList.toMutableList()
+                    val inventoryItem = currentList.find { it is ListItem.InventoryItem && it.item == item }
+                    if (inventoryItem != null) {
+                        currentList.remove(inventoryItem)
+                        submitList(currentList)
+                    }
+
                 }
             }
         }
@@ -95,7 +105,42 @@ class InventoryCraftAdapter(private val onItemClickListener: OnItemClickListener
         override fun areContentsTheSame(oldItem: ListItem, newItem: ListItem): Boolean {
             return oldItem == newItem
         }
+
     }
+
+    fun addInventoryItem(item: Item) {
+        val emptySpotIndex = currentList.indexOfFirst { it is ListItem.NumberItem }
+
+        if (emptySpotIndex != -1) {
+            val newList = currentList.toMutableList()
+            newList[emptySpotIndex] = ListItem.InventoryItem(item)
+            submitList(newList)
+        } else {
+            Log.d("InventoryCraftAdapter", "No empty spots available.")
+        }
+    }
+
+    fun removeInventoryItem(item: Item, originalNumber: Int) {
+        val itemIndex = currentList.indexOfFirst { it is ListItem.InventoryItem && it.item == item }
+
+        if (itemIndex != -1) {
+            val newList = currentList.toMutableList()
+
+            // Restore the number cell at the original position
+            val numberItem = ListItem.NumberItem(originalNumber)
+            newList.add(itemIndex, numberItem)
+
+            // Remove the inventory item
+            newList.removeAt(itemIndex + 1) // +1 because we added the number item before
+
+            // Submit the updated list
+            submitList(newList)
+        } else {
+            Log.d("InventoryCraftAdapter", "Item not found in the inventory list.")
+        }
+    }
+
+
 
     interface OnItemClickListener {
         fun onItemClicked(position: Int, item: Item)
