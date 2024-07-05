@@ -8,4 +8,5 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.jetbrainsKotlinJvm) apply false
+    alias(libs.plugins.androidLibrary) apply false
 }

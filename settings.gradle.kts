@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "Monopoly One (unofficial)"
 include(":app")
 include(":domain")
+include(":data")
