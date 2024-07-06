@@ -1,6 +1,7 @@
-package my.dahr.monopolyone.domain.model.session.login
+package my.dahr.monopolyone.domain.model.login
 
-import my.dahr.monopolyone.domain.model.session.LoginOutputData
+import my.dahr.monopolyone.domain.model.LoginOutputData
+
 
 /**
  * A model that contains a token for auth completing.

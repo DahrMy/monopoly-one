@@ -1,14 +1,16 @@
 package my.dahr.monopolyone.domain.usecase.login
 
+import my.dahr.monopolyone.domain.model.LoginOutputData
 import my.dahr.monopolyone.domain.model.Returnable
 import my.dahr.monopolyone.domain.model.WrongReturnable
-import my.dahr.monopolyone.domain.model.session.Session
-import my.dahr.monopolyone.domain.model.session.login.*
+import my.dahr.monopolyone.domain.model.login.LoginInputData
+
 
 class SignInUseCase {
     /**
-     * TODO: Not yet implemented
-     * @return [Session] or [TotpToken] if signing in is successful,
+     * Sign in operation UseCase.
+     * @param loginData an object contains an email and a password.
+     * @return [LoginOutputData] if signing in is successful,
      * or [WrongReturnable] if something went wrong.
      */
     operator fun invoke(loginData: LoginInputData): Returnable {

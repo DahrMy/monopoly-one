@@ -1,5 +1,9 @@
 package my.dahr.monopolyone.domain.model
 
+import my.dahr.monopolyone.domain.model.session.Session
+import my.dahr.monopolyone.domain.model.login.TotpToken
+import my.dahr.monopolyone.domain.usecase.login.SignInUseCase
+
 /**
  * A model that UseCase can return.
  * Any that can be returned from an UseCase inherit from this class.
@@ -22,10 +26,15 @@ sealed interface Returnable
  * The parent of a models that UseCase can return if all went successfully
  * @see Returnable
  */
-internal interface SuccessfulReturnable : Returnable
+interface SuccessfulReturnable : Returnable
 
 /**
  * The parent of a models that UseCase can return if something went wrong
  * @see Returnable
  */
-internal interface WrongReturnable : Returnable
+interface WrongReturnable : Returnable
+
+/**
+ * A parent class for models [Session] and [TotpToken]. [SignInUseCase] returns it.
+ */
+interface LoginOutputData : SuccessfulReturnable
