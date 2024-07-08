@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import my.dahr.monopolyone.databinding.ItemInventoryBinding
 import my.dahr.monopolyone.domain.models.inventory.items.Item
-import my.dahr.monopolyone.listeners.MoveListener
 
-class InventoryListForCraftAdapter(private val moveListener: MoveListener) :
+class InventoryListForCraftAdapter(
+    private val clickListener: (item: Item)-> Boolean) :
     ListAdapter<Item, InventoryListForCraftAdapter.InventoryViewHolder>(DiffUtil()) {
     class InventoryViewHolder(
         private var rawItemInventoryBinding: ItemInventoryBinding
@@ -38,8 +38,10 @@ class InventoryListForCraftAdapter(private val moveListener: MoveListener) :
         val item = getItem(position)
         holder.bind(item)
         holder.itemView.setOnClickListener {
-            val originalNumber = holder.adapterPosition+1
-            moveListener.onItemMoved(1,2, item,originalNumber )
+            val canAdd = clickListener(item)
+            if (canAdd) {
+                removeItem(item)
+            }
         }
     }
 
@@ -52,7 +54,7 @@ class InventoryListForCraftAdapter(private val moveListener: MoveListener) :
             return oldItem == newItem
         }
     }
-    fun removeItem(item: Item) {
+    private fun removeItem(item: Item) {
         val newList = currentList.toMutableList()
         newList.remove(item)
         submitList(newList)
@@ -62,9 +64,5 @@ class InventoryListForCraftAdapter(private val moveListener: MoveListener) :
         val newList = currentList.toMutableList()
         newList.add(0, item)
         submitList(newList)
-    }
-
-    interface OnItemClickListener {
-        fun onItemClicked(position: Int, item: Item)
     }
 }

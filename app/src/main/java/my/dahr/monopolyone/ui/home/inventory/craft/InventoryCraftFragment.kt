@@ -1,24 +1,23 @@
 package my.dahr.monopolyone.ui.home.inventory.craft
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import my.dahr.monopolyone.databinding.FragmentInventoryCraftBinding
 import my.dahr.monopolyone.domain.models.inventory.items.Item
 import my.dahr.monopolyone.domain.models.inventory.listitems.ListItem
-import my.dahr.monopolyone.listeners.MoveListener
 import my.dahr.monopolyone.ui.home.inventory.InventoryViewModel
 import my.dahr.monopolyone.ui.home.inventory.adapters.InventoryCraftAdapter
 import my.dahr.monopolyone.ui.home.inventory.adapters.InventoryListForCraftAdapter
 
 @AndroidEntryPoint
-class InventoryCraftFragment : Fragment(), MoveListener {
+class InventoryCraftFragment : Fragment() {
     private val inventoryViewModel: InventoryViewModel by viewModels()
 
     private var _binding: FragmentInventoryCraftBinding? = null
@@ -26,8 +25,6 @@ class InventoryCraftFragment : Fragment(), MoveListener {
 
     private lateinit var adapterForCraft: InventoryCraftAdapter
     private lateinit var adapterOfItemsForCraft: InventoryListForCraftAdapter
-
-    private var moveCount: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,7 +48,9 @@ class InventoryCraftFragment : Fragment(), MoveListener {
     }
 
     private fun showItemsList(items: List<Item>) {
-        adapterOfItemsForCraft = InventoryListForCraftAdapter(this)
+        adapterOfItemsForCraft = InventoryListForCraftAdapter {
+            adapterForCraft.addInventoryItemIfPossible(it)
+        }
         adapterOfItemsForCraft.submitList(items)
         val layoutManager = GridLayoutManager(requireContext(), 3)
         binding.rvItems.layoutManager = layoutManager
@@ -60,7 +59,12 @@ class InventoryCraftFragment : Fragment(), MoveListener {
     }
 
     private fun showListForCraft() {
-        adapterForCraft = InventoryCraftAdapter(this)
+        adapterForCraft = InventoryCraftAdapter(
+            clickListener = { adapterOfItemsForCraft.addItem(it) },
+            itemCountChangedListener = {
+                    binding.btnCraft.isVisible = it == 10
+            }
+        )
         val initialItems = (1..10).map { ListItem.NumberItem(it) }
         adapterForCraft.submitList(initialItems)
         val layoutManager = GridLayoutManager(requireContext(), 3)
@@ -69,27 +73,6 @@ class InventoryCraftFragment : Fragment(), MoveListener {
         binding.rvFreeSpots.adapter = adapterForCraft
     }
 
-    override fun onItemMoved(fromAdapter: Int, toAdapter: Int, item: Item, slot: Int) {
-        if (moveCount < 10) {
-            if (fromAdapter == 1) {
-                adapterForCraft.addInventoryItem(item)
-                adapterOfItemsForCraft.removeItem(item)
-                moveCount++
-            } else if (fromAdapter == 2) {
-                adapterOfItemsForCraft.addItem(item)
-                adapterForCraft.removeInventoryItem(item, slot)
-                moveCount--
-            }
-
-        } else {
-            Log.d("InventoryCraftFragment", "Reached maximum moves limit (10). Further moves are blocked.")
-        }
-    }
-
-    private fun updateWithInventoryItems(inventoryItems: List<Item>) {
-        val updatedItems = inventoryItems.map { ListItem.InventoryItem(it) }
-        adapterForCraft.submitList(updatedItems)
-    }
 
     override fun onDestroyView() {
         _binding = null
@@ -99,6 +82,4 @@ class InventoryCraftFragment : Fragment(), MoveListener {
     companion object {
         fun newInstance(): InventoryCraftFragment = InventoryCraftFragment()
     }
-
-
 }

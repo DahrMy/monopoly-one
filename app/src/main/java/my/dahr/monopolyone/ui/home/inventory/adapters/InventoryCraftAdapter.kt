@@ -12,10 +12,18 @@ import my.dahr.monopolyone.R
 import my.dahr.monopolyone.databinding.ItemInventoryBinding
 import my.dahr.monopolyone.domain.models.inventory.items.Item
 import my.dahr.monopolyone.domain.models.inventory.listitems.ListItem
-import my.dahr.monopolyone.listeners.MoveListener
 
-class InventoryCraftAdapter(private val moveListener: MoveListener) :
+class InventoryCraftAdapter(
+    private val clickListener: (Item) -> Unit,
+    private val itemCountChangedListener: (Int) -> Unit
+) :
     ListAdapter<ListItem, RecyclerView.ViewHolder>(DiffUtil()) {
+    override fun onCurrentListChanged(
+        previousList: MutableList<ListItem>,
+        currentList: MutableList<ListItem>
+    ) {
+        itemCountChangedListener(currentList.count { it is ListItem.InventoryItem })
+    }
 
     companion object {
         private const val TYPE_NUMBER = 0
@@ -33,7 +41,8 @@ class InventoryCraftAdapter(private val moveListener: MoveListener) :
         return when (viewType) {
             TYPE_NUMBER -> {
                 val view =
-                    LayoutInflater.from(parent.context).inflate(R.layout.item_inventory_craft, parent, false)
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.item_inventory_craft, parent, false)
                 NumberViewHolder(view)
             }
 
@@ -54,15 +63,8 @@ class InventoryCraftAdapter(private val moveListener: MoveListener) :
                 val item = (getItem(position) as ListItem.InventoryItem).item
                 holder.bind(item)
                 holder.itemView.setOnClickListener {
-                    val originalNumber = holder.adapterPosition+1
-                    moveListener.onItemMoved(2, 1, item, originalNumber)
-                    val currentList = currentList.toMutableList()
-                    val inventoryItem = currentList.find { it is ListItem.InventoryItem && it.item == item }
-                    if (inventoryItem != null) {
-                        currentList.remove(inventoryItem)
-                        submitList(currentList)
-                    }
-
+                    clickListener(item)
+                    removeInventoryItem(item)
                 }
             }
         }
@@ -105,10 +107,13 @@ class InventoryCraftAdapter(private val moveListener: MoveListener) :
         override fun areContentsTheSame(oldItem: ListItem, newItem: ListItem): Boolean {
             return oldItem == newItem
         }
-
     }
 
-    fun addInventoryItem(item: Item) {
+    fun addInventoryItemIfPossible(item: Item): Boolean {
+        val canAdd = itemCount <= 10
+        if (!canAdd) {
+            return false
+        }
         val emptySpotIndex = currentList.indexOfFirst { it is ListItem.NumberItem }
 
         if (emptySpotIndex != -1) {
@@ -117,32 +122,22 @@ class InventoryCraftAdapter(private val moveListener: MoveListener) :
             submitList(newList)
         } else {
             Log.d("InventoryCraftAdapter", "No empty spots available.")
+            return false
         }
+        return true
     }
 
-    fun removeInventoryItem(item: Item, originalNumber: Int) {
+    private fun removeInventoryItem(item: Item) {
         val itemIndex = currentList.indexOfFirst { it is ListItem.InventoryItem && it.item == item }
 
         if (itemIndex != -1) {
             val newList = currentList.toMutableList()
 
-            // Restore the number cell at the original position
-            val numberItem = ListItem.NumberItem(originalNumber)
-            newList.add(itemIndex, numberItem)
-
-            // Remove the inventory item
-            newList.removeAt(itemIndex + 1) // +1 because we added the number item before
-
-            // Submit the updated list
+            val numberItem = ListItem.NumberItem(itemIndex + 1)
+            newList[itemIndex] = numberItem
             submitList(newList)
         } else {
             Log.d("InventoryCraftAdapter", "Item not found in the inventory list.")
         }
-    }
-
-
-
-    interface OnItemClickListener {
-        fun onItemClicked(position: Int, item: Item)
     }
 }
