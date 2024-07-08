@@ -1,5 +1,7 @@
 package my.dahr.monopolyone.domain.model.session
 
+import my.dahr.monopolyone.domain.model.LoginOutputData
+
 /**
  * A model that is using for a require-authentication API requests.
  * @see <a href="https://docs.mnpl.one/objects/Session">Session</a>
