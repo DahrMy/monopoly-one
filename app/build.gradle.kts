@@ -70,7 +70,7 @@ dependencies {
     implementation(libs.androidx.hilt.work)
     ksp(libs.androidx.hilt.compiler)
 
-    // Room
+    // Room TODO: Remove from :app
     ksp(libs.androidx.room.compiler)
     annotationProcessor(libs.androidx.room.compiler)
     implementation(libs.androidx.room.runtime)
@@ -81,13 +81,13 @@ dependencies {
     // Material
     implementation(libs.google.material)
 
-    // Firebase
+    // Firebase TODO: Add Firebase dependencies
 
     // Hilt
     ksp(libs.google.hilt.compiler)
     implementation(libs.google.hilt)
 
-    // GSON
+    // GSON TODO: Remove from :app
     implementation(libs.google.gson)
 
     // *** KotlinX ***
@@ -98,7 +98,7 @@ dependencies {
 
     // *** Other ***
 
-    // Retrofit + OkHTTP
+    // Retrofit + OkHTTP TODO: Remove from :app
     implementation(libs.retrofit)
     implementation(libs.gson.converter)
     implementation(libs.okhttp)
