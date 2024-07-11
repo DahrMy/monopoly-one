@@ -1,6 +1,6 @@
 package my.dahr.monopolyone.data.source.auth
 
-import my.dahr.monopolyone.data.source.auth.local.ParcelableSession
+import my.dahr.monopolyone.data.source.auth.local.DeserializedSession
 import my.dahr.monopolyone.data.source.auth.remote.dto.request.AuthSignInRequest
 import my.dahr.monopolyone.data.source.auth.remote.dto.request.AuthTotpVerifyRequest
 import my.dahr.monopolyone.data.source.auth.remote.dto.response.SessionResponse
@@ -19,7 +19,7 @@ fun SessionResponse.toSession() = Session(
     lifespan = data.expiresIn
 )
 
-fun ParcelableSession.toSession() = Session(
+fun DeserializedSession.toSession() = Session(
     accessToken = accessToken,
     refreshToken = refreshToken,
     userId = userId,
@@ -27,7 +27,7 @@ fun ParcelableSession.toSession() = Session(
     lifespan = lifespan,
 )
 
-fun Session.toParcelable() = ParcelableSession(
+fun Session.toParcelable() = DeserializedSession(
     accessToken = accessToken,
     refreshToken = refreshToken,
     userId = userId,
