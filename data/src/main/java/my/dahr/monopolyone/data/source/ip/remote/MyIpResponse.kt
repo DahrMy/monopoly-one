@@ -1,4 +1,4 @@
-package my.dahr.monopolyone.data.network.dto.response
+package my.dahr.monopolyone.data.source.ip.remote
 
 data class MyIpResponse(
     val cc: String,

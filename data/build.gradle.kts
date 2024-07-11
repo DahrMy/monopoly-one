@@ -6,6 +6,8 @@ plugins {
     // Google
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+
+    id("kotlin-parcelize")
 }
 
 android {
@@ -38,6 +40,7 @@ android {
 }
 
 dependencies {
+
     implementation(project(path = ":domain"))
 
     // Junit
@@ -75,6 +78,5 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.gson.converter)
     implementation(libs.okhttp)
-
 
 }
