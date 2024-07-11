@@ -1,10 +1,10 @@
 package my.dahr.monopolyone.data.network.api.monopoly
 
-import my.dahr.monopolyone.data.network.dto.request.monopoly.auth.AuthRefreshRequest
-import my.dahr.monopolyone.data.network.dto.request.monopoly.auth.AuthSignInRequest
-import my.dahr.monopolyone.data.network.dto.request.monopoly.auth.AuthTotpVerifyRequest
+import my.dahr.monopolyone.data.source.auth.remote.dto.request.AuthRefreshRequest
+import my.dahr.monopolyone.data.source.auth.remote.dto.request.AuthSignInRequest
+import my.dahr.monopolyone.data.source.auth.remote.dto.request.AuthTotpVerifyRequest
 import my.dahr.monopolyone.data.network.dto.response.monopoly.BaseResponse
-import my.dahr.monopolyone.data.network.dto.response.monopoly.SessionResponse
+import my.dahr.monopolyone.data.source.auth.remote.dto.response.SessionResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST

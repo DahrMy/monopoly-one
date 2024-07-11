@@ -1,4 +1,4 @@
-package my.dahr.monopolyone.data.network.dto.request.monopoly.auth
+package my.dahr.monopolyone.data.source.auth.remote.dto.request
 
 import com.google.gson.annotations.SerializedName
 

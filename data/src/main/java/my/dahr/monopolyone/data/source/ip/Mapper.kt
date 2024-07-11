@@ -11,3 +11,7 @@ fun ParcelableIp.toIp() = Ip(
 fun MyIpResponse.toIp() = Ip(
     address = ip
 )
+
+fun Ip.toParcelableIp() = ParcelableIp(
+    address = address
+)

@@ -1,8 +1,9 @@
-package my.dahr.monopolyone.data.network.dto.response.monopoly
+package my.dahr.monopolyone.data.source.auth.remote.dto.response
 
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import my.dahr.monopolyone.data.network.dto.response.monopoly.BaseResponse
 
 data class TotpResponse(
     @Expose
