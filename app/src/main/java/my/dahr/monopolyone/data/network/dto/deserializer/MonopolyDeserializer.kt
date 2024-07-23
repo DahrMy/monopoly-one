@@ -8,6 +8,7 @@ import my.dahr.monopolyone.data.models.RequestStatus
 import my.dahr.monopolyone.data.network.dto.inventory.items.InventoryResponse
 import my.dahr.monopolyone.data.network.dto.inventory.protos.ProtosResponse
 import my.dahr.monopolyone.data.network.dto.response.BaseResponse
+import my.dahr.monopolyone.data.network.dto.response.EmptyResponse
 import my.dahr.monopolyone.data.network.dto.response.SessionResponse
 import my.dahr.monopolyone.data.network.dto.response.TotpResponse
 import my.dahr.monopolyone.data.network.dto.response.error.DefaultErrorResponse
@@ -53,6 +54,10 @@ class MonopolyDeserializer : JsonDeserializer<BaseResponse> {
         var isUsersResponse = false
         var isInventoryProtosResponse = false
 
+        if (dataJson == null) {
+            return context.deserialize(json, EmptyResponse::class.java)
+        }
+
         if (dataJson.isJsonObject) {
             hasTotpToken = dataJson.asJsonObject.has("totp_session_token")
             //friends
@@ -67,9 +72,6 @@ class MonopolyDeserializer : JsonDeserializer<BaseResponse> {
             //users
             isUsersResponse = dataJson.asJsonArray.get(0).asJsonObject.has("rank")
         }
-
-
-
 
         return when { // TODO: Add more responses
             hasTotpToken -> context.deserialize(json, TotpResponse::class.java)
