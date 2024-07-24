@@ -10,12 +10,12 @@ interface NetworkRepository {
     /**
      * Gets current IP address.
      */
-    suspend fun getCurrentIp(): Ip
+    suspend fun getCurrentIp(): Ip?
 
     /**
      * Gets IP address stored in local storage.
      */
-    fun getStoredIp(): Ip
+    fun getStoredIp(): Ip?
 
     /**
      * Save IP address into local storage.

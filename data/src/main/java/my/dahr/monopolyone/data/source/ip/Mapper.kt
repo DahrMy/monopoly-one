@@ -12,6 +12,6 @@ fun MyIpResponse.toIp() = Ip(
     address = ip
 )
 
-fun Ip.toParcelableIp() = DeserializedIp(
+fun Ip.toDeserializedIp() = DeserializedIp(
     address = address
 )
