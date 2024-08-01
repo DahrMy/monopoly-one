@@ -32,7 +32,9 @@ interface SuccessfulReturnable : Returnable
  * The parent of a models that UseCase can return if something went wrong
  * @see Returnable
  */
-interface WrongReturnable : Returnable
+interface WrongReturnable : Returnable {
+    val code: Int
+}
 
 /**
  * A parent class for models [Session] and [TotpToken]. [SignInUseCase] returns it.

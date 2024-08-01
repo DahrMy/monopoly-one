@@ -19,8 +19,7 @@ class NetworkRepositoryImpl(
 ) : NetworkRepository {
 
     override suspend fun getCurrentIp(): Ip? = suspendCoroutine { continuation ->
-        val call = ipRemoteDataSource.getMyIp()
-        call.enqueue(object : Callback<MyIpResponse> {
+        ipRemoteDataSource.getMyIp().enqueue(object : Callback<MyIpResponse> {
 
             override fun onResponse(call: Call<MyIpResponse>, response: Response<MyIpResponse>) {
                 if (response.isSuccessful) {
