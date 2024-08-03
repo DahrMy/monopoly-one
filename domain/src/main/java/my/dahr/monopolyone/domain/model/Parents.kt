@@ -31,8 +31,9 @@ interface SuccessfulReturnable : Returnable
 /**
  * The parent of a models that UseCase can return if something went wrong
  * @see Returnable
+ * @property code ID of error. See [docs.mnpl.one](https://docs.mnpl.one/api/http/intro)
  */
-interface WrongReturnable : Returnable {
+sealed interface WrongReturnable : Returnable {
     val code: Int
 }
 

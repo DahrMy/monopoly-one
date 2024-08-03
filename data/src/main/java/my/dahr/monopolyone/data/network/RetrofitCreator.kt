@@ -1,7 +1,6 @@
 package my.dahr.monopolyone.data.network
 
 import com.google.gson.GsonBuilder
-import com.google.gson.JsonDeserializer
 import my.dahr.monopolyone.data.MONOPOLY_BASE_URL
 import my.dahr.monopolyone.data.network.dto.response.monopoly.BaseResponse
 import okhttp3.OkHttpClient
@@ -21,7 +20,7 @@ private val okHttpClient
 
 internal fun buildMonopolyRetrofit(
     baseDtoClazz: Class<BaseResponse>,
-    deserializer: JsonDeserializer<BaseResponse>
+    deserializer: MonopolyResponseDeserializer
 ): Retrofit {
     val gson = GsonBuilder()
         .registerTypeAdapter(baseDtoClazz, deserializer)
