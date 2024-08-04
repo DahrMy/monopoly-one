@@ -13,8 +13,8 @@ import my.dahr.monopolyone.domain.model.LoginOutputData
  **/
 data class Session (
     val userId: Int,
-    val accessToken: String,
-    val refreshToken: String,
+    val accessToken: AccessToken,
+    val refreshToken: RefreshToken,
     val expiresAt: Long,
     val lifespan: Long
 ) : LoginOutputData

@@ -27,6 +27,6 @@ interface AuthorizationApi {
      * @see <a href="https://docs.mnpl.one/api/http/auth.refresh">auth.refresh</a>
      */
     @POST("auth.refresh")
-    fun authRefresh(@Body body: AuthRefreshRequest): Call<SessionResponse>
+    fun authRefresh(@Body body: AuthRefreshRequest): Call<BaseResponse>
 
 }

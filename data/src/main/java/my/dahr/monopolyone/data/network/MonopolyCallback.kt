@@ -30,7 +30,11 @@ import kotlin.coroutines.resume
  *          override fun onSuccessfulResponse(
  *              call: Call<BaseResponse>, responseBody: BaseResponse
  *          ) {
- *              continuation.resume(responseBody.toModel())
+ *              if (responseBody is TargetResponse) { // TargetResponse can be any normal DTO class
+ *                  continuation.resume(responseBody.toModel())
+ *              } else {
+ *                  handleResponse(responseBody)
+ *              }
  *          }
  *      })
  *  }
@@ -52,13 +56,13 @@ internal abstract class MonopolyCallback(
             if (responseBody != null) {
                 onSuccessfulResponse(call, responseBody)
             } else {
-                handleErrorResponse(null) // Undefined error
+                handleResponse(null) // Undefined error
             }
 
         } else {
             val jsonResponse = response.errorBody()?.string()
             val responseBody = Gson().fromJson(jsonResponse, BaseErrorResponse::class.java)
-            handleErrorResponse(responseBody)
+            handleResponse(responseBody)
         }
     }
 
@@ -70,19 +74,21 @@ internal abstract class MonopolyCallback(
         continuation.resume(Failure(throwable = t))
     }
 
+
     // TODO: Add KDoc
     internal abstract fun onSuccessfulResponse(call: Call<BaseResponse>, responseBody: BaseResponse)
 
+
     // TODO: Add KDoc
-    protected fun handleErrorResponse(response: BaseErrorResponse?) {
+    protected fun handleResponse(response: BaseResponse?) {
         Log.e("Retrofit", "Error:\n${response.toString()}")
 
-        if (response != null) {
+        if (response is BaseErrorResponse) {
             continuation.resume(response.toError())
         } else {
             continuation.resume(UndefinedError())
         }
-
     }
+
 
 }

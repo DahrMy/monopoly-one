@@ -5,7 +5,7 @@ import my.dahr.monopolyone.data.source.ip.remote.IpRemoteDataSource
 import my.dahr.monopolyone.data.source.ip.remote.MyIpResponse
 import my.dahr.monopolyone.data.source.ip.toIp
 import my.dahr.monopolyone.data.source.ip.toDeserializedIp
-import my.dahr.monopolyone.domain.model.session.Ip
+import my.dahr.monopolyone.domain.model.Ip
 import my.dahr.monopolyone.domain.repository.NetworkRepository
 import retrofit2.Call
 import retrofit2.Callback

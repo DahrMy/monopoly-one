@@ -9,7 +9,7 @@ internal class SessionSharedPrefDataSourceImpl(
     private val sharedPreferences: SharedPreferences
 ) : SessionLocalDataSource {
 
-    override var session: DeserializedSession?
+    override var deserializedSession: DeserializedSession?
 
         get() {
             val sessionJson = sharedPreferences.getString(SESSION_KEY, "")
