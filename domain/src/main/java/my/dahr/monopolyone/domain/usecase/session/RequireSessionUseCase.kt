@@ -12,23 +12,23 @@ class RequireSessionUseCase(
     private val networkRepository: NetworkRepository
 ) {
     /**
-     * Gives a session object from local storage.
+     * Gives a session instance from local storage.
      * @return [Session] or [WrongReturnable] if it isn't possible to obtain an actual session
      * or **null** if session doesn't exist.
      */
     suspend operator fun invoke(): Returnable? {
         val session = sessionRepository.getStoredSession() ?: return null
-        val currentIp = networkRepository.getCurrentIp()
+        val currentIp = networkRepository.getCurrentIp() ?: return null
 
         val isExpired = (session.expiresAt - currentTimeInSec) <= 30 // thirty seconds for reserve
 
-        return if (isExpired) {
-            sessionRepository.refreshSession(session)
+        if (isExpired) {
+            return sessionRepository.refreshSession(session)
         } else if (networkRepository.getStoredIp() != currentIp) {
             networkRepository.saveIp(currentIp)
-            /* return */ sessionRepository.refreshSession(session)
+            return sessionRepository.refreshSession(session)
         } else {
-            session
+            return session
         }
     }
 }

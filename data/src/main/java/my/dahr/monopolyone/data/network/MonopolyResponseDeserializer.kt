@@ -10,7 +10,7 @@ import my.dahr.monopolyone.data.network.dto.response.monopoly.error.FrequentTotp
 import my.dahr.monopolyone.data.network.dto.response.monopoly.error.ParamInvalidErrorResponse
 import java.lang.reflect.Type
 
-internal abstract class MonopolyResponseDeserializer : JsonDeserializer<BaseResponse> {
+abstract class MonopolyResponseDeserializer : JsonDeserializer<BaseResponse> {
 
     override fun deserialize(
         json: JsonElement, typeOfT: Type, context: JsonDeserializationContext
@@ -20,13 +20,13 @@ internal abstract class MonopolyResponseDeserializer : JsonDeserializer<BaseResp
         val clazz: Class<out BaseResponse> = if (code == 0) {
             identifyByCode(code)
         } else {
-            identifyByContent()
+            identifyByContent(json)
         }
 
         return context.deserialize(json, clazz)
     }
 
-    internal abstract fun identifyByContent(): Class<out BaseResponse>
+    internal abstract fun identifyByContent(json: JsonElement): Class<out BaseResponse>
 
     private fun identifyByCode(code: Int): Class<out BaseErrorResponse> = when (code) {
         2 -> ParamInvalidErrorResponse::class.java
