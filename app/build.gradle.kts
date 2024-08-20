@@ -15,7 +15,7 @@ android {
     defaultConfig {
         applicationId = "my.dahr.monopolyone"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -44,6 +44,9 @@ android {
 }
 
 dependencies {
+
+    implementation(project(path = ":domain"))
+    implementation(project(path = ":data"))
 
     // Junit
     testImplementation(libs.junit)
