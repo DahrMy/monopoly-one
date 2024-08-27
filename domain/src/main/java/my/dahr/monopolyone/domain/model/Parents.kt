@@ -41,3 +41,6 @@ sealed interface WrongReturnable : Returnable {
  * A parent class for models [Session] and [TotpToken]. [SignInUseCase] returns it.
  */
 interface LoginOutputData : SuccessfulReturnable
+
+
+

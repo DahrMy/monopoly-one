@@ -54,7 +54,7 @@ class SessionRepositoryImpl(
         call.enqueue(object : MonopolyCallback(continuation) {
             override fun onSuccessfulResponse(call: Call<BaseResponse>, responseBody: BaseResponse) {
                 if (responseBody is SessionResponse) {
-                    continuation.resume(responseBody.toSession())
+                   continuation.resume(responseBody.toSession())
                 } else {
                     handleResponse(responseBody)
                 }
