@@ -1,7 +1,7 @@
 package my.dahr.monopolyone.ui.login
 
 import dagger.hilt.android.scopes.ViewModelScoped
-import my.dahr.monopolyone.data.network.api.AuthorizationApi
+import my.dahr.monopolyone.data.network.api.monopoly.AuthorizationApi
 import my.dahr.monopolyone.data.network.dto.response.BaseResponse
 import retrofit2.Callback
 import javax.inject.Inject
@@ -16,8 +16,8 @@ class LoginRepository @Inject constructor(
             "email" to email,
             "password" to password
         )
-        val call = api.authSignInRequest(requestBody)
-        call.enqueue(callback)
+//        val call = api.authSignInRequest(requestBody)
+//        call.enqueue(callback)
     }
 
     fun verify2faCode(code: String, totpToken: String, callback: Callback<BaseResponse>) {
@@ -25,8 +25,8 @@ class LoginRepository @Inject constructor(
             "totp_session_token" to totpToken,
             "code" to code
         )
-        val call = api.authTotpVerify(requestBody)
-        call.enqueue(callback)
+//        val call = api.authTotpVerify(requestBody)
+//        call.enqueue(callback)
     }
 
 }

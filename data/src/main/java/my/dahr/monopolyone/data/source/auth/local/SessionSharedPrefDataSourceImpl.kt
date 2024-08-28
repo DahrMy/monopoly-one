@@ -5,7 +5,7 @@ import com.google.gson.Gson
 
 private const val SESSION_KEY = "session"
 
-internal class SessionSharedPrefDataSourceImpl(
+class SessionSharedPrefDataSourceImpl(
     private val sharedPreferences: SharedPreferences
 ) : SessionLocalDataSource {
 

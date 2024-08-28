@@ -9,11 +9,12 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
+import my.dahr.monopolyone.data.SHARED_PREFERENCES
 import my.dahr.monopolyone.data.models.RequestStatus
 import my.dahr.monopolyone.data.models.Session
 import my.dahr.monopolyone.data.network.MonopolyCallback
-import my.dahr.monopolyone.data.network.api.AuthorizationApi
 import my.dahr.monopolyone.data.network.api.IpApi
+import my.dahr.monopolyone.data.network.api.monopoly.AuthorizationApi
 import my.dahr.monopolyone.data.network.dto.response.SessionResponse
 import my.dahr.monopolyone.workers.SessionWorker
 import retrofit2.Call
@@ -87,19 +88,19 @@ class SessionHelper @Inject constructor(
         callback: () -> Callback<SessionResponse>
     ) {
         val requestBody = "refresh_token" to refreshToken
-        val call = api.authRefreshRequest(requestBody)
-        call.enqueue(callback.invoke())
-
-        session?.let { SessionWorker.enqueue(it.expiresAt, context) }
+//        val call = api.authRefreshRequest(requestBody)
+//        call.enqueue(callback.invoke())
+//
+//        session?.let { SessionWorker.enqueue(it.expiresAt, context) }
     }
 
     fun removeSession() { session = null }
 
     suspend fun refreshSavedIp() {
-        coroutineScope {
-            val currentIp = async { ipApi.getMyIp().ip }
-            savedIp = currentIp.await()
-        }
+//        coroutineScope {
+//            val currentIp = async { ipApi.getMyIp().ip }
+//            savedIp = currentIp.await()
+//        }
     }
 
     fun isSessionNotExpired(): Boolean {
@@ -115,8 +116,9 @@ class SessionHelper @Inject constructor(
     }
 
     suspend fun isCurrentIpChanged(): Boolean = coroutineScope {
-        val currentIp = async { ipApi.getMyIp().ip }
-        return@coroutineScope currentIp.await() == savedIp
+//        val currentIp = async { ipApi.getMyIp().ip }
+//        return@coroutineScope currentIp.await() == savedIp
+        return@coroutineScope true
     }
 
     fun haveInternetConnection(): Boolean {

@@ -7,7 +7,7 @@ import my.dahr.monopolyone.data.source.auth.remote.dto.request.AuthSignInRequest
 import my.dahr.monopolyone.data.source.auth.remote.dto.request.AuthTotpVerifyRequest
 import retrofit2.Call
 
-internal class SessionRetrofitDataSourceImpl(
+class SessionRetrofitDataSourceImpl(
     private val api: AuthorizationApi
 ) : SessionRemoteDataSource {
 

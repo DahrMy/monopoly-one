@@ -5,7 +5,7 @@ import com.google.gson.Gson
 
 private const val IP_KEY = "ip_address"
 
-internal class IpSharedPrefDataSourceImpl(
+class IpSharedPrefDataSourceImpl(
     private val sharedPreferences: SharedPreferences
 ) : IpLocalDataSource {
 

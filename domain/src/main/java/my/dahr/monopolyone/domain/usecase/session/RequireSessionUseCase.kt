@@ -14,7 +14,7 @@ class RequireSessionUseCase(
     /**
      * Gives a session instance from local storage.
      * @return [Session] or [WrongReturnable] if it isn't possible to obtain an actual session
-     * or **null** if session doesn't exist.
+     * or `null` if session doesn't exist.
      */
     suspend operator fun invoke(): Returnable? {
         val session = sessionRepository.getStoredSession() ?: return null

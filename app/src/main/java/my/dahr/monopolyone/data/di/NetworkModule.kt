@@ -5,11 +5,10 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import my.dahr.monopolyone.data.network.api.AuthorizationApi
 import my.dahr.monopolyone.data.network.api.FriendsApi
 import my.dahr.monopolyone.data.network.api.InventoryApi
-import my.dahr.monopolyone.data.network.api.IpApi
 import my.dahr.monopolyone.data.network.api.UsersApi
+import my.dahr.monopolyone.data.network.api.monopoly.AuthorizationApi
 import my.dahr.monopolyone.data.network.dto.deserializer.MonopolyDeserializer
 import my.dahr.monopolyone.data.network.dto.response.BaseResponse
 import my.dahr.monopolyone.utils.BASE_URL
@@ -47,7 +46,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideAuthorizationApi(retrofit: Retrofit): AuthorizationApi = retrofit.create(AuthorizationApi::class.java)
+    fun provideAuthorizationApi(retrofit: Retrofit): AuthorizationApi = retrofit.create(
+        AuthorizationApi::class.java)
 
     @Provides
     @Singleton
@@ -60,17 +60,5 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideInventoryApi(retrofit: Retrofit): InventoryApi = retrofit.create(InventoryApi::class.java)
-
-    @Provides
-    @Singleton
-    fun provideIpApi(): IpApi {
-        val retrofit = Retrofit.Builder()
-            .client(okHttpClient)
-            .baseUrl(MY_IP_BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        return retrofit.create(IpApi::class.java)
-    }
 
 }

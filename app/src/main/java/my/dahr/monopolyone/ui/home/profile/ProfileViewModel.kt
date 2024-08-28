@@ -11,6 +11,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import my.dahr.monopolyone.data.SHARED_PREFERENCES
 import my.dahr.monopolyone.data.converters.toUi
 import my.dahr.monopolyone.data.models.RequestStatus
 import my.dahr.monopolyone.data.models.Session
@@ -21,7 +22,6 @@ import my.dahr.monopolyone.data.repository.ResourceRepository
 import my.dahr.monopolyone.domain.models.users.Data
 import my.dahr.monopolyone.domain.repository.UsersRepository
 import my.dahr.monopolyone.utils.SESSION_KEY
-import my.dahr.monopolyone.utils.SHARED_PREFERENCES
 import retrofit2.Call
 import javax.inject.Inject
 

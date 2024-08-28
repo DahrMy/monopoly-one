@@ -18,8 +18,9 @@ private val okHttpClient
         .addInterceptor(logger)
         .build()
 
-internal fun buildMonopolyRetrofit(
-    baseDtoClazz: Class<BaseResponse>,
+// TODO: Add KDoc
+fun buildMonopolyRetrofit(
+    baseDtoClazz: Class<out BaseResponse>,
     deserializer: MonopolyResponseDeserializer
 ): Retrofit {
     val gson = GsonBuilder()
@@ -34,8 +35,8 @@ internal fun buildMonopolyRetrofit(
         .build()
 }
 
-internal fun buildPlainRetrofit() = Retrofit.Builder()
-        .baseUrl(MONOPOLY_BASE_URL)
-        .client(okHttpClient)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+fun buildPlainRetrofit(): Retrofit = Retrofit.Builder()
+    .baseUrl(MONOPOLY_BASE_URL)
+    .client(okHttpClient)
+    .addConverterFactory(GsonConverterFactory.create())
+    .build()
