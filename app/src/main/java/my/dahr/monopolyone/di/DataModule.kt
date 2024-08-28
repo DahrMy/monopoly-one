@@ -26,11 +26,23 @@ import my.dahr.monopolyone.data.source.ip.remote.IpRemoteDataSource
 import my.dahr.monopolyone.data.source.ip.remote.IpRetrofitDataSourceImpl
 import my.dahr.monopolyone.domain.repository.NetworkRepository
 import my.dahr.monopolyone.domain.repository.SessionRepository
+import my.dahr.monopolyone.domain.usecase.login.VerifyTotpUseCase
+import my.dahr.monopolyone.domain.usecase.session.RequireSessionUseCase
 
 @Module
 @InstallIn(SingletonComponent::class)
 internal object DataModule {
 
+    // USE CASES
+    @Provides
+    internal fun provideRequireSessionUseCase(
+        sessionRepository: SessionRepository,
+        networkRepository: NetworkRepository
+    ): RequireSessionUseCase = RequireSessionUseCase(sessionRepository, networkRepository)
+
+    @Provides
+    internal fun provideVerifyTotpUseCase(sessionRepository: SessionRepository): VerifyTotpUseCase =
+        VerifyTotpUseCase(sessionRepository)
 
     // REPOSITORIES
 

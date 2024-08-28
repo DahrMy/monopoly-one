@@ -7,9 +7,15 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import my.dahr.monopolyone.R
-import my.dahr.monopolyone.utils.SessionHelper
 import my.dahr.monopolyone.databinding.ActivityMainBinding
+import my.dahr.monopolyone.domain.model.session.Session
+import my.dahr.monopolyone.domain.usecase.session.RequireSessionUseCase
 import my.dahr.monopolyone.ui.home.MainFragment
 import my.dahr.monopolyone.ui.login.LoginFragment
 import javax.inject.Inject
@@ -19,8 +25,7 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    @Inject
-    lateinit var sessionHelper: SessionHelper
+    @Inject lateinit var requireSessionUseCase: RequireSessionUseCase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,16 +41,22 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-//        sessionHelper.session = null
-        onSessionCheck()
+        defineStartingFragment()
 
     }
 
-    private fun onSessionCheck() {
-        when (sessionHelper.isSessionNotExpired()) {
-            true -> setFragment(MainFragment())
-            false -> setFragment(LoginFragment())
+    private fun defineStartingFragment() {
+
+        val session = CoroutineScope(Dispatchers.IO).async { requireSessionUseCase() }
+
+        MainScope().launch {
+            when (session.await()) { // TODO: Test speed of the app loading
+                is Session -> setFragment(MainFragment())
+                null -> setFragment(LoginFragment())
+                else -> setFragment(LoginFragment()) // TODO: Add crashlytics and toast for showing reason of logout
+            }
         }
+
     }
 
     private fun setFragment(fragment: Fragment) {
