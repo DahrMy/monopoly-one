@@ -1,8 +1,7 @@
-package my.dahr.monopolyone.ui.login
+package my.dahr.monopolyone.ui.dialog.totp
 
 import dagger.hilt.android.scopes.ViewModelScoped
 import my.dahr.monopolyone.data.network.api.monopoly.AuthorizationApi
-import my.dahr.monopolyone.data.network.dto.response.BaseResponse
 import retrofit2.Callback
 import javax.inject.Inject
 

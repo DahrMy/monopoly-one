@@ -18,9 +18,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
-import my.dahr.monopolyone.data.models.RequestStatus
 import my.dahr.monopolyone.data.network.MonopolyCallback
-import my.dahr.monopolyone.data.network.dto.response.SessionResponse
 import my.dahr.monopolyone.utils.SessionHelper
 import my.dahr.monopolyone.utils.currentTimeInSec
 import kotlin.coroutines.resume

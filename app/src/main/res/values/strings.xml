@@ -19,6 +19,8 @@
     <string name="dialog_error_title">Error message</string>
     <string name="dialog_error_1_text">Authorisation Error. Login or password aren\'t correct.</string>
     <string name="dialog_error_2_text">A required parameter was not passed or the passed parameters are invalid.</string>
+    <string name="dialog_error_2_tv_key_text">Key: %s</string>
+    <string name="dialog_error_2_tv_massage_text">Massage: %s</string>
     <string name="dialog_error_3_text">Internal Server Error.</string>
     <string name="dialog_error_4_text">You do not have permission to execute this request.</string>
     <string name="dialog_error_5_text">An unknown API method was called.</string>
@@ -35,7 +37,7 @@
     <string name="dialog_error_107_text">The user added you to the block list.</string>
     <string name="dialog_error_412_text">The account is globally blocked.</string>
     <string name="dialog_error_413_text">Invalid TOTP session key.</string>
-    <string name="dialog_error_414_text">Too frequent TOTP authorization.</string>
+    <string name="dialog_error_414_text">Too frequent TOTP authorization. Retry after %d seconds.</string>
     <string name="dialog_error_603_text">Any of the transferred items cannot be used in crafting.</string>
     <string name="dialog_error_605_text">Items must be of the same type and class.</string>
     <string name="dialog_error_624_text">Such an item cannot be used in this operation.</string>
@@ -68,8 +70,6 @@
     <string name="_25">25</string>
     <string name="wins">wins</string>
     <string name="inventory_1">Inventory</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="add_new_friend">Add new friend</string>
     <string name="you_can_find_new_friend_by_id_or_domain">Find new friend by id or domain</string>
     <string name="go">GO</string>

@@ -1,25 +1,29 @@
 package my.dahr.monopolyone.ui.login
 
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewGroup
-import androidx.annotation.ColorInt
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import my.dahr.monopolyone.R
-import my.dahr.monopolyone.data.models.RequestStatus
 import my.dahr.monopolyone.databinding.FragmentLoginBinding
+import my.dahr.monopolyone.domain.model.UndefinedError
+import my.dahr.monopolyone.domain.model.WrongReturnable
+import my.dahr.monopolyone.domain.model.login.TotpToken
+import my.dahr.monopolyone.domain.model.session.Session
+import my.dahr.monopolyone.ui.dialog.error.showErrorDialog
 import my.dahr.monopolyone.ui.home.MainFragment
-import my.dahr.monopolyone.ui.login.dialog.totp.TotpDialogFragment
+import my.dahr.monopolyone.ui.dialog.totp.TotpDialogFragment
+import my.dahr.monopolyone.utils.ProgressState
+import my.dahr.monopolyone.utils.endAnimation
+import my.dahr.monopolyone.utils.getBitmapById
 import my.dahr.monopolyone.utils.validEmail
 import my.dahr.monopolyone.utils.validPassword
 
@@ -30,6 +34,7 @@ class LoginFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel by viewModels<LoginViewModel>()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -42,17 +47,63 @@ class LoginFragment : Fragment() {
         return binding.root
     }
 
+
     private fun initObservers() {
+        pageObserver()
         btLoginObserver()
     }
 
+
     private fun setListeners() {
         binding.apply {
-            btLogin.setOnClickListener { btLoginOnClickListener() }
+            btLogin.setOnClickListener(btLoginOnClickListener())
         }
     }
 
-    private fun btLoginOnClickListener() {
+
+    private fun pageObserver() {
+        viewModel.loginResultLiveData.observe(viewLifecycleOwner) { data ->
+            when (data) {
+                is Session -> moveToMainFragment()
+                is TotpToken -> showTotpDialog(data)
+                is WrongReturnable -> showErrorDialog(data, requireContext())
+                else -> showErrorDialog(UndefinedError(), requireContext())
+            }
+        }
+    }
+
+
+    private fun btLoginObserver() {
+        viewModel.loginProgressStateLiveData.observe(viewLifecycleOwner) { state ->
+            when (state) {
+
+                ProgressState.Success -> lifecycleScope.launch(Dispatchers.Main) {
+                    binding.btLogin.endAnimation(
+                        color = binding.btLogin.solidColor,
+                        bitmap = requireContext().getBitmapById(R.drawable.ic_done)
+                    )
+                }
+
+                ProgressState.Loading -> {
+                    binding.btLogin.startAnimation()
+                }
+
+                ProgressState.Error, null -> lifecycleScope.launch(Dispatchers.Main) {
+                    binding.btLogin.endAnimation(
+                        bitmap = requireContext().getBitmapById(R.drawable.ic_error_outline)
+                    )
+                }
+
+                ProgressState.Idle -> {
+                    binding.btLogin.revertAnimation()
+                }
+
+            }
+        }
+    }
+
+
+    private fun btLoginOnClickListener() = OnClickListener {
         binding.apply {
             val email = etEmail.text.toString()
             val password = etPassword.text.toString()
@@ -75,91 +126,23 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun btLoginObserver() { // TODO: Make shorter the method
-        binding.btLogin.apply {
-            viewModel.requestStatusLiveData.observe(viewLifecycleOwner) { status ->
-                when (status) {
 
-                    RequestStatus.Success -> {
-                        lifecycleScope.launch(Dispatchers.Main) {
-                            btLoginEndAnimation(
-                                solidColor, viewModel.loadBitmap(R.drawable.ic_done)
-                            )
-                            parentFragmentManager.beginTransaction()
-                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN)
-                                .replace(R.id.fragment_container_view, MainFragment())
-                                .commit()
-                        }
-                    }
-
-                    RequestStatus.TwoFaCode -> {
-                        showTotpDialog()
-                        revertAnimation()
-                    }
-
-                    RequestStatus.Loading -> {
-                        startAnimation()
-                    }
-
-                    RequestStatus.Failure -> {
-                        lifecycleScope.launch(Dispatchers.Main) {
-                            btLoginEndAnimation(
-                                solidColor, viewModel.loadBitmap(R.drawable.ic_error_outline)
-                            )
-                        }
-                        MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(resources.getString(R.string.dialog_failure_title))
-                            .setPositiveButton(resources.getString(R.string.dialog_bt_ok)) { _, _ -> }
-                            .setMessage(R.string.dialog_failure_text)
-                            .show()
-                    }
-
-                    RequestStatus.NoInternetConnection -> {
-                        lifecycleScope.launch(Dispatchers.Main) {
-                            btLoginEndAnimation(
-                                solidColor, viewModel.loadBitmap(R.drawable.ic_error_outline)
-                            )
-                        }
-                        MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(resources.getString(R.string.dialog_noInternet_title))
-                            .setPositiveButton(resources.getString(R.string.dialog_bt_ok)) { _, _ -> }
-                            .setMessage(R.string.dialog_noInternet_text)
-                            .show()
-                    }
-
-                    else -> {
-                        lifecycleScope.launch(Dispatchers.Main) {
-                            btLoginEndAnimation(
-                                solidColor, viewModel.loadBitmap(R.drawable.ic_error_outline)
-                            )
-                        }
-                        MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(resources.getString(R.string.dialog_error_title))
-                            .setPositiveButton(resources.getString(R.string.dialog_bt_ok)) { _, _ -> }
-                            .setMessage(viewModel.loadErrorMessage(status))
-                            .show()
-                    }
-                }
-            }
-        }
-
+    private fun moveToMainFragment() {
+        parentFragmentManager.beginTransaction()
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN)
+            .replace(R.id.fragment_container_view, MainFragment())
+            .commit()
     }
 
-    private suspend fun btLoginEndAnimation(@ColorInt color: Int, bitmap: Bitmap) {
-        binding.btLogin.doneLoadingAnimation(color, bitmap)
-        delay(1000)
-        binding.btLogin.revertAnimation()
-    }
 
-    private fun showTotpDialog() {
-        val fragmentManager = parentFragmentManager
-        val newFragment = TotpDialogFragment.newInstance(viewModel.totpToken)
+    private fun showTotpDialog(totpToken: TotpToken) {
+        val newFragment = TotpDialogFragment.newInstance(totpToken.token)
         val isLargeLayout = resources.getBoolean(R.bool.large_layout)
 
         if (isLargeLayout) {
-            newFragment.show(fragmentManager, "dialog")
+            newFragment.show(parentFragmentManager, "dialog")
         } else {
-            fragmentManager.beginTransaction()
+            parentFragmentManager.beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .add(android.R.id.content, newFragment)
                 .addToBackStack(null)
@@ -167,5 +150,6 @@ class LoginFragment : Fragment() {
         }
 
     }
+
 
 }
