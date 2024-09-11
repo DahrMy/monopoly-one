@@ -6,6 +6,7 @@ import my.dahr.monopolyone.domain.model.friends.params.DeleteParams
 import my.dahr.monopolyone.domain.model.friends.params.ListParams
 import my.dahr.monopolyone.domain.model.friends.params.RequestsParams
 
+
 interface FriendsRepository {
     suspend fun getFriendsList(
         friendsParams: ListParams

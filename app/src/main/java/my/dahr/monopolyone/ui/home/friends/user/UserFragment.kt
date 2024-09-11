@@ -162,35 +162,35 @@ class UserFragment : Fragment() {
             }
         }
 
-        inventoryViewModel.requestStatusLiveData.observe(viewLifecycleOwner){status ->
-            when (status) {
-                RequestStatus.Success -> {
-                    binding.clProfile.visibility = View.VISIBLE
-                    loadingDialog.isDismiss()
-                }
-
-                RequestStatus.Failure -> {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(resources.getString(R.string.dialog_failure_title))
-                        .setPositiveButton(resources.getString(R.string.dialog_bt_ok)) { _, _ -> }
-                        .setMessage(R.string.dialog_failure_text)
-                        .show()
-                }
-
-                RequestStatus.Loading -> {
-                    loadingDialog.startLoading()
-                }
-
-                else -> {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(resources.getString(R.string.dialog_error_title))
-                        .setPositiveButton(resources.getString(R.string.dialog_bt_ok)) { _, _ -> }
-                        .setMessage(viewModel.loadErrorMessage(status))
-                        .show()
-                }
-            }
-
-        }
+//        inventoryViewModel.requestStatusLiveData.observe(viewLifecycleOwner){status ->
+//            when (status) {
+//                RequestStatus.Success -> {
+//                    binding.clProfile.visibility = View.VISIBLE
+//                    loadingDialog.isDismiss()
+//                }
+//
+//                RequestStatus.Failure -> {
+//                    MaterialAlertDialogBuilder(requireContext())
+//                        .setTitle(resources.getString(R.string.dialog_failure_title))
+//                        .setPositiveButton(resources.getString(R.string.dialog_bt_ok)) { _, _ -> }
+//                        .setMessage(R.string.dialog_failure_text)
+//                        .show()
+//                }
+//
+//                RequestStatus.Loading -> {
+//                    loadingDialog.startLoading()
+//                }
+//
+//                else -> {
+//                    MaterialAlertDialogBuilder(requireContext())
+//                        .setTitle(resources.getString(R.string.dialog_error_title))
+//                        .setPositiveButton(resources.getString(R.string.dialog_bt_ok)) { _, _ -> }
+//                        .setMessage(viewModel.loadErrorMessage(status))
+//                        .show()
+//                }
+//            }
+//
+//        }
     }
 
     private fun showInventory(items: List<Item>) {
