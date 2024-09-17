@@ -8,9 +8,9 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import my.dahr.monopolyone.domain.model.Returnable
+import my.dahr.monopolyone.domain.model.SuccessfulReturnable
 import my.dahr.monopolyone.domain.model.login.LoginInputData
 import my.dahr.monopolyone.domain.model.session.Session
 import my.dahr.monopolyone.domain.usecase.login.SignInUseCase
@@ -40,14 +40,24 @@ class LoginViewModel @Inject constructor(
         val inputData = LoginInputData(email, password)
 
         viewModelScope.launch(coroutineContext) {
-            val loginData = signInUseCase(inputData)
-            _loginResultLiveData.postValue(loginData)
+            val result = signInUseCase(inputData)
+            _loginResultLiveData.postValue(result)
 
-            _loginProgressStateLiveData.postValue(ProgressState.Success)
+            when (result) {
+                is SuccessfulReturnable -> {
+                    _loginProgressStateLiveData.postValue(ProgressState.Success)
 
-            if (loginData is Session) {
-                SessionWorker.enqueue(loginData.expiresAt, appContext)
+                    if (result is Session) {
+                        SessionWorker.enqueue(result.expiresAt, appContext)
+                    }
+                }
+
+                else /* is WrongReturnable */ -> {
+                    _loginProgressStateLiveData.postValue(ProgressState.Error)
+                }
             }
+
+
         }
 
     }

@@ -136,7 +136,7 @@ class LoginFragment : Fragment() {
 
 
     private fun showTotpDialog(totpToken: TotpToken) {
-        val newFragment = TotpDialogFragment.newInstance(totpToken.token)
+        val newFragment = TotpDialogFragment.newInstance(totpToken)
         val isLargeLayout = resources.getBoolean(R.bool.large_layout)
 
         if (isLargeLayout) {
