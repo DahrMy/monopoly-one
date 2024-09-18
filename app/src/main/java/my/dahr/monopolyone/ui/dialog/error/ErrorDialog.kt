@@ -1,12 +1,15 @@
 package my.dahr.monopolyone.ui.dialog.error
 
 import android.content.Context
+import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import my.dahr.monopolyone.R
 import my.dahr.monopolyone.domain.model.Failure
 import my.dahr.monopolyone.domain.model.ParamInvalidError
 import my.dahr.monopolyone.domain.model.WrongReturnable
 import my.dahr.monopolyone.utils.getErrorMessageStringResource
+
 
 internal fun showErrorDialog(data: WrongReturnable, context: Context) {
 
@@ -24,11 +27,11 @@ internal fun showErrorDialog(data: WrongReturnable, context: Context) {
 
     when (data) {
         is ParamInvalidError -> {
-            alertBuilder
+            val alert = alertBuilder
                 .setView(R.layout.dialog_error)
                 .show()
 
-            setAlertContent(data.issues)
+            setAlertContent(alert, data.issues)
         }
 
         else -> alertBuilder.show()
@@ -36,6 +39,11 @@ internal fun showErrorDialog(data: WrongReturnable, context: Context) {
 
 }
 
-private fun setAlertContent(list: List<ParamInvalidError.Issue>) {
-    TODO("Not yet implemented. Create RecyclerViewAdapter for R.layout.dialog_error.")
+
+private fun setAlertContent(alert: AlertDialog, list: List<ParamInvalidError.Issue>) {
+    val adapter = DialogErrorIssuesRvAdapter(alert.context)
+    alert.findViewById<RecyclerView>(R.id.root)?.also {
+        it.adapter = adapter
+    }
+    adapter.updateList(list)
 }
