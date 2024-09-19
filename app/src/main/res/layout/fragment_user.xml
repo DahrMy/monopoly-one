@@ -6,7 +6,7 @@
     android:visibility="gone"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.friends.user.UserFragment">
+    tools:context=".ui.friends.user.UserFragment">
 
     <ImageView
         android:id="@+id/ivBack"

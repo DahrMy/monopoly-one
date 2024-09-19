@@ -18,8 +18,8 @@ import my.dahr.monopolyone.domain.model.UndefinedError
 import my.dahr.monopolyone.domain.model.WrongReturnable
 import my.dahr.monopolyone.domain.model.login.TotpToken
 import my.dahr.monopolyone.domain.model.session.Session
+import my.dahr.monopolyone.ui.MainFragment
 import my.dahr.monopolyone.ui.dialog.error.showErrorDialog
-import my.dahr.monopolyone.ui.home.MainFragment
 import my.dahr.monopolyone.ui.dialog.totp.TotpDialogFragment
 import my.dahr.monopolyone.utils.ProgressState
 import my.dahr.monopolyone.utils.endAnimation
