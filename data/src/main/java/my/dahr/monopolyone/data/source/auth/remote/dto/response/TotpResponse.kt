@@ -5,7 +5,7 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import my.dahr.monopolyone.data.network.dto.response.monopoly.BaseResponse
 
-data class TotpResponse(
+internal data class TotpResponse(
     @Expose
     override val code: Int,
     @Expose

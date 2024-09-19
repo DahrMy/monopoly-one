@@ -2,7 +2,7 @@ package my.dahr.monopolyone.data.network.dto.response.monopoly.error
 
 import com.google.gson.annotations.Expose
 
-data class ParamInvalidErrorResponse(
+internal data class ParamInvalidErrorResponse(
     @Expose
     override val code: Int,
     @Expose

@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import my.dahr.monopolyone.data.network.dto.response.monopoly.BaseResponse
 
 
-data class SessionResponse(
+internal data class SessionResponse(
 
     @Expose
     override val code: Int,

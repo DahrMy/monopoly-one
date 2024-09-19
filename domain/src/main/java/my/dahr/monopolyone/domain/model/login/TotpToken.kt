@@ -8,4 +8,6 @@ import my.dahr.monopolyone.domain.model.LoginOutputData
  */
 data class TotpToken(
     val token: String
-) : LoginOutputData
+) : LoginOutputData {
+    override fun toString() = token
+}

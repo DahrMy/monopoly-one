@@ -4,7 +4,7 @@ package my.dahr.monopolyone.data.network.dto.response.monopoly.error
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class FrequentTotpErrorResponse(
+internal data class FrequentTotpErrorResponse(
     @Expose
     override val code: Int,
     @Expose
