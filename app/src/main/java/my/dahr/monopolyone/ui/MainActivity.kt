@@ -16,8 +16,6 @@ import my.dahr.monopolyone.R
 import my.dahr.monopolyone.databinding.ActivityMainBinding
 import my.dahr.monopolyone.domain.model.session.Session
 import my.dahr.monopolyone.domain.usecase.session.RequireSessionUseCase
-import my.dahr.monopolyone.ui.home.MainFragment
-import my.dahr.monopolyone.ui.login.LoginFragment
 import javax.inject.Inject
 
 
@@ -52,8 +50,9 @@ class MainActivity : AppCompatActivity() {
         MainScope().launch {
             when (session.await()) { // TODO: Test speed of the app loading
                 is Session -> setFragment(MainFragment())
-                null -> setFragment(LoginFragment())
-                else -> setFragment(LoginFragment()) // TODO: Add crashlytics and toast for showing reason of logout
+                else -> setFragment(MainFragment())
+//                null -> setFragment(LoginFragment())
+//                else -> setFragment(LoginFragment()) // TODO: Add crashlytics and toast for showing reason of logout
             }
         }
 
