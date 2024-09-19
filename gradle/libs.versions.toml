@@ -1,33 +1,33 @@
 [versions]
 # Plugins
-agp = "8.5.0"
-kotlin = "1.9.21"
-ksp = "1.9.23-1.0.20"
+agp = "8.5.2"
+kotlin = "2.0.20"
+ksp = "2.0.20-1.0.25"
 
 # Junit
 junit = "4.13.2"
 
 # AndroidX
 coreKtx = "1.13.1"
-junitVersion = "1.1.5"
-espressoCore = "3.5.1"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
 appcompat = "1.7.0"
-activity = "1.9.0"
+activity = "1.9.2"
 constraintlayout = "2.1.4"
-fragment = "1.8.0"
-lifecycle = "2.8.2"
-workRuntimeKtx = "2.9.0"
+fragment = "1.8.3"
+lifecycle = "2.8.6"
+workRuntimeKtx = "2.9.1"
 hiltWork = "1.2.0"
 hiltCompiler = "1.2.0"
 room = "2.6.1"
 
 # Google
 material = "1.12.0"
-hiltGoogle = "2.50"
+hiltGoogle = "2.52"
 gson = "2.10.1"
 
 # KotlinX
-coroutines = "1.8.1"
+coroutines = "1.9.0"
 
 # Retrofit + OkHTTP
 retrofit = "2.9.0"
@@ -38,7 +38,6 @@ glide = "4.16.0"
 
 # Other
 loadingBt = "2.3.0"
-jetbrainsKotlinJvm = "1.9.21"
 
 
 [libraries]
@@ -89,13 +88,14 @@ glide = { group="com.github.bumptech.glide", name="glide", version.ref="glide" }
 # Other
 loadingBt = { group = "com.github.leandroborgesferreira", name = "loading-button-android", version.ref = "loadingBt" }
 
+
 [plugins]
 
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+jetbrainsKotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 
 # Google
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltGoogle" }
-jetbrainsKotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
