@@ -9,3 +9,7 @@ internal fun validEmail(email: String) = Regex(
 internal fun validPassword(password: String) = Regex(
     """^(.){10,}$"""
 ).matches(password)
+
+fun printErrorln(message: String) {
+    System.err.println(message)
+}

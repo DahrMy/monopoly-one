@@ -35,6 +35,7 @@ interface SuccessfulReturnable : Returnable
  */
 sealed interface WrongReturnable : Returnable {
     val code: Int
+    val description: String
 }
 
 /**

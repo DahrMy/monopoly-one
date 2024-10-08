@@ -34,22 +34,6 @@ import my.dahr.monopolyone.domain.usecase.session.RequireSessionUseCase
 @InstallIn(SingletonComponent::class)
 internal object DataModule {
 
-    // USE CASES
-    @Provides
-    internal fun provideRequireSessionUseCase(
-        sessionRepository: SessionRepository,
-        networkRepository: NetworkRepository
-    ): RequireSessionUseCase = RequireSessionUseCase(sessionRepository, networkRepository)
-
-    @Provides
-    internal fun provideSignInUseCase(sessionRepository: SessionRepository): SignInUseCase =
-        SignInUseCase(sessionRepository)
-
-    @Provides
-    internal fun provideVerifyTotpUseCase(sessionRepository: SessionRepository): VerifyTotpUseCase =
-        VerifyTotpUseCase(sessionRepository)
-
-
     // REPOSITORIES
 
     @Provides
