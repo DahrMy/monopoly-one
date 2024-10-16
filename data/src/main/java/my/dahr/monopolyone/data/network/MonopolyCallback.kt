@@ -1,13 +1,13 @@
 package my.dahr.monopolyone.data.network
 
 import android.util.Log
-import com.google.gson.Gson
 import my.dahr.monopolyone.data.network.dto.response.monopoly.BaseResponse
 import my.dahr.monopolyone.data.network.dto.response.monopoly.error.BaseErrorResponse
 import my.dahr.monopolyone.data.network.dto.response.monopoly.toError
+import my.dahr.monopolyone.data.utils.buildMonopolyGson
+import my.dahr.monopolyone.data.utils.createPlainMonopolyDeserializerInstance
 import my.dahr.monopolyone.domain.model.Failure
 import my.dahr.monopolyone.domain.model.Returnable
-import my.dahr.monopolyone.domain.model.SuccessfulReturnable
 import my.dahr.monopolyone.domain.model.UndefinedError
 import retrofit2.Call
 import retrofit2.Callback
@@ -20,7 +20,7 @@ import kotlin.coroutines.resume
  *
  * This [Callback] implementation have error responses handling and
  * overrode [onFailure]. In [onSuccessfulResponse] you work with 100% successful response that
- * server returned, but need implement it to pass [SuccessfulReturnable] into [Continuation].
+ * server returned, but need implement it to pass [my.dahr.monopolyone.domain.model.SuccessfulReturnable] into [Continuation].
  *
  * Implementation example:
  * ```Kotlin
@@ -60,8 +60,12 @@ internal abstract class MonopolyCallback(
             }
 
         } else {
+            val gson = buildMonopolyGson(
+                BaseErrorResponse::class.java,
+                createPlainMonopolyDeserializerInstance()
+            )
             val jsonResponse = response.errorBody()?.string()
-            val responseBody = Gson().fromJson(jsonResponse, BaseErrorResponse::class.java)
+            val responseBody = gson.fromJson(jsonResponse, BaseErrorResponse::class.java)
             handleResponse(responseBody)
         }
     }
