@@ -16,7 +16,7 @@ internal data class ParamInvalidErrorResponse(
     ) {
         data class Issue(
             @Expose
-            val key: String,
+            val path: String,
             @Expose
             val message: String
         )

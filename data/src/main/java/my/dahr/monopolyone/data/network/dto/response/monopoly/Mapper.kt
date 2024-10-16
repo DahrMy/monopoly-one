@@ -80,7 +80,7 @@ internal fun List<ParamInvalidErrorResponse.Data.Issue>.toModelList(): List<Para
 }
 
 internal fun ParamInvalidErrorResponse.Data.Issue.toModel() = ParamInvalidError.Issue(
-    key = key,
+    path = path,
     message = message
 )
 
