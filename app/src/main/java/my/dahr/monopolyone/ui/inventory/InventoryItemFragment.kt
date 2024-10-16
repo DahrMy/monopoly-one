@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import my.dahr.monopolyone.R
 import my.dahr.monopolyone.databinding.FragmentInventoryItemBinding
-import my.dahr.monopolyone.utils.ItemTypeConverter
+import my.dahr.monopolyone.data.utils.ItemTypeConverter
 
 class InventoryItemFragment : Fragment() {
     private var _binding: FragmentInventoryItemBinding? = null

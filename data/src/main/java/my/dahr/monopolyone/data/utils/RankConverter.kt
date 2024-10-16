@@ -1,4 +1,4 @@
-package my.dahr.monopolyone.utils
+package my.dahr.monopolyone.data.utils
 
 enum class RankConverter(val range: IntRange, val word: String, val number: Int) {
     ROOKIE(0..4, "Rookie", 0),

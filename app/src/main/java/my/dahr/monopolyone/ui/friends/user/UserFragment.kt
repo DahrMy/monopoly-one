@@ -24,8 +24,7 @@ import my.dahr.monopolyone.ui.inventory.InventoryFragment
 import my.dahr.monopolyone.ui.inventory.InventoryItemFragment
 import my.dahr.monopolyone.ui.inventory.InventoryViewModel
 import my.dahr.monopolyone.ui.inventory.adapters.InventoryAdapter
-import my.dahr.monopolyone.utils.LoadingDialog
-import my.dahr.monopolyone.utils.RankConverter
+import my.dahr.monopolyone.data.utils.RankConverter
 
 @AndroidEntryPoint
 class UserFragment : Fragment() {
@@ -34,8 +33,6 @@ class UserFragment : Fragment() {
 
     private var _binding: FragmentUserBinding? = null
     private val binding get() = _binding!!
-
-    private lateinit var loadingDialog: LoadingDialog
 
     private var userId: Int? = null
     private var avatar: String? = null
@@ -56,7 +53,6 @@ class UserFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        loadingDialog = LoadingDialog(requireActivity())
         receiveData()
         viewModel.checkIfFriend(userId!!)
         viewModel.getFriendListForUser(userId!!)

@@ -1,4 +1,4 @@
-package my.dahr.monopolyone.utils
+package my.dahr.monopolyone.data.utils
 
 enum class ItemTypeConverter(val number: Int, val word: String) {
     ZERO(0, "Card"),
@@ -16,6 +16,5 @@ enum class ItemTypeConverter(val number: Int, val word: String) {
         fun fromNumber(number: Int): String? {
             return entries.find { it.number == number }?.word
         }
-
     }
 }

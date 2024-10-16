@@ -17,13 +17,10 @@ import my.dahr.monopolyone.domain.models.friends.list.Friend
 import my.dahr.monopolyone.ui.friends.FriendsViewModel
 import my.dahr.monopolyone.ui.friends.adapters.FriendsAdapter
 import my.dahr.monopolyone.ui.friends.user.UserFragment
-import my.dahr.monopolyone.utils.LoadingDialog
 
 @AndroidEntryPoint
 class UserFriendsFragment : Fragment() {
     private val viewModel: FriendsViewModel by viewModels()
-
-    private lateinit var loadingDialog:LoadingDialog
 
     private var _binding: FragmentUserFriendsBinding? = null
     private val binding get() = _binding!!
@@ -42,7 +39,6 @@ class UserFriendsFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        loadingDialog = LoadingDialog(requireActivity())
         receiveData()
         setContent()
         initObservers()

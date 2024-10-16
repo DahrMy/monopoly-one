@@ -12,7 +12,6 @@ import my.dahr.monopolyone.R
 import my.dahr.monopolyone.databinding.FragmentInventoryBinding
 import my.dahr.monopolyone.domain.models.inventory.items.Item
 import my.dahr.monopolyone.ui.inventory.adapters.InventoryAdapter
-import my.dahr.monopolyone.utils.LoadingDialog
 
 @AndroidEntryPoint
 class InventoryFragment : Fragment() {
@@ -21,7 +20,6 @@ class InventoryFragment : Fragment() {
     private var _binding: FragmentInventoryBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var loadingDialog: LoadingDialog
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,7 +30,6 @@ class InventoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        loadingDialog = LoadingDialog(requireActivity())
         initObservers()
         inventoryViewModel.getItemList()
     }
