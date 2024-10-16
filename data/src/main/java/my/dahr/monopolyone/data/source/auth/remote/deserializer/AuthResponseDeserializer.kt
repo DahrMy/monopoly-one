@@ -10,7 +10,7 @@ import my.dahr.monopolyone.data.source.auth.remote.dto.response.TotpResponse
 class AuthResponseDeserializer : MonopolyResponseDeserializer() {
 
     override fun identifyByContent(json: JsonElement): Class<out BaseResponse> {
-        val jsonObject = json.asJsonObject
+        val jsonObject = json.asJsonObject.get("data").asJsonObject
         return when {
             jsonObject.has("access_token") -> SessionResponse::class.java
             jsonObject.has("totp_session_token") -> TotpResponse::class.java

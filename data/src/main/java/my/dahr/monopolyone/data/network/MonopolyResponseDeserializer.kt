@@ -18,9 +18,9 @@ abstract class MonopolyResponseDeserializer : JsonDeserializer<BaseResponse> {
         val code = json.asJsonObject.get("code").asInt
 
         val clazz: Class<out BaseResponse> = if (code == 0) {
-            identifyByCode(code)
-        } else {
             identifyByContent(json)
+        } else {
+            identifyByCode(code)
         }
 
         return context.deserialize(json, clazz)
