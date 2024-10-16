@@ -7,5 +7,6 @@ package my.dahr.monopolyone.domain.model
  */
 data class Failure(
     override val code: Int = -1,
-    val throwable: Throwable
+    override val description: String = "",
+    val throwable: Throwable,
 ) : WrongReturnable

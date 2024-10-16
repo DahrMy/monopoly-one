@@ -1,6 +1,9 @@
 package my.dahr.monopolyone.di
 
+import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import my.dahr.monopolyone.domain.repository.NetworkRepository
 import my.dahr.monopolyone.domain.repository.SessionRepository
 import my.dahr.monopolyone.domain.usecase.login.RefreshSessionUseCase
@@ -8,6 +11,8 @@ import my.dahr.monopolyone.domain.usecase.login.SignInUseCase
 import my.dahr.monopolyone.domain.usecase.login.VerifyTotpUseCase
 import my.dahr.monopolyone.domain.usecase.session.RequireSessionUseCase
 
+@Module
+@InstallIn(SingletonComponent::class)
 object DomainModule {
 
     // USE CASES
