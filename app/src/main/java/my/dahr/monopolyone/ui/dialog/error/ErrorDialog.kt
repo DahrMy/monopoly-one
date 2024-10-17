@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import my.dahr.monopolyone.R
 import my.dahr.monopolyone.domain.model.Failure
+import my.dahr.monopolyone.domain.model.NoInternetConnectionError
 import my.dahr.monopolyone.domain.model.ParamInvalidError
 import my.dahr.monopolyone.domain.model.WrongReturnable
 import my.dahr.monopolyone.utils.getErrorMessageStringResource
@@ -15,7 +16,7 @@ internal fun showErrorDialog(data: WrongReturnable, context: Context) {
 
     val title = when(data) {
         is Failure -> context.resources.getString(R.string.dialog_failure_title)
-        // TODO: is NoInternetError -> context.resources.getString(R.string.dialog_noInternet_title)
+        is NoInternetConnectionError -> context.resources.getString(R.string.dialog_noInternet_title)
         else -> context.resources.getString(R.string.dialog_error_title)
     }
     val message = context.getErrorMessageStringResource(data)

@@ -2,6 +2,7 @@ package my.dahr.monopolyone.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.net.ConnectivityManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,6 +30,8 @@ import my.dahr.monopolyone.data.source.auth.remote.deserializer.AuthResponseDese
 import my.dahr.monopolyone.data.source.friends.remote.FriendsDataSource
 import my.dahr.monopolyone.data.source.friends.remote.FriendsDataSourceImpl
 import my.dahr.monopolyone.data.source.friends.remote.deserializer.FriendsResponseDeserializer
+import my.dahr.monopolyone.data.source.internet.NetworkStateDataSource
+import my.dahr.monopolyone.data.source.internet.NetworkStateDataSourceImpl
 import my.dahr.monopolyone.data.source.inventory.remote.InventoryDataSource
 import my.dahr.monopolyone.data.source.inventory.remote.InventoryDataSourceImpl
 import my.dahr.monopolyone.data.source.inventory.remote.deserializer.InventoryResponseDeserializer
@@ -44,9 +47,6 @@ import my.dahr.monopolyone.domain.repository.InventoryRepository
 import my.dahr.monopolyone.domain.repository.NetworkRepository
 import my.dahr.monopolyone.domain.repository.SessionRepository
 import my.dahr.monopolyone.domain.repository.UserRepository
-import my.dahr.monopolyone.domain.usecase.login.SignInUseCase
-import my.dahr.monopolyone.domain.usecase.login.VerifyTotpUseCase
-import my.dahr.monopolyone.domain.usecase.session.RequireSessionUseCase
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -57,29 +57,38 @@ internal object DataModule {
     @Provides
     internal fun provideNetworkRepository(
         ipRemoteDataSource: IpRemoteDataSource,
-        ipLocalDataSource: IpLocalDataSource
-    ): NetworkRepository = NetworkRepositoryImpl(ipRemoteDataSource, ipLocalDataSource)
+        ipLocalDataSource: IpLocalDataSource,
+        networkStateDataSource: NetworkStateDataSource
+    ): NetworkRepository = NetworkRepositoryImpl(
+        ipRemoteDataSource, ipLocalDataSource, networkStateDataSource
+    )
 
     @Provides
     internal fun provideSessionRepository(
         sessionRemoteDataSource: SessionRemoteDataSource,
-        sessionLocalDataSource: SessionLocalDataSource
-    ): SessionRepository = SessionRepositoryImpl(sessionRemoteDataSource, sessionLocalDataSource)
+        sessionLocalDataSource: SessionLocalDataSource,
+        networkStateDataSource: NetworkStateDataSource
+    ): SessionRepository = SessionRepositoryImpl(
+        sessionRemoteDataSource, sessionLocalDataSource, networkStateDataSource
+    )
 
     @Provides
     internal fun provideFriendsRepository(
         friendsDataSource: FriendsDataSource,
-    ): FriendsRepository = FriendsRepositoryImpl(friendsDataSource)
+        networkStateDataSource: NetworkStateDataSource
+    ): FriendsRepository = FriendsRepositoryImpl(friendsDataSource, networkStateDataSource)
 
     @Provides
     internal fun provideInventoryRepository(
-        inventoryDataSource: InventoryDataSource
-    ): InventoryRepository = InventoryRepositoryImpl(inventoryDataSource)
+        inventoryDataSource: InventoryDataSource,
+        networkStateDataSource: NetworkStateDataSource
+    ): InventoryRepository = InventoryRepositoryImpl(inventoryDataSource, networkStateDataSource)
 
     @Provides
     internal fun provideUserRepository(
-        userDataSource: UserDataSource
-    ): UserRepository = UserRepositoryImpl(userDataSource)
+        userDataSource: UserDataSource,
+        networkStateDataSource: NetworkStateDataSource
+    ): UserRepository = UserRepositoryImpl(userDataSource, networkStateDataSource)
 
 
     // DATA SOURCES
@@ -91,6 +100,15 @@ internal object DataModule {
     @Provides
     internal fun provideIpLocalDataSource(sharedPref: SharedPreferences): IpLocalDataSource =
         IpSharedPrefDataSourceImpl(sharedPref)
+
+    @Provides
+    internal fun provideNetworkStateDataSource(
+        @ApplicationContext context: Context
+    ): NetworkStateDataSource {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return NetworkStateDataSourceImpl(connectivityManager)
+    }
 
     @Provides
     internal fun provideSessionRemoteDataSource(api: AuthorizationApi): SessionRemoteDataSource =

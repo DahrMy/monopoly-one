@@ -1,5 +1,6 @@
 package my.dahr.monopolyone.data.repository
 
+import my.dahr.monopolyone.data.source.internet.NetworkStateDataSource
 import my.dahr.monopolyone.data.source.ip.local.IpLocalDataSource
 import my.dahr.monopolyone.data.source.ip.remote.IpRemoteDataSource
 import my.dahr.monopolyone.data.source.ip.remote.MyIpResponse
@@ -15,26 +16,33 @@ import kotlin.coroutines.suspendCoroutine
 
 class NetworkRepositoryImpl(
     private val ipRemoteDataSource: IpRemoteDataSource,
-    private val ipLocalDataSource: IpLocalDataSource
+    private val ipLocalDataSource: IpLocalDataSource,
+    private val networkStateDataSource: NetworkStateDataSource
 ) : NetworkRepository {
 
-    override suspend fun getCurrentIp(): Ip? = suspendCoroutine { continuation ->
-        ipRemoteDataSource.getMyIp().enqueue(object : Callback<MyIpResponse> {
+    override suspend fun getCurrentIp(): Ip? {
+        if (!networkStateDataSource.hasInternetConnection()) {
+            return null
+        }
 
-            override fun onResponse(call: Call<MyIpResponse>, response: Response<MyIpResponse>) {
-                if (response.isSuccessful) {
-                    val ip = response.body()?.toIp()
-                    continuation.resume(ip)
-                } else {
+        return suspendCoroutine { continuation ->
+            ipRemoteDataSource.getMyIp().enqueue(object : Callback<MyIpResponse> {
+
+                override fun onResponse(call: Call<MyIpResponse>, response: Response<MyIpResponse>) {
+                    if (response.isSuccessful) {
+                        val ip = response.body()?.toIp()
+                        continuation.resume(ip)
+                    } else {
+                        continuation.resume(null)
+                    }
+                }
+
+                override fun onFailure(call: Call<MyIpResponse>, t: Throwable) {
                     continuation.resume(null)
                 }
-            }
 
-            override fun onFailure(call: Call<MyIpResponse>, t: Throwable) {
-                continuation.resume(null)
-            }
-
-        })
+            })
+        }
     }
 
     override fun getStoredIp(): Ip? = ipLocalDataSource.storedIp?.toIp()

@@ -1,5 +1,9 @@
 package my.dahr.monopolyone.domain.model
 
+data class NoInternetConnectionError(
+    override val code: Int = -1,
+    override val description: String = ""
+) : WrongReturnable
 
 data class AuthorizationError(
     override val code: Int = 1,

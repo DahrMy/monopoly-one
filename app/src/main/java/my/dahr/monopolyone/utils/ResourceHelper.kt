@@ -21,6 +21,7 @@ import my.dahr.monopolyone.domain.model.InvalidTotpCodeError
 import my.dahr.monopolyone.domain.model.ItemUsingOperationError
 import my.dahr.monopolyone.domain.model.MaintenanceError
 import my.dahr.monopolyone.domain.model.MuteError
+import my.dahr.monopolyone.domain.model.NoInternetConnectionError
 import my.dahr.monopolyone.domain.model.ObjectsLimitError
 import my.dahr.monopolyone.domain.model.ParamInvalidError
 import my.dahr.monopolyone.domain.model.RequestsLimitError
@@ -50,6 +51,7 @@ internal fun Context.getBitmapById(@DrawableRes id: Int): Bitmap {
 
 internal fun Context.getErrorMessageStringResource(data: WrongReturnable) = when (data) {
     is Failure /* -1 */ -> resources.getString(R.string.dialog_failure_text)
+    is NoInternetConnectionError /* -1 */ -> resources.getString(R.string.dialog_noInternet_text)
     is AuthorizationError /* 1 */ -> resources.getString(R.string.dialog_error_1_text)
     is ParamInvalidError /* 2 */ -> resources.getString(R.string.dialog_error_2_text)
     is InternalError /* 3 */ -> resources.getString(R.string.dialog_error_3_text)
