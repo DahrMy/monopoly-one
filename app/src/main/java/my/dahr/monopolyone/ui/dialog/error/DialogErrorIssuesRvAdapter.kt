@@ -41,7 +41,7 @@ class DialogErrorIssuesRvAdapter @Inject constructor(
 
             binding.tvKey.text = context.resources.getString(
                 R.string.dialog_error_2_tv_key_text,
-                item.key
+                item.path
             )
 
             binding.tvMassage.text = context.resources.getString(
@@ -67,7 +67,7 @@ class MyDiffCallback(
 
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-        oldList[oldItemPosition].key == newList[newItemPosition].key
+        oldList[oldItemPosition].path == newList[newItemPosition].path
 
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =

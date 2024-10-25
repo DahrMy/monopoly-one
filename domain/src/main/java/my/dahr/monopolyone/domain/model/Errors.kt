@@ -18,7 +18,7 @@ data class ParamInvalidError(
 ) : WrongReturnable {
 
     data class Issue(
-        val key: String,
+        val path: String,
         val message: String
     )
 

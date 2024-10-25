@@ -53,15 +53,15 @@ class SessionWorker @AssistedInject constructor(
         }
 
         null -> {
-            printErrorln("Session instance is null")
+            Log.e(TAG_LOGGER, "Session instance is null")
             Result.failure()
         }
 
         else -> {
             if (resultInstance is WrongReturnable) {
-                printErrorln("${resultInstance.code}: ${resultInstance.description}")
+                Log.e(TAG_LOGGER, "${resultInstance.code}: ${resultInstance.description}")
             } else {
-                printErrorln("Undefined error is occurred")
+                Log.e(TAG_LOGGER, "Undefined error is occurred")
             }
             Result.failure()
         }
