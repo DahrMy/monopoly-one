@@ -3,7 +3,6 @@
 package my.dahr.monopolyone.domain.usecase.login
 
 import my.dahr.monopolyone.domain.model.Returnable
-import my.dahr.monopolyone.domain.model.WrongReturnable
 import my.dahr.monopolyone.domain.model.session.Session
 import my.dahr.monopolyone.domain.repository.SessionRepository
 
@@ -16,7 +15,11 @@ class RefreshSessionUseCase(
      * or `null` if session doesn't exist.
      */
     suspend operator fun invoke(): Returnable? {
-        val session = sessionRepository.getStoredSession() ?: return null
-        return sessionRepository.refreshSession(session)
+        val oldSession = sessionRepository.getStoredSession() ?: return null
+        val output = sessionRepository.refreshSession(oldSession)
+        if (output is Session) {
+            sessionRepository.saveSession(output)
+        }
+        return output
     }
 }

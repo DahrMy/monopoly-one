@@ -22,8 +22,9 @@ class FriendsFragment : Fragment() {
     private val viewModel: FriendsViewModel by viewModels()
 
     private var _binding: FragmentFriendsBinding? = null
-
     private val binding get() = _binding!!
+
+    private lateinit var adapter: FriendsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,12 +37,34 @@ class FriendsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setRv()
         initObservers()
 
         viewModel.getRequestsList()
         viewModel.getFriendList()
 
+
         setListeners()
+    }
+
+    fun setRv() {
+        adapter = FriendsAdapter(object : FriendsAdapter.OnItemClickListener {
+            override fun onItemClicked(position: Int, friend: Friend) {
+                val fragment = UserFragment.newInstance(friend.userId,
+                    friend.avatar,
+                    friend.nick,
+                    friend.xpLevel,
+                    friend.xp,
+                    friend.games,
+                    friend.gamesWins)
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.container, fragment)
+                    .commit()
+            }
+        })
+        binding.rvFriends.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvFriends.setHasFixedSize(true)
+        binding.rvFriends.adapter = adapter
     }
 
     private fun setListeners() {
@@ -69,25 +92,7 @@ class FriendsFragment : Fragment() {
     }
 
     private fun showFriendsList(friends: List<Friend>) {
-        val adapter = FriendsAdapter(object : FriendsAdapter.OnItemClickListener {
-            override fun onItemClicked(position: Int, friend: Friend) {
-                val fragment = UserFragment.newInstance(friend.userId,
-                    friend.avatar,
-                    friend.nick,
-                    friend.xpLevel,
-                    friend.xp,
-                    friend.games,
-                    friend.gamesWins)
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.container, fragment)
-                    .commit()
-            }
-        })
         adapter.submitList(friends)
-        val layoutManager = LinearLayoutManager(requireContext())
-        binding.rvFriends.layoutManager = layoutManager
-        binding.rvFriends.setHasFixedSize(true)
-        binding.rvFriends.adapter = adapter
     }
 
     private fun checkFriendRequests(requests: List<Request>) {
@@ -110,4 +115,5 @@ class FriendsFragment : Fragment() {
     companion object {
         fun newInstance(): FriendsFragment = FriendsFragment()
     }
+
 }

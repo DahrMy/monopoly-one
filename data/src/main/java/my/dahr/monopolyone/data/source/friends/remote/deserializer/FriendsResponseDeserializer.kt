@@ -9,7 +9,7 @@ import my.dahr.monopolyone.data.network.dto.response.monopoly.error.DefaultError
 class FriendsResponseDeserializer : MonopolyResponseDeserializer() {
 
     override fun identifyByContent(json: JsonElement): Class<out BaseResponse> {
-        val jsonObject = json.asJsonObject
+        val jsonObject = json.asJsonObject.get("data").asJsonObject
         return when {
             jsonObject.has("friends") -> FriendsResponse::class.java
             else -> DefaultErrorResponse::class.java
