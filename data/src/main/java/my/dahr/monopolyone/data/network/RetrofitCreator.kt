@@ -30,8 +30,8 @@ fun buildMonopolyRetrofit(
     ))
     .build()
 
-fun buildPlainRetrofit(): Retrofit = Retrofit.Builder()
-    .baseUrl(MONOPOLY_BASE_URL)
+fun buildPlainRetrofit(baseUrl: String): Retrofit = Retrofit.Builder()
+    .baseUrl(baseUrl)
     .client(okHttpClient)
     .addConverterFactory(GsonConverterFactory.create())
     .build()

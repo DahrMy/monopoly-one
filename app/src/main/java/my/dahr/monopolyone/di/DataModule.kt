@@ -7,6 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import my.dahr.monopolyone.data.MY_IP_BASE_URL
 import my.dahr.monopolyone.data.SHARED_PREFERENCES
 import my.dahr.monopolyone.data.network.api.IpApi
 import my.dahr.monopolyone.data.network.api.monopoly.AuthorizationApi
@@ -116,7 +117,8 @@ internal object DataModule {
 
     // APIs
     @Provides
-    internal fun provideIpApi(): IpApi = buildPlainRetrofit().create(IpApi::class.java)
+    internal fun provideIpApi(): IpApi =
+        buildPlainRetrofit(MY_IP_BASE_URL).create(IpApi::class.java)
 
     @Provides
     internal fun provideFriendsApi(): FriendsApi =

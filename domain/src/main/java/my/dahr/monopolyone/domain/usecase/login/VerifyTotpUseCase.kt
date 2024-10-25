@@ -1,5 +1,6 @@
 package my.dahr.monopolyone.domain.usecase.login
 
+import my.dahr.monopolyone.domain.model.Returnable
 import my.dahr.monopolyone.domain.model.WrongReturnable
 import my.dahr.monopolyone.domain.model.login.TotpInputData
 import my.dahr.monopolyone.domain.model.login.TotpToken
@@ -15,6 +16,11 @@ class VerifyTotpUseCase(
      * @return [Session] if operation went successfully,
      * or [WrongReturnable] if something went wrong.
      */
-    suspend operator fun invoke(totpInputData: TotpInputData) =
-        sessionRepository.getSession(totpInputData)
+    suspend operator fun invoke(totpInputData: TotpInputData): Returnable {
+        val output = sessionRepository.getSession(totpInputData)
+        if (output is Session) {
+            sessionRepository.saveSession(output)
+        }
+        return output
+    }
 }
