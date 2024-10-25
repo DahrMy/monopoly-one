@@ -1,5 +1,6 @@
 package my.dahr.monopolyone.ui.friends
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -46,6 +47,7 @@ class FriendsViewModel @Inject constructor(
     fun getFriendList() {
         viewModelScope.launch(myCoroutineContext) {
             val session = requireSessionUseCase()
+            Log.d("111", session.toString())
             if (session is Session) {
                 val params = ListParams(
                     userId = session.userId,
@@ -55,6 +57,7 @@ class FriendsViewModel @Inject constructor(
                     offset = 0,
                     count = 20
                 )
+                Log.d("111", params.toString())
                 val list = getFriendsListUseCase(params)
                 if (list is Friends) {
                     val listOfFriends = list.data.friends

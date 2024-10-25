@@ -12,12 +12,4 @@ interface InventoryApi {
     fun getInventoryList(
         @Body body: ItemsParamsData
     ): Call<BaseResponse>
-
-    @GET("data.getItemProtos")
-    fun getInventoryDataList(
-        @Query("item_proto_ids") itemProtoIds: Set<Int>,
-        @Query("add_legacy") addLegacy: Boolean,
-        @Query("add_metadata") addMetadata: Boolean
-    ): Call<BaseResponse>
-
 }

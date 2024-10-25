@@ -24,17 +24,20 @@ class FriendsRepositoryImpl (
     private val networkStateDataSource: NetworkStateDataSource
 ): FriendsRepository {
 
-
     override suspend fun getFriendsList(
-        friendsParams: ListParams
+        userId: Any,
+        online: Boolean,
+        addUser: Boolean,
+        type: String,
+        offset: Int,
+        count: Int,
     ): Returnable {
         if (!networkStateDataSource.hasInternetConnection()) {
             return NoInternetConnectionError()
         }
 
         return suspendCoroutine { continuation ->
-            val request = friendsParams.toRequest()
-            val call = friendsDataSource.getListOfFriends(request)
+            val call = friendsDataSource.getListOfFriends(userId, online, addUser, type, offset, count)
 
             call.enqueue(object : MonopolyCallback(continuation) {
                 override fun onSuccessfulResponse(
@@ -53,15 +56,17 @@ class FriendsRepositoryImpl (
 
 
     override suspend fun getFriendsRequestsList(
-        requestsParams: RequestsParams
+        accessToken: String,
+        type: String,
+        offset: Int,
+        count: Int,
     ): Returnable {
         if (!networkStateDataSource.hasInternetConnection()) {
             return NoInternetConnectionError()
         }
 
         return suspendCoroutine { continuation ->
-            val request = requestsParams.toRequest()
-            val call = friendsDataSource.getListOfRequests(request)
+            val call = friendsDataSource.getListOfRequests(accessToken, type, offset, count)
 
             call.enqueue(object : MonopolyCallback(continuation) {
                 override fun onSuccessfulResponse(

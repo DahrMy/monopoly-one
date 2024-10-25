@@ -3,7 +3,6 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import my.dahr.monopolyone.data.network.dto.response.monopoly.BaseResponse
 
-
 data class SessionResponse(
 
     @Expose
@@ -38,8 +37,6 @@ data class SessionResponse(
         @Expose
         @SerializedName("user_id")
         val userId: Int
-
     )
-
 }
 
