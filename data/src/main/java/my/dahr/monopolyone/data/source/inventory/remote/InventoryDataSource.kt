@@ -5,5 +5,14 @@ import my.dahr.monopolyone.data.source.inventory.remote.dto.request.ItemsParamsD
 import retrofit2.Call
 
 interface InventoryDataSource {
-    fun getItemsList(itemsParamsData: ItemsParamsData) : Call<BaseResponse>
+    fun getItemsList(
+        accessToken: String,
+        userId: Any,
+        includeStock: Boolean,
+        order: String,
+        count: Int,
+        addUser: Boolean,
+        addEquipped: String,
+        addLegacy: Boolean
+    ): Call<BaseResponse>
 }

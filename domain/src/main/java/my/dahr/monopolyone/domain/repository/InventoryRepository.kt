@@ -5,6 +5,13 @@ import my.dahr.monopolyone.domain.model.inventory.params.ItemParams
 
 interface InventoryRepository {
     suspend fun getItemsList(
-        itemParams: ItemParams
+        accessToken: String,
+        userId: Any,
+        includeStock: Boolean,
+        order: String,
+        count: Int,
+        addUser: Boolean,
+        addEquipped: String,
+        addLegacy: Boolean,
     ): Returnable
 }

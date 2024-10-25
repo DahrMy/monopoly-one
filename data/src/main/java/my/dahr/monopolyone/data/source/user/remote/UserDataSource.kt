@@ -6,5 +6,9 @@ import retrofit2.Call
 
 interface UserDataSource {
 
-    fun getUsersList(userParamsData: UserParamsData): Call<BaseResponse>
+    fun getUsersList(
+        userId: Any,
+        userIds: Set<Int>,
+        type: String,
+    ): Call<BaseResponse>
 }

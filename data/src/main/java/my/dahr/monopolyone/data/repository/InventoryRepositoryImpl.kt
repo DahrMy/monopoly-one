@@ -22,7 +22,14 @@ class InventoryRepositoryImpl(
     InventoryRepository {
 
     override suspend fun getItemsList(
-        itemParams: ItemParams
+        accessToken: String,
+        userId: Any,
+        includeStock: Boolean,
+        order: String,
+        count: Int,
+        addUser: Boolean,
+        addEquipped: String,
+        addLegacy: Boolean,
     ): Returnable {
         if (!networkStateDataSource.hasInternetConnection()) {
             return NoInternetConnectionError()
@@ -30,8 +37,16 @@ class InventoryRepositoryImpl(
 
         return suspendCoroutine { continuation ->
 
-            val request = itemParams.toRequest()
-            val call = inventoryDataSource.getItemsList(request)
+            val call = inventoryDataSource.getItemsList(
+                accessToken,
+                userId,
+                includeStock,
+                order,
+                count,
+                addUser,
+                addEquipped,
+                addLegacy
+            )
 
             call.enqueue(object : MonopolyCallback(continuation) {
                 override fun onSuccessfulResponse(

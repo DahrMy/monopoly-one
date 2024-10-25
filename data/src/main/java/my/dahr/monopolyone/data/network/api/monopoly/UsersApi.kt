@@ -5,10 +5,13 @@ import my.dahr.monopolyone.data.source.user.remote.dto.request.UserParamsData
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface UsersApi {
     @GET("users.get")
     fun getUsersList(
-        @Body body: UserParamsData
+        @Query("user_id") userId: Any,
+        @Query("user_ids") userIds: Set<Int>,
+        @Query("type") type: String
     ): Call<BaseResponse>
 }

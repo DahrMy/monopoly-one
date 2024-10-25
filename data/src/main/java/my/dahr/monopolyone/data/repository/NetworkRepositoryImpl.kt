@@ -1,5 +1,6 @@
 package my.dahr.monopolyone.data.repository
 
+import android.util.Log
 import my.dahr.monopolyone.data.source.internet.NetworkStateDataSource
 import my.dahr.monopolyone.data.source.ip.local.IpLocalDataSource
 import my.dahr.monopolyone.data.source.ip.remote.IpRemoteDataSource
@@ -45,7 +46,12 @@ class NetworkRepositoryImpl(
         }
     }
 
-    override fun getStoredIp(): Ip? = ipLocalDataSource.storedIp?.toIp()
+    override fun getStoredIp(): Ip? {
+       val a = ipLocalDataSource.storedIp?.toIp()
+        Log.d("aaaaa", a.toString())
+        return a
+    }
+
 
     override fun saveIp(ip: Ip) {
         ipLocalDataSource.storedIp = ip.toDeserializedIp()

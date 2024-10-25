@@ -10,7 +10,7 @@ import my.dahr.monopolyone.data.network.dto.response.users.UsersResponse
 class UserResponseDeserializer : MonopolyResponseDeserializer() {
 
     override fun identifyByContent(json: JsonElement): Class<out BaseResponse> {
-        val jsonObject = json.asJsonObject
+        val jsonObject = json.asJsonArray.get(0).asJsonObject
         return when {
             jsonObject.has("rank") -> UsersResponse::class.java
             else -> DefaultErrorResponse::class.java
