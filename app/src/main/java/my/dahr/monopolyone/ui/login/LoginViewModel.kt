@@ -1,6 +1,7 @@
 package my.dahr.monopolyone.ui.login
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,7 +23,6 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val signInUseCase: SignInUseCase
 ) : ViewModel() {
-
 
     private val coroutineContext = Dispatchers.IO + SupervisorJob()
 

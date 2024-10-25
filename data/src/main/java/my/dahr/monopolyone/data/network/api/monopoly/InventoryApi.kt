@@ -10,14 +10,13 @@ import retrofit2.http.Query
 interface InventoryApi {
     @GET("inventory.get")
     fun getInventoryList(
-        @Body body: ItemsParamsData
-    ): Call<BaseResponse>
-
-    @GET("data.getItemProtos")
-    fun getInventoryDataList(
-        @Query("item_proto_ids") itemProtoIds: Set<Int>,
+        @Query("access_token") accessToken: String,
+        @Query("user_id") userId: Any,
+        @Query("include_stock") includeStock: Boolean,
+        @Query("order") order: String,
+        @Query("count") count: Int,
+        @Query("add_user") addUser: Boolean,
+        @Query("add_equipped") addEquipped: String,
         @Query("add_legacy") addLegacy: Boolean,
-        @Query("add_metadata") addMetadata: Boolean
     ): Call<BaseResponse>
-
 }

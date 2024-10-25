@@ -5,7 +5,7 @@ import my.dahr.monopolyone.domain.model.user.params.UserParams
 import my.dahr.monopolyone.domain.repository.UserRepository
 
 class FindUserUseCase(private val userRepository: UserRepository) {
-    suspend operator fun invoke(userParams: UserParams): Returnable{
-        return userRepository.getUsersList(userParams)
+    suspend operator fun invoke(userParams: UserParams): Returnable {
+        return userRepository.getUsersList(userParams.userId, userParams.userIds, userParams.type)
     }
 }

@@ -5,6 +5,8 @@ import my.dahr.monopolyone.domain.model.user.params.UserParams
 
 interface UserRepository {
     suspend fun getUsersList(
-        userParams: UserParams
+        userId: Any,
+        userIds: Set<Int>,
+        type: String,
     ): Returnable
 }

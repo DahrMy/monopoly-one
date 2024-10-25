@@ -8,9 +8,21 @@ import my.dahr.monopolyone.data.source.friends.remote.dto.request.listrequests.R
 import retrofit2.Call
 
 interface FriendsDataSource {
-    fun getListOfFriends(listParamsData: ListParamsData): Call<BaseResponse>
+    fun getListOfFriends(
+        userId: Any,
+        online: Boolean,
+        addUser: Boolean,
+        type: String,
+        offset: Int,
+        count: Int,
+    ): Call<BaseResponse>
 
-    fun getListOfRequests(requestsParamsData: RequestsParamsData): Call<BaseResponse>
+    fun getListOfRequests(
+        accessToken: String,
+        type: String,
+        offset: Int,
+        count: Int,
+    ): Call<BaseResponse>
 
     fun addOrAcceptUser(addParamsData: AddParamsData): Call<BaseResponse>
 

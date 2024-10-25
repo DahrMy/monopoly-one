@@ -10,7 +10,7 @@ import my.dahr.monopolyone.data.network.dto.response.monopoly.error.DefaultError
 class InventoryResponseDeserializer : MonopolyResponseDeserializer() {
 
     override fun identifyByContent(json: JsonElement): Class<out BaseResponse> {
-        val jsonObject = json.asJsonObject
+        val jsonObject = json.asJsonObject.get("data").asJsonObject
         return when {
             jsonObject.has("items") -> InventoryResponse::class.java
             else -> DefaultErrorResponse::class.java

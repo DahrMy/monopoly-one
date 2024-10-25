@@ -3,17 +3,22 @@ package my.dahr.monopolyone.domain.repository
 import my.dahr.monopolyone.domain.model.Returnable
 import my.dahr.monopolyone.domain.model.friends.params.AddParams
 import my.dahr.monopolyone.domain.model.friends.params.DeleteParams
-import my.dahr.monopolyone.domain.model.friends.params.ListParams
-import my.dahr.monopolyone.domain.model.friends.params.RequestsParams
-
 
 interface FriendsRepository {
     suspend fun getFriendsList(
-        friendsParams: ListParams
+        userId: Any,
+        online: Boolean,
+        addUser: Boolean,
+        type: String,
+        offset: Int,
+        count: Int,
     ): Returnable
 
     suspend fun getFriendsRequestsList(
-        requestsParams: RequestsParams
+        accessToken: String,
+        type: String,
+        offset: Int,
+        count: Int,
     ): Returnable
 
     suspend fun addFriend(

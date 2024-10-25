@@ -6,6 +6,24 @@ import my.dahr.monopolyone.data.source.inventory.remote.dto.request.ItemsParamsD
 import retrofit2.Call
 
 class InventoryDataSourceImpl(private val inventoryApi: InventoryApi) : InventoryDataSource {
-    override fun getItemsList(itemsParamsData: ItemsParamsData): Call<BaseResponse> =
-        inventoryApi.getInventoryList(itemsParamsData)
+    override fun getItemsList(
+        accessToken: String,
+        userId: Any,
+        includeStock: Boolean,
+        order: String,
+        count: Int,
+        addUser: Boolean,
+        addEquipped: String,
+        addLegacy: Boolean,
+    ): Call<BaseResponse> =
+        inventoryApi.getInventoryList(
+            accessToken,
+            userId,
+            includeStock,
+            order,
+            count,
+            addUser,
+            addEquipped,
+            addLegacy
+        )
 }

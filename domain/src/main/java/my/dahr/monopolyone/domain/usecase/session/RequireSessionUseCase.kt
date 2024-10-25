@@ -1,6 +1,7 @@
 package my.dahr.monopolyone.domain.usecase.session
 
 import my.dahr.monopolyone.domain.currentTimeInSec
+import my.dahr.monopolyone.domain.model.LoginOutputData
 import my.dahr.monopolyone.domain.model.Returnable
 import my.dahr.monopolyone.domain.model.WrongReturnable
 import my.dahr.monopolyone.domain.model.session.Session

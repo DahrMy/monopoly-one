@@ -15,19 +15,22 @@ import retrofit2.Call
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class UserRepositoryImpl (
+class UserRepositoryImpl(
     private val userDataSource: UserDataSource,
     private val networkStateDataSource: NetworkStateDataSource
-): UserRepository {
+) : UserRepository {
 
-    override suspend fun getUsersList(userParams: UserParams): Returnable {
+    override suspend fun getUsersList(
+        userId: Any,
+        userIds: Set<Int>,
+        type: String,
+    ): Returnable {
         if (!networkStateDataSource.hasInternetConnection()) {
             return NoInternetConnectionError()
         }
 
         return suspendCoroutine { continuation ->
-            val request = userParams.toRequest()
-            val call = userDataSource.getUsersList(request)
+            val call = userDataSource.getUsersList(userId, userIds, type)
 
             call.enqueue(object : MonopolyCallback(continuation) {
                 override fun onSuccessfulResponse(

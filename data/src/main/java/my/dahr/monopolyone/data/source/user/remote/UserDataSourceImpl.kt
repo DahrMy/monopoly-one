@@ -6,6 +6,8 @@ import my.dahr.monopolyone.data.source.user.remote.dto.request.UserParamsData
 import retrofit2.Call
 
 class UserDataSourceImpl(private val usersApi: UsersApi): UserDataSource {
-    override fun getUsersList(userParamsData: UserParamsData): Call<BaseResponse> =
-        usersApi.getUsersList(userParamsData)
+    override fun getUsersList(userId: Any,
+                              userIds: Set<Int>,
+                              type: String,): Call<BaseResponse> =
+        usersApi.getUsersList(userId, userIds, type)
 }
